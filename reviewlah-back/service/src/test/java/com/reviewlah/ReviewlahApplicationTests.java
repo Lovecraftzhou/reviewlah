@@ -1,4 +1,4 @@
-package com.reviewlah;
+package java.com.reviewlah;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
