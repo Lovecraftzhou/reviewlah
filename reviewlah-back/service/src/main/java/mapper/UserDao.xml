@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.UserDao">
+    <insert id = "insertUser" parameterType = "com.reviewlah.db.vo.User">
+        INSERT INTO user
+        SET
+            name = #{name},
+            password = #{password},
+            type = #{type}
+            <if test="phone_number!=null">
+                phone_numer = #{phone_number}
+            </if>
+            <if test="email!=null">
+                email = #{email}
+            </if>
+            <if test="avator!=null">
+                avator = #{avator}
+            </if>
+    </insert>
+    <update id = "updateUser" parameterType = "com.reviewlah.db.vo.User">
+        UPDATE user
+        SET
+            name = #{name},
+            password = #{password},
+            <if test="phone_number!=null">
+                phone_numer = #{phone_number}
+            </if>
+            <if test="email!=null">
+                email = #{email}
+            </if>
+            <if test="avator!=null">
+                avator = #{avator}
+            </if>
+        where user_id = #{user_id}
+    </update>
+    <delete id = "deleteUserById" parameterType="BigInteger">
+        DELETE FROM user
+        where user_id = #{user_id}
+    </delete>
+</mapper>
