@@ -26,5 +26,5 @@ reviewlah
     ├── admin  后台（vue）接口工程
     ├── common 前后台需要用到的公共配置，工具类等的集合地
     ├── service 前后台需要用到的公共的、商城基本流程所需的service，dao的集合地
-├── reviewlah-front -- 前端(Vue)工程
+├── fronted-vue -- 前端(Vue)工程
 ~~~
