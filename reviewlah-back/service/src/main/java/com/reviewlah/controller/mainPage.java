@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class mainPage {
     @GetMapping("/hello")
     public String hello(){
-        return "Welcome to ReviewLah! -Powered   by SpringBoot & VueJS";
+        return "Welcome to ReviewLah! -Powered by SpringBoot & VueJS";
     }
 }
