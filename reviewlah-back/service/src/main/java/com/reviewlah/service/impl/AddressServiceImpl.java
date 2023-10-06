@@ -1,7 +1,7 @@
 package com.reviewlah.service.impl;
 
 import com.reviewlah.db.dao.AddressDao;
-import com.reviewlah.db.vo.Address;
+import com.reviewlah.db.pojo.Address;
 import com.reviewlah.service.AddressService;
 
 public class AddressServiceImpl implements AddressService {

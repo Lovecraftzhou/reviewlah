@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.AddressDao">
-    <insert id = "insertAddress" parameterType="com.reviewlah.db.vo.Address">
+    <insert id = "insertAddress" parameterType="com.reviewlah.db.pojo.Address">
         INSERT INTO address
         SET
             address_code = #{address_code}
@@ -13,7 +13,7 @@
                 unitnum = #{unitnum}
             </if>
     </insert>
-    <update id = "updateAddress" parameterType = "com.reviewlah.db.vo.Address">
+    <update id = "updateAddress" parameterType = "com.reviewlah.db.pojo.Address">
         UPDATE address
         SET
             address_code = #{address_code}

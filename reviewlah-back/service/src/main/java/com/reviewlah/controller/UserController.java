@@ -1,6 +1,6 @@
 package com.reviewlah.controller;
 
-import com.reviewlah.db.vo.User;
+import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.UserService;
 
 import java.math.BigInteger;

@@ -10,4 +10,8 @@ public class CustomerServiceImpl implements CustomerService {
     public void insertMerchant(BigInteger user_id) {
         this.customerDao.insertCustomer(user_id);
     }
+    public BigInteger selectCustomerIdByUserId(BigInteger user_id) {
+        BigInteger customer_id = this.customerDao.selectCustomerIdByUserId(user_id);
+        return customer_id;
+    }
 }

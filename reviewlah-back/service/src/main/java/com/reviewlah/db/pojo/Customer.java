@@ -1,4 +1,4 @@
-package com.reviewlah.db.vo;
+package com.reviewlah.db.pojo;
 
 import java.math.BigInteger;
 

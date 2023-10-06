@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.UserDao">
-    <insert id = "insertUser" parameterType = "com.reviewlah.db.vo.User">
+    <insert id = "insertUser" parameterType = "com.reviewlah.db.pojo.User">
         INSERT INTO user
         SET
             name = #{name},
@@ -17,7 +17,7 @@
                 avator = #{avator}
             </if>
     </insert>
-    <update id = "updateUser" parameterType = "com.reviewlah.db.vo.User">
+    <update id = "updateUser" parameterType = "com.reviewlah.db.pojo.User">
         UPDATE user
         SET
             name = #{name},
@@ -37,4 +37,9 @@
         DELETE FROM user
         where user_id = #{user_id}
     </delete>
+    <select id = "selectUserIdByName" parameterType="String" resultType="BigInteger">
+        SELECT user_id
+        FROM user
+        WHERE name = #{name}
+    </select>
 </mapper>

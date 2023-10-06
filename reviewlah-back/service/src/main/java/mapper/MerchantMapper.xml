@@ -6,4 +6,9 @@
         SET
             user_id = #{user_id}
     </insert>
+    <select id = "selectMerchantIdByUserId" parameterType="BigInteger" resultType="BigInteger">
+        SELECT merchant_id
+        FROM merchants
+        WHERE user_id = #{user_id}
+    </select>
 </mapper>

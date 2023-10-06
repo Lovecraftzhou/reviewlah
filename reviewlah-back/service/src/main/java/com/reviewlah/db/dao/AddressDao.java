@@ -1,6 +1,6 @@
 package com.reviewlah.db.dao;
 
-import com.reviewlah.db.vo.Address;
+import com.reviewlah.db.pojo.Address;
 
 public interface AddressDao {
     void insertAddress(Address address);
