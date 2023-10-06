@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.MCDao">
+    <insert id = "insertMC" parameterType="com.reviewlah.db.pojo.MC">
+        INSERT INTO merchants category
+        SET
+            category_id = #{category_id},
+            merchant_id = #{merchant_id}
+    </insert>
+    <update id = "updateMC" parameterType="com.reviewlah.db.pojo.MC">
+        UPDATE merchants category
+        SET
+            category_id = #{category_id},
+            merchant_id = #{merchant_id}
+        WHERE id = #{id}
+    </update>
+</mapper>
