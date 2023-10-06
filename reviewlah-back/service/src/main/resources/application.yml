@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://review-db.cnglxiwein6d.ap-southeast-1.rds.amazonaws.com:3306/reviewlah?characterEncoding=utf-8
+    username: admin
+    password: ZHou*87721472
+

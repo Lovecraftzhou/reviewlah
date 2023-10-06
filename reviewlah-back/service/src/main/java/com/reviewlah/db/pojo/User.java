@@ -12,6 +12,14 @@ public class User {
     private String avator;
     public User() {
     }
+    public User(String name, String phone_number, String email, String password, int type, String avator) {
+        this.name = name;
+        this.phone_number = phone_number;
+        this.email = email;
+        this.password = password;
+        this.type = type;
+        this.avator = avator;
+    }
     public BigInteger getUser_id() {
         return user_id;
     }

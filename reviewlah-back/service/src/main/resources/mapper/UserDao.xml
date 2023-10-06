@@ -37,8 +37,8 @@
         DELETE FROM user
         where user_id = #{user_id}
     </delete>
-    <select id = "selectUserIdByName" parameterType="String" resultType="BigInteger">
-        SELECT user_id
+    <select id = "selectUserByName" parameterType="String" resultType="com.reviewlah.db.pojo.User">
+        SELECT *
         FROM user
         WHERE name = #{name}
     </select>
