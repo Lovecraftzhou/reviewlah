@@ -10,4 +10,5 @@ public interface MCDao {
 //    ArrayList<Integer> selectCategoryIdByMerchantId(BigInteger merchant_id);
     void insertMC(MC mc);
     void updateMC(MC mc);
+    void deleteMCByMerchantId(BigInteger merchant_id);
 }

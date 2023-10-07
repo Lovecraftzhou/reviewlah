@@ -1,9 +1,10 @@
 package com.reviewlah.service;
 
 import com.reviewlah.db.pojo.Category;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-
+@Service
 public interface CategoryService {
     ArrayList<String> selectAllCategory();
     int selectCategoryIdByName(String category_name);

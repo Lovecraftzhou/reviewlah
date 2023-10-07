@@ -11,6 +11,12 @@ public class Address {
     public  Address() {
 
     }
+    public Address(String address_code, BigInteger merchant_id, String address_detail, String unitnum) {
+        this.address_code = address_code;
+        this.merchant_id = merchant_id;
+        this.address_detail = address_detail;
+        this.unitnum = unitnum;
+    }
     public int getAddress_id() {
         return address_id;
     }

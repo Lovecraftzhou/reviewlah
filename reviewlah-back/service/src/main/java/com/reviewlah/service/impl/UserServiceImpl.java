@@ -24,4 +24,8 @@ public class UserServiceImpl implements UserService {
         User user = this.userDao.selectUserByName(name);
         return user;
     }
+    public User selectUserById(BigInteger user_id) {
+        User user = this.userDao.selectUserById(user_id);
+        return user;
+    }
 }

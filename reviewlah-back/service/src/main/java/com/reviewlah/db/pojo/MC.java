@@ -9,6 +9,10 @@ public class MC {
     public MC() {
 
     }
+    public MC(int category_id, BigInteger merchant_id) {
+        this.category_id = category_id;
+        this.merchant_id = merchant_id;
+    }
     public BigInteger getId() {
         return id;
     }

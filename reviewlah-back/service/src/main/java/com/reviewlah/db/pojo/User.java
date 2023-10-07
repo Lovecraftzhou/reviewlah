@@ -20,6 +20,13 @@ public class User {
         this.type = type;
         this.avator = avator;
     }
+    public User(BigInteger user_id, String phone_number, String email, String password, String avator) {
+        this.user_id = user_id;
+        this.phone_number = phone_number;
+        this.email = email;
+        this.password = password;
+        this.avator = avator;
+    }
     public BigInteger getUser_id() {
         return user_id;
     }

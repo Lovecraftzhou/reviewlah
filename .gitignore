@@ -2,6 +2,7 @@ target/
 !review-sys/maven/.mvn/wrapper/maven-wrapper.jar
 !reviewlah-back/service/src/main/**/target/
 !reviewlah-back/service/src/test/**/target/
+reviewlah-back/service/src/main/resources/application.yml
 
 ### STS ###
 .apt_generated

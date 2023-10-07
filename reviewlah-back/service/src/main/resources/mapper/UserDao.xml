@@ -2,22 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.UserDao">
     <insert id = "insertUser" parameterType = "com.reviewlah.db.pojo.User">
-        INSERT INTO user (name, phone_number, email, password, type, avator) values (#{name}, #{phone_number}, #{email}, #{password}, #{type}, #{avator})
+        INSERT INTO user (
+        <if test="name!=null">
+            name,
+        </if>
+        <if test="password!=null">
+            password,
+        </if>
+        <if test="type!=null">
+            type,
+        </if>
+        phone_number,
+        email,
+        avator) values (
+        <if test="name!=null">
+            #{name},
+        </if>
+        <if test="password!=null">
+            #{password},
+        </if>
+        <if test="type!=null">
+            #{type},
+        </if>
+        #{phone_number},
+        #{email},
+        #{avator}
+        )
     </insert>
     <update id = "updateUser" parameterType = "com.reviewlah.db.pojo.User">
         UPDATE user
-        SET
-            name = #{name},
-            password = #{password},
+        <set>
+            <if test="password!=null">
+                password = #{password},
+            </if>
             <if test="phone_number!=null">
-                phone_numer = #{phone_number}
+                phone_number = #{phone_number},
             </if>
             <if test="email!=null">
-                email = #{email}
+                email = #{email},
             </if>
             <if test="avator!=null">
-                avator = #{avator}
+                avator = #{avator},
             </if>
+        </set>
         where user_id = #{user_id}
     </update>
     <delete id = "deleteUserById" parameterType="BigInteger">
@@ -28,5 +55,10 @@
         SELECT *
         FROM user
         WHERE name = #{name}
+    </select>
+    <select id = "selectUserById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.User">
+        SELECT *
+        FROM user
+        WHERE user_id = #{user_id}
     </select>
 </mapper>

@@ -10,4 +10,6 @@ public interface UserDao {
     void updateUser(User user);
     void deleteUserById(BigInteger user_id);
     User selectUserByName(String name);
+    User selectUserById(BigInteger user_id);
+
 }
