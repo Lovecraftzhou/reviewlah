@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.AddressDao">
+    <insert id = "insertAddress" parameterType="com.reviewlah.db.pojo.Address">
+        INSERT INTO address (
+        <if test="address_code!=null">
+            address_code,
+        </if>
+        <if test="merchant_id!=null">
+            merchant_id,
+        </if>
+        address_detail,
+        unitnum) values (
+        <if test="address_code!=null">
+            #{address_code},
+        </if>
+        <if test="merchant_id!=null">
+            #{merchant_id},
+        </if>
+        #{address_detail},
+        #{unitnum}
+        )
+    </insert>
+    <update id = "updateAddress" parameterType = "com.reviewlah.db.pojo.Address">
+        UPDATE address
+        <set>
+            <if test="address_code!=null">
+                address_code = #{address_code},
+            </if>
+            <if test="address_detail!=null">
+                address_detail = #{address_detail},
+            </if>
+            <if test="unitnum!=null">
+                unitnum = #{unitnum},
+            </if>
+        </set>
+        where merchant_id = #{merchant_id}
+    </update>
+</mapper>
