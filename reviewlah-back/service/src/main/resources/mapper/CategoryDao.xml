@@ -17,8 +17,11 @@
     </insert>
     <update id = "updateCategory" parameterType="com.reviewlah.db.pojo.Category">
         UPDATE category
-        SET
-            category_name = #{category_name}
+        <set>
+            <if test="category_name!=null">
+                category_name = #{category_name},
+            </if>
+        </set>
         WHERE category_id = #{category_id}
     </update>
     <delete id = "deleteCategoryByName" parameterType="String">
