@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
-//@MapperScan("com.reviewlah.db.dao")
+@MapperScan("com.reviewlah.db.dao")
 public class ReviewlahApplication {
 
     public static void main(String[] args) {

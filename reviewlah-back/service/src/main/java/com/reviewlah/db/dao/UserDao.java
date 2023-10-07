@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
-@Mapper
+//@Mapper
 public interface UserDao {
     void insertUser(User user);
     void updateUser(User user);

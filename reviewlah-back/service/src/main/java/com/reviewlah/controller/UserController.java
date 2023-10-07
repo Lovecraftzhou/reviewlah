@@ -6,14 +6,11 @@ import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 
-@Controller
+@RestController
 @RequestMapping({"/user"})
 public class UserController {
     @Autowired
@@ -24,8 +21,8 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public  String get(){
-        return "Hello";
+    public String get(){
+        return "user";
     }
     @PostMapping({"/insert"})
     public String insertUser(@RequestBody InsertUserRequest request) {
@@ -38,6 +35,7 @@ public class UserController {
         User user = this.userService.selectUserByName(name);
         if(user == null) {
             user = new User(name, phone_number, email, password, type, avator);
+            user.toString();
             userService.insertUser(user);
             System.out.println("successful");
         }

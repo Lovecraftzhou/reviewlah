@@ -2,20 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.UserDao">
     <insert id = "insertUser" parameterType = "com.reviewlah.db.pojo.User">
-        INSERT INTO user
-        SET
-            name = #{name},
-            password = #{password},
-            type = #{type}
-            <if test="phone_number!=null">
-                phone_numer = #{phone_number}
-            </if>
-            <if test="email!=null">
-                email = #{email}
-            </if>
-            <if test="avator!=null">
-                avator = #{avator}
-            </if>
+        INSERT INTO user (name, phone_number, email, password, type, avator) values (#{name}, #{phone_number}, #{email}, #{password}, #{type}, #{avator})
     </insert>
     <update id = "updateUser" parameterType = "com.reviewlah.db.pojo.User">
         UPDATE user
