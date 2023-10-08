@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 @Service
 public interface CategoryService {
-    ArrayList<String> selectAllCategory();
+    ArrayList<Category> selectAllCategory();
     int selectCategoryIdByName(String category_name);
     void insertCategory(String category_name);
     void updateCategory(Category category);

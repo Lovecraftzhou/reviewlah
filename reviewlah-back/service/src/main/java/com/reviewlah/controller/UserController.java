@@ -54,6 +54,7 @@ public class UserController {
         int type = request.getType();
         String avator = request.getAvator();
         User user = this.userService.selectUserByName(name);
+        //        if(avator == null || avator == "") pic_post = "";
         if(user == null) {
             user = new User(name, phone_number, email, password, type, avator);
             this.userService.insertUser(user);

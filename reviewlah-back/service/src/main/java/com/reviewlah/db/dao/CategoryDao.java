@@ -5,7 +5,7 @@ import com.reviewlah.db.pojo.Category;
 import java.util.ArrayList;
 
 public interface CategoryDao {
-    ArrayList<String> selectAllCategory();
+    ArrayList<Category> selectAllCategory();
     int selectCategoryIdByName(String category_name);
     void insertCategory(String category_name);
     void updateCategory(Category category);

@@ -1,13 +1,17 @@
 package com.reviewlah.db.pojo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigInteger;
 import java.util.Date;
 
 public class Post {
     private BigInteger posts_id;
     private BigInteger customer_id;
+    private String title;
     private String content;
     private String pic_post;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time_post;
     public Post() {
 
@@ -50,6 +54,13 @@ public class Post {
 
     public void setTime_post(Date time_post) {
         this.time_post = time_post;
+    }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 

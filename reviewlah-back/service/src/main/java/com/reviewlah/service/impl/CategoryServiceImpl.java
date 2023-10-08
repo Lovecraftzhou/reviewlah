@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryDao categoryDao;
-    public ArrayList<String> selectAllCategory() {
-        ArrayList<String> list = this.categoryDao.selectAllCategory();
+    public ArrayList<Category> selectAllCategory() {
+        ArrayList<Category> list = this.categoryDao.selectAllCategory();
         return list;
     }
     public int selectCategoryIdByName(String category_name) {
