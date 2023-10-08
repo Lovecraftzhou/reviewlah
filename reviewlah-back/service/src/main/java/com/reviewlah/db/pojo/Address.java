@@ -1,4 +1,4 @@
-package com.reviewlah.db.vo;
+package com.reviewlah.db.pojo;
 
 import java.math.BigInteger;
 
@@ -6,10 +6,16 @@ public class Address {
     private int address_id;
     private String address_code;
     private BigInteger merchant_id;
-    private String address_email;
+    private String address_detail;
     private String unitnum;
     public  Address() {
 
+    }
+    public Address(String address_code, BigInteger merchant_id, String address_detail, String unitnum) {
+        this.address_code = address_code;
+        this.merchant_id = merchant_id;
+        this.address_detail = address_detail;
+        this.unitnum = unitnum;
     }
     public int getAddress_id() {
         return address_id;
@@ -35,12 +41,12 @@ public class Address {
         this.merchant_id = merchant_id;
     }
 
-    public String getAddress_email() {
-        return address_email;
+    public String getAddress_detail() {
+        return address_detail;
     }
 
-    public void setAddress_email(String address_email) {
-        this.address_email = address_email;
+    public void setAddress_detail(String address_email) {
+        this.address_detail = address_detail;
     }
 
     public String getUnitnum() {
