@@ -12,6 +12,18 @@
         FROM posts
         WHERE post_id = #{post_id}
     </select>
+    <select id="selectAllPostExceptMine" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Post">
+        select *
+        FROM posts
+        WHERE customer_id != #{customer_id}
+        ORDER BY time_post DESC
+    </select>
+    <select id="selectRelativePost" resultType="com.reviewlah.db.pojo.Post">
+        select *
+        FROM posts
+        WHERE content like concat('%',#{keyword},'%') AND customer_id != #{customer_id}
+        ORDER BY time_post DESC
+    </select>
     <insert id="insertPost" parameterType="com.reviewlah.db.pojo.Post">
         INSERT INTO posts (
         <if test="customer_id!=null">

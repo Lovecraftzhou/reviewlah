@@ -12,7 +12,9 @@
         <if test="type!=null">
             type,
         </if>
-        phone_number,
+        <if test="phone_number!=null">
+            phone_number,
+        </if>
         email,
         avator) values (
         <if test="name!=null">
@@ -24,7 +26,9 @@
         <if test="type!=null">
             #{type},
         </if>
-        #{phone_number},
+        <if test="phone_number!=null">
+            #{phone_number},
+        </if>
         #{email},
         #{avator}
         )

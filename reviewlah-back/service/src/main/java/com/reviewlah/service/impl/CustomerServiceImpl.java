@@ -17,4 +17,8 @@ public class CustomerServiceImpl implements CustomerService {
         BigInteger customer_id = this.customerDao.selectCustomerIdByUserId(user_id);
         return customer_id;
     }
+    public BigInteger selectUserIdByCustomerId(BigInteger customer_id) {
+        BigInteger user_id = this.customerDao.selectUserIdByCustomerId(customer_id);
+        return user_id;
+    }
 }

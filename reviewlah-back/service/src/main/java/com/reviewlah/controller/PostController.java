@@ -1,8 +1,6 @@
 package com.reviewlah.controller;
 
-import com.reviewlah.controller.form.DeletePostRequest;
-import com.reviewlah.controller.form.InsertPostRequest;
-import com.reviewlah.controller.form.SelectPostByCustomerIdRequest;
+import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Post;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.CustomerService;
@@ -77,5 +75,50 @@ public class PostController {
             System.out.println("User Does Not Exist");
         }
         return null;
+    }
+    @PostMapping({"/homepage"})
+    public ArrayList<Post> selectAllPostExceptMine(@RequestBody SelectPostByCustomerIdRequest request) {
+        BigInteger user_id = request.getUser_id();
+        User user = this.userService.selectUserById(user_id);
+        if(user != null) {
+            ArrayList<Post> list = new ArrayList<>();
+            BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
+            list = this.postService.selectAllPostExceptMine(customer_id);
+            System.out.println("successful");
+            return list;
+        }
+        else {
+            System.out.println("User Does Not Exist");
+        }
+        return null;
+    }
+    @PostMapping({"/homepage/relative"})
+    public ArrayList<Post> selectRelativePost(@RequestBody SelectRelativePostRequest request) {
+        BigInteger user_id = request.getUser_id();
+        String keyword = request.getKeyword();
+        User user = this.userService.selectUserById(user_id);
+        if(user != null) {
+            ArrayList<Post> list = new ArrayList<>();
+            BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
+            list = this.postService.selectRelativePost(keyword, customer_id);
+            System.out.println("successful");
+            return list;
+        }
+        else {
+            System.out.println("User Does Not Exist");
+        }
+        return null;
+    }
+    @PostMapping({"/detail"})
+    public Post selectPostByPostId(@RequestBody SelectPostByPostIdRequest request) {
+        BigInteger post_id = request.getPost_id();
+        Post post = this.postService.selectPostByPostId(post_id);
+        if(post == null) {
+            System.out.println("Post Does Not Exist");
+        }
+        else {
+            System.out.println("successful");
+        }
+        return post;
     }
 }

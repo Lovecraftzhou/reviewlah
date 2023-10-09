@@ -11,4 +11,9 @@
         FROM customer
         WHERE user_id = #{user_id}
     </select>
+    <select id="selectUserIdByCustomerId" parameterType="BigInteger" resultType="BigInteger">
+        SELECT user_id
+        FROM customer
+        WHERE customer_id = #{customer_id}
+    </select>
 </mapper>

@@ -55,6 +55,8 @@ public class UserController {
         String avator = request.getAvator();
         User user = this.userService.selectUserByName(name);
         //        if(avator == null || avator == "") pic_post = "";
+        //        if(password == null) {System.out.println("Password Cannot Be Empty!");}
+        //        if(email == null) {System.out.println("Email Cannot Be Empty!");}
         if(user == null) {
             user = new User(name, phone_number, email, password, type, avator);
             this.userService.insertUser(user);
@@ -100,7 +102,12 @@ public class UserController {
         String avator = request.getAvator();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
-            user = new User(user_id, phone_number, email, password, avator);
+//            if(password == null) {System.out.println("Password Cannot Be Empty!");}
+//            if(email == null) {System.out.println("Email Cannot Be Empty!");}
+            user.setPhone_number(phone_number);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setAvator(avator);
             this.userService.updateUser(user);
             System.out.println("successful");
         }

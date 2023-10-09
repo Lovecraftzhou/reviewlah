@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-@Service
+
 public interface MCService {
     void insertMC(MC mc);
     void updateMC(MC mc);
