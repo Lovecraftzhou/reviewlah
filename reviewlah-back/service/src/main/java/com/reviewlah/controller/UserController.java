@@ -4,15 +4,14 @@ import com.reviewlah.controller.form.DeleteUserRequest;
 import com.reviewlah.controller.form.InsertUserRequest;
 import com.reviewlah.controller.form.LoginRequest;
 import com.reviewlah.controller.form.UpdateUserRequest;
-import com.reviewlah.db.dao.UserDao;
 import com.reviewlah.db.pojo.Address;
 import com.reviewlah.db.pojo.MC;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.*;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class UserController {
     @Autowired
     private AddressService addressService;
     @Autowired
+    @Resource
     private MCService mcService;
     @Autowired
     private CategoryService categoryService;
@@ -45,7 +45,10 @@ public class UserController {
     public String get(){
         return "user";
     }
+
+
     @PostMapping({"/insert"})
+//    @ApiOperation(value = )
     public String insertUser(@RequestBody InsertUserRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
