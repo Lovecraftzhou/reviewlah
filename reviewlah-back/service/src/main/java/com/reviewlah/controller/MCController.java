@@ -37,13 +37,18 @@ public class MCController {
         User user = this.userService.selectUserById(user_id);
         if(user != null && user.getType() == 2) {
             BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
-            this.mcService.deleteMCByMerchantId(merchant_id);
-            for(String category_name : category) {
-                int category_id = this.categoryService.selectCategoryIdByName(category_name);
-                MC mc = new MC(category_id, merchant_id);
-                this.mcService.insertMC(mc);
+            if(merchant_id != null) {
+                this.mcService.deleteMCByMerchantId(merchant_id);
+                for(String category_name : category) {
+                    int category_id = this.categoryService.selectCategoryIdByName(category_name);
+                    MC mc = new MC(category_id, merchant_id);
+                    this.mcService.insertMC(mc);
+                    System.out.println("successful");
+                }
             }
-            System.out.println("successful");
+            else {
+                System.out.println("Merchant Does Not Exist");
+            }
         }
         else {
             System.out.println("Merchant Does Not Exist");

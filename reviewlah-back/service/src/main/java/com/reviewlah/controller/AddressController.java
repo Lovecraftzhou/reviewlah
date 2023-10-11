@@ -33,9 +33,14 @@ public class AddressController {
         User user = this.userService.selectUserById(user_id);
         if(user != null && user.getType() == 2) {
             BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
-            Address address = new Address(address_code, merchant_id, address_detail, unitnum);
-            this.addressService.updateAddress(address);
-            System.out.println("successful");
+            if(merchant_id != null) {
+                Address address = new Address(address_code, merchant_id, address_detail, unitnum);
+                this.addressService.updateAddress(address);
+                System.out.println("successful");
+            }
+            else {
+                System.out.println("Merchant Does Not Exist");
+            }
         }
         else {
             System.out.println("Merchant Does Not Exist");

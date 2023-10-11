@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.DishDao">
+    <select id="selectAllDish" resultType="com.reviewlah.db.pojo.Dish">
+        SELECT *
+        From dishes
+    </select>
+    <select id="selectDishByName" resultType="com.reviewlah.db.pojo.Dish">
+        SELECT *
+        FROM dishes
+        WHERE dish_name like concat('%',#{dish_name},'%') AND menu_id = #{menu_id}
+    </select>
+    <select id="selectDishById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Dish">
+        SELECT *
+        FROM dishes
+        WHERE dish_id = #{dish_id}
+    </select>
+    <select id="selectDishByMenuId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Dish">
+        SELECT *
+        FROM dishes
+        WHERE menu_id = #{menu_id}
+        ORDER BY price DESC
+    </select>
+    <insert id="insertDish" parameterType="com.reviewlah.db.pojo.Dish">
+        INSERT INTO dishes (
+        <if test="dish_name!=null">
+            dish_name,
+        </if>
+        <if test="price!=null">
+            price,
+        </if>
+        <if test="menu_id!=null">
+            menu_id,
+        </if>
+        pic_dish) values (
+        <if test="dish_name!=null">
+            #{dish_name},
+        </if>
+        <if test="price!=null">
+            #{price},
+        </if>
+        <if test="menu_id!=null">
+            #{menu_id},
+        </if>
+        #{pic_dish}
+        )
+    </insert>
+    <update id="updateDish" parameterType="com.reviewlah.db.pojo.Dish">
+        UPDATE dishes
+        <set>
+            <if test="dish_name!=null">
+                dish_name = #{dish_name},
+            </if>
+            <if test="price!=null">
+                price = #{price},
+            </if>
+            <if test="menu_id!=null">
+                menun_id = #{menu_id},
+            </if>
+            <if test="pic_dish!=null">
+                pic_dish = #{pic_dish}
+            </if>
+        </set>
+        where dish_id = #{dish_id}
+    </update>
+    <delete id="deleteDishByName">
+        DELETE FROM dishes
+        WHERE dish_name = #{dish_name} AND menu_id = #{menu_id}
+    </delete>
+    <delete id="deleteDishById" parameterType="BigInteger">
+        DELETE FROM dishes
+        WHERE dish_id = #{dish_id}
+    </delete>
+</mapper>
