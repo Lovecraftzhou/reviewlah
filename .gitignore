@@ -1,8 +1,8 @@
 target/
-!review-sys/maven/.mvn/wrapper/maven-wrapper.jar
-!reviewlah-back/service/src/main/**/target/
-!reviewlah-back/service/src/test/**/target/
-reviewlah-back/service/src/main/resources/application.yml
+!reviewlah-back/.mvn/wrapper/maven-wrapper.jar
+!reviewlah-back/src/main/**/target/
+!reviewlah-back/src/test/**/target/
+reviewlah-back/src/main/resources/application.yml
 
 ### STS ###
 .apt_generated
@@ -25,8 +25,8 @@ reviewlah-back/service/src/main/resources/application.yml
 /nbdist/
 /.nb-gradle/
 build/
-!reviewlah-back/service/src/main/**/build/
-!reviewlah-back/service/src/test/**/build/
+!reviewlah-back/src/main/**/build/
+!reviewlah-back/src/test/**/build/
 
 ### VS Code ###
 .vscode/
