@@ -1,4 +1,4 @@
-# frontend-vue
+# reviewlah-vue
 
 ## Project setup
 ```
