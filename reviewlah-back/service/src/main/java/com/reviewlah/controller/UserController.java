@@ -46,7 +46,7 @@ public class UserController {
         return "user";
     }
     @PostMapping({"/insert"})
-    public String insertUser(@RequestBody InsertUserRequest request) {
+    public void insertUser(@RequestBody InsertUserRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();
@@ -55,9 +55,15 @@ public class UserController {
         String avator = request.getAvator();
         User user = this.userService.selectUserByName(name);
         //        if(avator == null || avator == "") pic_post = "";
-        //        if(password == null) {System.out.println("Password Cannot Be Empty!");}
-        //        if(email == null) {System.out.println("Email Cannot Be Empty!");}
         if(user == null) {
+            if(password == null || password.isEmpty()) {
+                System.out.println("Password Cannot Be Empty!");
+                return;
+            }
+            if(email == null || email.isEmpty()) {
+                System.out.println("Email Cannot Be Empty!");
+                return;
+            }
             user = new User(name, phone_number, email, password, type, avator);
             this.userService.insertUser(user);
             if(type == 1) {
@@ -75,6 +81,10 @@ public class UserController {
                 String address_code = request.getAddress_code();
                 String address_detail = request.getAddress_detail();
                 String unitnum = request.getUnitnum();
+                if(address_code == null || address_code.isEmpty()) {
+                    System.out.println("Address Code Cannot Be Empty!");
+                    return;
+                }
                 Address address = new Address(address_code, merchant_id,address_detail,unitnum);
                 this.addressService.insertAddress(address);
                 //insert MC
@@ -91,7 +101,6 @@ public class UserController {
         else {
             System.out.println("failed");
         }
-        return "register";
     }
     @PostMapping({"/personalInfo/update"})
     public String updateUser(@RequestBody UpdateUserRequest request) {

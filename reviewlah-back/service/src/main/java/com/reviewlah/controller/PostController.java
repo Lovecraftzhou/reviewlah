@@ -33,6 +33,14 @@ public class PostController {
         Date date = new Date();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
+            if(content == null || content.isEmpty()) {
+                System.out.println("Content Cannot Be Empty");
+                return;
+            }
+            if(title == null || title.isEmpty()) {
+                System.out.println("Title Cannot Be Empty");
+                return;
+            }
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             Post post = new Post();
             post.setCustomer_id(customer_id);

@@ -3,17 +3,17 @@
 <mapper namespace="com.reviewlah.db.dao.PostCommentDao">
     <select id="selectPostCommentByPostId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.PostComment">
         select *
-        FROM postComments
+        FROM postComment
         WHERE post_id = #{post_id}
         ORDER BY time_pc DESC
     </select>
     <select id="selectPostCommentByPCId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.PostComment">
         select *
-        FROM postComments
+        FROM postComment
         WHERE post_com_id = #{post_com_id}
     </select>
     <insert id="insertPostComment" parameterType="com.reviewlah.db.pojo.PostComment">
-        INSERT INTO postComments (
+        INSERT INTO postComment (
         <if test="customer_id!=null">
             customer_id,
         </if>
@@ -38,7 +38,7 @@
         )
     </insert>
     <delete id="deletePostCommentByPCId" parameterType="BigInteger">
-        DELETE FROM postComments
+        DELETE FROM postComment
         WHERE post_com_id = #{post_com_id}
     </delete>
 </mapper>

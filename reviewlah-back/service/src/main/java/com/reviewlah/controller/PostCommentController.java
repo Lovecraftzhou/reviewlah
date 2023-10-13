@@ -70,6 +70,10 @@ public class PostCommentController {
         User user = this.userService.selectUserById(user_id);
         Date date = new Date();
         if(user != null) {
+            if(content == null || content.isEmpty()) {
+                System.out.println("Content Cannot Be Empty");
+                return;
+            }
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             PostComment postComment = new PostComment();
             postComment.setCustomer_id(customer_id);

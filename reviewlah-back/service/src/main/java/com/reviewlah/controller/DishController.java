@@ -94,6 +94,15 @@ public class DishController {
                     Double price = request.getPrice();
                     String pic_dish = request.getPic_dish();
                     BigInteger menu_id = menu.getMenu_id();
+                    if(dish_name == null || dish_name.isEmpty()) {
+                        System.out.println("Dish Name Cannot Be Empty");
+                    }
+                    if(price <= 0) {
+                        System.out.println("Dish Name Cannot Be Empty");
+                    }
+//                    if(pic_dish == null || pic_dish.isEmpty()) {
+//                        pic_dish = "";
+//                    }
                     Dish dish = new Dish();
                     dish.setDish_name(dish_name);
                     dish.setPrice(price);

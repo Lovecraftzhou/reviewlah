@@ -3,29 +3,29 @@
 <mapper namespace="com.reviewlah.db.dao.PostDao">
     <select id="selectPostByCustomerId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Post">
         select *
-        FROM posts
+        FROM post
         WHERE customer_id = #{customer_id}
         ORDER BY time_post DESC
     </select>
     <select id="selectPostByPostId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Post">
         select *
-        FROM posts
+        FROM post
         WHERE post_id = #{post_id}
     </select>
     <select id="selectAllPostExceptMine" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Post">
         select *
-        FROM posts
+        FROM post
         WHERE customer_id != #{customer_id}
         ORDER BY time_post DESC
     </select>
     <select id="selectRelativePost" resultType="com.reviewlah.db.pojo.Post">
         select *
-        FROM posts
+        FROM post
         WHERE content like concat('%',#{keyword},'%') AND customer_id != #{customer_id}
         ORDER BY time_post DESC
     </select>
     <insert id="insertPost" parameterType="com.reviewlah.db.pojo.Post">
-        INSERT INTO posts (
+        INSERT INTO post (
         <if test="customer_id!=null">
             customer_id,
         </if>
@@ -55,7 +55,7 @@
         )
     </insert>
     <delete id="deletePostByPostId" parameterType="BigInteger">
-        DELETE FROM posts
+        DELETE FROM post
         WHERE post_id = #{post_id}
     </delete>
 </mapper>

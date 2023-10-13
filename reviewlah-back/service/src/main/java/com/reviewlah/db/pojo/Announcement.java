@@ -11,7 +11,9 @@ public class Announcement {
     private String content;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time_anc;
+    public Announcement() {
 
+    }
     public BigInteger getAnnouncement_id() {
         return announcement_id;
     }

@@ -3,26 +3,26 @@
 <mapper namespace="com.reviewlah.db.dao.DishDao">
     <select id="selectAllDish" resultType="com.reviewlah.db.pojo.Dish">
         SELECT *
-        From dishes
+        From dish
     </select>
     <select id="selectDishByName" resultType="com.reviewlah.db.pojo.Dish">
         SELECT *
-        FROM dishes
+        FROM dish
         WHERE dish_name like concat('%',#{dish_name},'%') AND menu_id = #{menu_id}
     </select>
     <select id="selectDishById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Dish">
         SELECT *
-        FROM dishes
+        FROM dish
         WHERE dish_id = #{dish_id}
     </select>
     <select id="selectDishByMenuId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Dish">
         SELECT *
-        FROM dishes
+        FROM dish
         WHERE menu_id = #{menu_id}
         ORDER BY price DESC
     </select>
     <insert id="insertDish" parameterType="com.reviewlah.db.pojo.Dish">
-        INSERT INTO dishes (
+        INSERT INTO dish (
         <if test="dish_name!=null">
             dish_name,
         </if>
@@ -46,7 +46,7 @@
         )
     </insert>
     <update id="updateDish" parameterType="com.reviewlah.db.pojo.Dish">
-        UPDATE dishes
+        UPDATE dish
         <set>
             <if test="dish_name!=null">
                 dish_name = #{dish_name},
@@ -64,11 +64,11 @@
         where dish_id = #{dish_id}
     </update>
     <delete id="deleteDishByName">
-        DELETE FROM dishes
+        DELETE FROM dish
         WHERE dish_name = #{dish_name} AND menu_id = #{menu_id}
     </delete>
     <delete id="deleteDishById" parameterType="BigInteger">
-        DELETE FROM dishes
+        DELETE FROM dish
         WHERE dish_id = #{dish_id}
     </delete>
 </mapper>
