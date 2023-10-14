@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 public interface AnnouncementDao {
-    void insertAnnouncement (Announcement announcement);
+    void insertAnnouncement(Announcement announcement);
     void updateAnnouncement(Announcement announcement);
     void deleteAnnouncementByAnnouncementId(BigInteger announcement_id);
     ArrayList<Announcement> selectAnnouncementByMerchantId(BigInteger merchant_id);

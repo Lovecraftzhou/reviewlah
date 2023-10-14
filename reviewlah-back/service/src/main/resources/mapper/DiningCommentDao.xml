@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.DiningCommentDao">
+    <select id="selectDCById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.DiningComment">
+        SELECT *
+        FROM diningComment
+        WHERE dining_com_id = #{dining_com_id}
+    </select>
+    <select id="selectDCByMerchantId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.DiningComment">
+        SELECT *
+        FROM diningComment
+        WHERE merchant_id = #{merchant_id}
+        ORDER BY time_dc DESC
+    </select>
+    <select id="selectDCByMerAndCusId" resultType="com.reviewlah.db.pojo.DiningComment">
+        SELECT *
+        FROM diningComment
+        WHERE merchant_id = #{merchant_id} AND customer_id = #{customer_id}
+        ORDER BY time_dc DESC
+    </select>
+    <insert id="insertDC" parameterType="com.reviewlah.db.pojo.DiningComment">
+        INSERT INTO diningComment (
+        <if test="merchant_id!=null">
+            merchant_id,
+        </if>
+        <if test="customer_id!=null">
+            customer_id,
+        </if>
+        <if test="rate!=null">
+            rate,
+        </if>
+        content,
+        pic_dc,
+        time_dc) values (
+        <if test="merchant_id!=null">
+            #{merchant_id},
+        </if>
+        <if test="customer_id!=null">
+            #{customer_id},
+        </if>
+        <if test="rate!=null">
+            #{rate},
+        </if>
+        #{content},
+        #{pic_dc},
+        #{time_dc}
+        )
+    </insert>
+    <delete id="deleteDCById" parameterType="BigInteger">
+        DELETE FROM diningComment
+        WHERE dining_com_id = #{dining_com_id}
+    </delete>
+</mapper>

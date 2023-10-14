@@ -15,20 +15,16 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishDao dishDao;
     public ArrayList<Dish> selectAllDish() {
-        ArrayList<Dish> list = this.dishDao.selectAllDish();
-        return list;
+        return this.dishDao.selectAllDish();
     }
     public ArrayList<Dish> selectDishByName(@Param("dish_name") String dish_name, @Param("menu_id") BigInteger menu_id) {
-        ArrayList<Dish> list = this.dishDao.selectDishByName(dish_name, menu_id);
-        return list;
+        return this.dishDao.selectDishByName(dish_name, menu_id);
     }
     public Dish selectDishById(BigInteger dish_id) {
-        Dish dish = this.dishDao.selectDishById(dish_id);
-        return dish;
+        return this.dishDao.selectDishById(dish_id);
     }
     public ArrayList<Dish> selectDishByMenuId(BigInteger menu_id) {
-        ArrayList<Dish> list = this.dishDao.selectDishByMenuId(menu_id);
-        return list;
+        return this.dishDao.selectDishByMenuId(menu_id);
     }
     public void insertDish(Dish dish) {
         this.dishDao.insertDish(dish);

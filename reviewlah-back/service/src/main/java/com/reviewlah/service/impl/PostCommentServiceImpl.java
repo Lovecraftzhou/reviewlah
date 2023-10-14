@@ -14,12 +14,10 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Autowired
     private PostCommentDao postCommentDao;
     public ArrayList<PostComment> selectPostCommentByPostId(BigInteger post_id) {
-        ArrayList<PostComment> list = this.postCommentDao.selectPostCommentByPostId(post_id);
-        return list;
+        return this.postCommentDao.selectPostCommentByPostId(post_id);
     }
     public PostComment selectPostCommentByPCId(BigInteger post_com_id) {
-        PostComment postComment = this.postCommentDao.selectPostCommentByPCId(post_com_id);
-        return postComment;
+        return this.postCommentDao.selectPostCommentByPCId(post_com_id);
     }
     public void insertPostComment(PostComment postComment) {
         this.postCommentDao.insertPostComment(postComment);

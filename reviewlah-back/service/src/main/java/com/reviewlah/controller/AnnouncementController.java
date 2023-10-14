@@ -1,10 +1,7 @@
 package com.reviewlah.controller;
 
 
-import com.reviewlah.controller.form.DeleteAnnouncementRequest;
-import com.reviewlah.controller.form.InsertAnnouncementRequest;
-import com.reviewlah.controller.form.SelectAnnouncementByAnnouncementIDRequest;
-import com.reviewlah.controller.form.UpdateAnnouncementRequest;
+import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Announcement;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.AnnouncementService;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
@@ -30,7 +28,7 @@ public class AnnouncementController {
     private AnnouncementService announcementService;
 
 
-    @PostMapping({"/detail"})
+    @PostMapping({"/announcementDetail"})
     public Announcement selectAnnouncementByAnnouncementId(@RequestBody SelectAnnouncementByAnnouncementIDRequest request){
         BigInteger announcement_id = request.getAnnouncement_id();
         Announcement announcement=this.announcementService.selectAnnouncementByAnnouncementId(announcement_id);
@@ -41,6 +39,27 @@ public class AnnouncementController {
             System.out.println("successful");
         }
         return announcement;
+    }
+    @PostMapping({"/detail"})
+    public ArrayList<Announcement> selectAnnouncementByMerchantId(@RequestBody SelectAnnouncementByMerchantIDRequest request){
+        BigInteger user_id = request.getUser_id();
+        User user = this.userService.selectUserById(user_id);
+        if (user != null && user.getType() == 2) {
+            BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
+            if (merchant_id != null) {
+                ArrayList<Announcement> list = new ArrayList<Announcement>();
+                list = this.announcementService.selectAnnouncementByMerchantId(merchant_id);
+                System.out.println("successful");
+                return list;
+            }
+            else{
+                System.out.println("Merchant Does Not Exist");
+            }
+        }
+        else{
+            System.out.println("User Does Not Exist");
+        }
+        return null;
     }
     @PostMapping({"/update"})
     public void updateAnnouncement(@RequestBody UpdateAnnouncementRequest request) {
@@ -72,7 +91,7 @@ public class AnnouncementController {
             BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
             if (merchant_id !=null){
                 String content = request.getContent();
-                if(content != null && content != "") {
+                if(content != null && !content.equals("")) {
                     Date time_anc = new Date();
                     Announcement announcement = new Announcement();
                     announcement.setContent(content);

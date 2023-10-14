@@ -28,13 +28,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     public ArrayList<Announcement> selectAnnouncementByMerchantId(BigInteger merchant_id) {
-        ArrayList<Announcement> list =this.announcementDao.selectAnnouncementByMerchantId(merchant_id);
-        return list;
+        return this.announcementDao.selectAnnouncementByMerchantId(merchant_id);
 
     }
 
     public Announcement selectAnnouncementByAnnouncementId(BigInteger announcement_id) {
-        Announcement announcement =this.announcementDao.selectAnnouncementByAnnouncementId(announcement_id);
-        return announcement;
+        return this.announcementDao.selectAnnouncementByAnnouncementId(announcement_id);
     }
 }

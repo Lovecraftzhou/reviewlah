@@ -21,11 +21,9 @@ public class UserServiceImpl implements UserService {
         this.userDao.deleteUserById(user_id);
     };
     public User selectUserByName(String name) {
-        User user = this.userDao.selectUserByName(name);
-        return user;
+        return this.userDao.selectUserByName(name);
     }
     public User selectUserById(BigInteger user_id) {
-        User user = this.userDao.selectUserById(user_id);
-        return user;
+        return this.userDao.selectUserById(user_id);
     }
 }

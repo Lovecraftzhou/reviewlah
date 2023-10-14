@@ -11,4 +11,9 @@
         FROM merchant
         WHERE user_id = #{user_id}
     </select>
+    <select id="selectMerchantByUserId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Merchant">
+        SELECT *
+        FROM merchant
+        WHERE user_id = #{user_id}
+    </select>
 </mapper>

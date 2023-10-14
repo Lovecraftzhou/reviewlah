@@ -42,17 +42,18 @@ public class PostCommentController {
                 BigInteger customer_id = tmp.getCustomer_id();
                 BigInteger user_id = this.customerService.selectUserIdByCustomerId(customer_id);
                 User user = this.userService.selectUserById(user_id);
-                if(user != null) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("name", user.getName());
-                    map.put("avator", user.getAvator());
-                    map.put("content", tmp.getContent());
-                    map.put("time_pc", tmp.getTime_pc());
-                    res.add(map);
-                }
-                else {
-                    System.out.println("User Does Not Exist");
-                }
+                String name = user.getName();
+                String avator = user.getAvator();
+//                if(user == null) {
+//                    name = "New Glory";
+//                    avator = "";
+//                }
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", name);
+                map.put("avator", avator);
+                map.put("content", tmp.getContent());
+                map.put("time_pc", tmp.getTime_pc());
+                res.add(map);
             }
 
         }

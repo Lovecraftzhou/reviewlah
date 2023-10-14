@@ -13,12 +13,10 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuDao menuDao;
     public ArrayList<Menu> selectAllMenu() {
-        ArrayList<Menu> list = this.menuDao.selectAllMenu();
-        return list;
+        return this.menuDao.selectAllMenu();
     }
     public Menu selectMenuByMerchantId(BigInteger merchant_id) {
-        Menu menu = this.menuDao.selectMenuByMerchantId(merchant_id);
-        return menu;
+        return this.menuDao.selectMenuByMerchantId(merchant_id);
     }
     public void insertMenu(Menu menu) {
         this.menuDao.insertMenu(menu);

@@ -20,19 +20,15 @@ public class PostServiceImpl implements PostService {
         this.postDao.deletePostByPostId(post_id);
     }
     public ArrayList<Post> selectPostByCustomerId(BigInteger customer_id) {
-        ArrayList<Post> list = this.postDao.selectPostByCustomerId(customer_id);
-        return list;
+        return this.postDao.selectPostByCustomerId(customer_id);
     }
     public Post selectPostByPostId(BigInteger post_id) {
-        Post post = this.postDao.selectPostByPostId(post_id);
-        return post;
+        return this.postDao.selectPostByPostId(post_id);
     }
     public ArrayList<Post> selectAllPostExceptMine(BigInteger customer_id) {
-        ArrayList<Post> list = this.postDao.selectAllPostExceptMine(customer_id);
-        return list;
+        return this.postDao.selectAllPostExceptMine(customer_id);
     }
     public ArrayList<Post> selectRelativePost(@Param("keyword") String keyword, @Param("customer_id") BigInteger customer_id) {
-        ArrayList<Post> list = this.postDao.selectRelativePost(keyword, customer_id);
-        return list;
+        return this.postDao.selectRelativePost(keyword, customer_id);
     }
 }

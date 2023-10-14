@@ -36,10 +36,11 @@
         WHERE announcement_id = #{announcement_id}
     </delete>
 
-    <select id = "selectAnnouncementIdByMerchantId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Announcement">
+    <select id = "selectAnnouncementByMerchantId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Announcement">
         SELECT *
         FROM announcement
         WHERE merchant_id = #{merchant_id}
+        ORDER BY time_anc DESC
     </select>
     <select id="selectAnnouncementByAnnouncementId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Announcement">
         SELECT *
