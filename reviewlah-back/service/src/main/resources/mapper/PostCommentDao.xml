@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.PostCommentDao">
+    <select id="selectPostCommentByPostId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.PostComment">
+        select *
+        FROM postComment
+        WHERE post_id = #{post_id}
+        ORDER BY time_pc DESC
+    </select>
+    <select id="selectPostCommentByPCId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.PostComment">
+        select *
+        FROM postComment
+        WHERE post_com_id = #{post_com_id}
+    </select>
+    <insert id="insertPostComment" parameterType="com.reviewlah.db.pojo.PostComment">
+        INSERT INTO postComment (
+        <if test="customer_id!=null">
+            customer_id,
+        </if>
+        <if test="post_id!=null">
+            post_id,
+        </if>
+        <if test="content!=null">
+            content,
+        </if>
+        time_pc
+        )values (
+        <if test="customer_id!=null">
+            #{customer_id},
+        </if>
+        <if test="post_id!=null">
+            #{post_id},
+        </if>
+        <if test="content!=null">
+            #{content},
+        </if>
+        #{time_pc}
+        )
+    </insert>
+    <delete id="deletePostCommentByPCId" parameterType="BigInteger">
+        DELETE FROM postComment
+        WHERE post_com_id = #{post_com_id}
+    </delete>
+</mapper>

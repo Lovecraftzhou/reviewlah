@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.AnnouncementDao">
+    <insert id = "insertAnnouncement" parameterType="com.reviewlah.db.pojo.Announcement">
+        INSERT INTO announcement (
+        <if test="merchant_id!=null">
+            merchant_id,
+        </if>
+        <if test="content!=null">
+            content,
+        </if>
+        time_anc) values (
+        <if test="merchant_id!=null">
+            #{merchant_id},
+        </if>
+        <if test="content!=null">
+            #{content},
+        </if>
+        #{time_anc}
+        )
+    </insert>
+    <update id = "updateAnnouncement" parameterType = "com.reviewlah.db.pojo.Announcement">
+        UPDATE announcement
+        <set>
+            <if test="time_anc!=null">
+                time_anc = #{time_anc},
+            </if>
+            <if test="content!=null">
+                content = #{content},
+            </if>
+        </set>
+        where announcement_id = #{announcement_id}
+    </update>
+    <delete id = "deleteAnnouncementByAnnouncementId" parameterType="BigInteger">
+        DELETE FROM announcement
+        WHERE announcement_id = #{announcement_id}
+    </delete>
+
+    <select id = "selectAnnouncementIdByMerchantId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Announcement">
+        SELECT *
+        FROM announcement
+        WHERE merchant_id = #{merchant_id}
+    </select>
+    <select id="selectAnnouncementByAnnouncementId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Announcement">
+        SELECT *
+        FROM announcement
+        WHERE announcement_id = #{announcement_id}
+    </select>
+
+</mapper>

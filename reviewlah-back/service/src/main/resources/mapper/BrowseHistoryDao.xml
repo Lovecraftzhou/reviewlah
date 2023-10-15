@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.BrowseHistoryDao">
+    <select id="selectBrowseHistoryByHistoryID" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.BrowseHistory">
+        select *
+        FROM browseHistory
+        WHERE history_id = #{history_id}
+    </select>
+    <select id="selectBrowseHistoryByCustomerIDAndCategory" parameterType="map" resultType="com.reviewlah.db.pojo.BrowseHistory">
+        SELECT COUNT(*)
+        FROM browseHistory
+        WHERE customer_id = #{customer_id}
+          AND category_id = #{category_id}
+        ORDER BY time_his DESC
+    </select>
+    <select id="selectBrowseHistoryByCategoryName" parameterType="String" resultType="com.reviewlah.db.pojo.BrowseHistory">
+        select *
+        FROM browseHistory
+        WHERE category_name_ = #{category_name}
+        ORDER BY time_his DESC
+    </select>
+    <select id="selectBrowseHistoryByTimeHis" parameterType="Date" resultType="com.reviewlah.db.pojo.BrowseHistory">
+        select *
+        FROM browseHistory
+        WHERE time_his &lt; #{time_his}
+        ORDER BY time_his DESC
+    </select>
+    <select id="selectBrowseHistoryByMerchantID" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.BrowseHistory">
+        select *
+        FROM browseHistory
+        WHERE merchant_id = #{merchant_id}
+        ORDER BY time_his DESC
+    </select>
+    <insert id="insertPost" parameterType="com.reviewlah.db.pojo.Post">
+        INSERT INTO browseHistory(
+        <if test="customer_id!=null">
+            customer_id,
+        </if>
+        <if test="category_name!=null">
+            category_id,
+        </if>
+        time_his) values (
+        <if test="customer_id!=null">
+            #{customer_id},
+        </if>
+        <if test="category_name!=null">
+            #{category_id},
+        </if>
+        #{time_his}
+        )
+    </insert>
+    <delete id = "deleteBrowseHistoryByHistoryID" parameterType="BigInteger">
+        DELETE FROM browseHistory
+        WHERE history_id = #{history_id}
+    </delete>
+
+
+
+
+</mapper>
