@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.DiningCommentDao">
+    <select id="selectAllDC" resultType="com.reviewlah.db.pojo.DiningComment">
+        SELECT *
+        FROM diningComment
+    </select>
     <select id="selectDCById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.DiningComment">
         SELECT *
         FROM diningComment
@@ -12,11 +16,30 @@
         WHERE merchant_id = #{merchant_id}
         ORDER BY time_dc DESC
     </select>
-    <select id="selectDCByMerAndCusId" resultType="com.reviewlah.db.pojo.DiningComment">
-        SELECT *
-        FROM diningComment
-        WHERE merchant_id = #{merchant_id} AND customer_id = #{customer_id}
-        ORDER BY time_dc DESC
+    <select id="selectDCMapByMerchantId" parameterType="BigInteger" resultType="HashMap">
+        SELECT d.content AS content,
+               d.rate AS rate,
+               d.pic_dc AS pic_dc,
+               d.time_dc AS time_dc,
+               u.name AS name,
+               u.avator AS avator
+        FROM diningComment d INNER JOIN customer c ON d.customer_id = c.customer_id
+        LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE d.merchant_id = #{merchant_id}
+        ORDER BY d.time_dc DESC
+    </select>
+    <select id="selectDCMapByMerAndCusId" resultType="HashMap">
+        SELECT d.content AS content,
+               d.rate AS rate,
+               d.pic_dc AS pic_dc,
+               d.time_dc AS time_dc,
+               d.customer_id = #{customer_id} AS own,
+               u.name AS name,
+               u.avator AS avator
+        FROM diningComment d INNER JOIN customer c ON d.customer_id = c.customer_id
+        LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE d.merchant_id = #{merchant_id}
+        ORDER BY d.time_dc DESC
     </select>
     <insert id="insertDC" parameterType="com.reviewlah.db.pojo.DiningComment">
         INSERT INTO diningComment (
@@ -50,4 +73,9 @@
         DELETE FROM diningComment
         WHERE dining_com_id = #{dining_com_id}
     </delete>
+    <select id="getAverageRateByMerchantId" parameterType="BigInteger" resultType="Double">
+        SELECT AVG(rate)
+        FROM diningComment
+        WHERE merchant_id = #{merchant_id}
+    </select>
 </mapper>

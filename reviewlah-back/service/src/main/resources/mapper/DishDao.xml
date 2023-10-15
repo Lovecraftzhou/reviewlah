@@ -21,6 +21,15 @@
         WHERE menu_id = #{menu_id}
         ORDER BY price DESC
     </select>
+    <select id="selectDishByMerchantId" parameterType="BigInteger" resultType="HashMap">
+        SELECT d.dish_name AS dish_name,
+               d.price AS price,
+               d.pic_dish AS pic_dish
+        FROM merchant m INNER JOIN menu me ON m.merchant_id = me.merchant_id
+        LEFT JOIN dish d ON me.menu_id = d.menu_id
+        WHERE m.merchant_id = #{merchant_id}
+        ORDER BY d.price DESC
+    </select>
     <insert id="insertDish" parameterType="com.reviewlah.db.pojo.Dish">
         INSERT INTO dish (
         <if test="dish_name!=null">

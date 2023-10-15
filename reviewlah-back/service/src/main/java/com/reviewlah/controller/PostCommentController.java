@@ -2,11 +2,9 @@ package com.reviewlah.controller;
 
 import com.reviewlah.controller.form.DeletePostCommentByPCIdRequest;
 import com.reviewlah.controller.form.InsertPostCommentRequest;
+import com.reviewlah.controller.form.SelectPostCommentByPostAndCusIdRequest;
 import com.reviewlah.controller.form.SelectPostCommentByPostIdRequest;
-import com.reviewlah.db.pojo.MC;
-import com.reviewlah.db.pojo.Post;
-import com.reviewlah.db.pojo.PostComment;
-import com.reviewlah.db.pojo.User;
+import com.reviewlah.db.pojo.*;
 import com.reviewlah.service.CustomerService;
 import com.reviewlah.service.PostCommentService;
 import com.reviewlah.service.PostService;
@@ -31,38 +29,78 @@ public class PostCommentController {
     private PostService postService;
     @Autowired
     private PostCommentService postCommentService;
-    @PostMapping({"/post_comment"})
-    public ArrayList<Map<String, Object>> selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
-        ArrayList<Map<String, Object>> res = new ArrayList<>();
+    @PostMapping({"/post_commentForPostOwner"})
+    public ArrayList<HashMap> selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
+        ArrayList<HashMap> res = new ArrayList<>();
         BigInteger post_id = request.getPost_id();
         Post post = this.postService.selectPostByPostId(post_id);
         if(post != null) {
-            ArrayList<PostComment> list = this.postCommentService.selectPostCommentByPostId(post_id);
-            for(PostComment tmp : list) {
-                BigInteger customer_id = tmp.getCustomer_id();
-                BigInteger user_id = this.customerService.selectUserIdByCustomerId(customer_id);
-                User user = this.userService.selectUserById(user_id);
-                String name = user.getName();
-                String avator = user.getAvator();
-//                if(user == null) {
-//                    name = "New Glory";
-//                    avator = "";
-//                }
-                Map<String, Object> map = new HashMap<>();
-                map.put("name", name);
-                map.put("avator", avator);
-                map.put("content", tmp.getContent());
-                map.put("time_pc", tmp.getTime_pc());
-                res.add(map);
-            }
-
+            res = this.postCommentService.selectPostMapCommentByPostId(post_id);
+            return res;
         }
         else {
             System.out.println("Post Does Not Exist");
-            return null;
         }
-        return res;
+        return null;
     }
+    @PostMapping({"/post_comment"})
+    public ArrayList<HashMap> selectPostCommentByPostAndCusId(@RequestBody SelectPostCommentByPostAndCusIdRequest request) {
+        ArrayList<HashMap> res = new ArrayList<>();
+        BigInteger post_id = request.getPost_id();
+        BigInteger user_id = request.getUser_id();
+        Post post = this.postService.selectPostByPostId(post_id);
+        User user = this.userService.selectUserById(user_id);
+        if(post != null) {
+            if(user != null) {
+                Customer customer = this.customerService.selectCustomerByUserId(user_id);
+                if(customer != null) {
+                    res = this.postCommentService.selectPostMapCommentByCusAndPostId(post_id, customer.getCustomer_id());
+                    return res;
+                }
+                else {
+                    System.out.println("Customer Does Not Exist");
+                }
+            }
+            else {
+                System.out.println("User Does Not Exist");
+            }
+        }
+        else {
+            System.out.println("Post Does Not Exist");
+        }
+        return null;
+    }
+//    public ArrayList<Map<String, Object>> selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
+//        ArrayList<Map<String, Object>> res = new ArrayList<>();
+//        BigInteger post_id = request.getPost_id();
+//        Post post = this.postService.selectPostByPostId(post_id);
+//        if(post != null) {
+//            ArrayList<PostComment> list = this.postCommentService.selectPostCommentByPostId(post_id);
+//            for(PostComment tmp : list) {
+//                BigInteger customer_id = tmp.getCustomer_id();
+//                BigInteger user_id = this.customerService.selectUserIdByCustomerId(customer_id);
+//                User user = this.userService.selectUserById(user_id);
+//                String name = user.getName();
+//                String avator = user.getAvator();
+////                if(user == null) {
+////                    name = "New Glory";
+////                    avator = "";
+////                }
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("name", name);
+//                map.put("avator", avator);
+//                map.put("content", tmp.getContent());
+//                map.put("time_pc", tmp.getTime_pc());
+//                res.add(map);
+//            }
+//
+//        }
+//        else {
+//            System.out.println("Post Does Not Exist");
+//            return null;
+//        }
+//        return res;
+//    }
     @PostMapping({"/post_comment/insert"})
     public void insertPostComment(@RequestBody InsertPostCommentRequest request) {
         BigInteger user_id = request.getUser_id();

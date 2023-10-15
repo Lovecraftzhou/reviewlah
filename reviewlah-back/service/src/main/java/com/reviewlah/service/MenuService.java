@@ -1,5 +1,6 @@
 package com.reviewlah.service;
 
+import com.reviewlah.db.pojo.Dish;
 import com.reviewlah.db.pojo.Menu;
 
 import java.math.BigInteger;

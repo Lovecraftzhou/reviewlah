@@ -69,4 +69,9 @@
         FROM user
         WHERE user_id = #{user_id}
     </select>
+    <select id="selectUserByType" parameterType="Integer" resultType="com.reviewlah.db.pojo.User">
+        SELECT *
+        FROM user
+        WHERE type = #{type}
+    </select>
 </mapper>

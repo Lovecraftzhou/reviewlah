@@ -37,37 +37,17 @@ public class DiningCommentController {
     @Autowired
     private DiningCommentService diningCommentService;
     @PostMapping({"/showAllForMerchant"})
-    public ArrayList<Map<String, Object>> selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
-        ArrayList<Map<String, Object>> res = new ArrayList<>();
+    public ArrayList<HashMap> selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
+        ArrayList<HashMap> res = new ArrayList<>();
         if(user != null && user.getType() == 2) {
-            BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
-            if(merchant_id != null) {
-                ArrayList<DiningComment> list = this.diningCommentService.selectDCByMerchantId(merchant_id);
-                for(DiningComment tmp : list) {
-                    Map<String, Object> map = new HashMap<>();
-                    BigInteger customer_id = tmp.getCustomer_id();
-                    BigInteger tmp_user_id = this.customerService.selectUserIdByCustomerId(customer_id);
-                    User tmp_user = this.userService.selectUserById(tmp_user_id);
-                    String name = tmp_user.getName();
-                    String avator = tmp_user.getAvator();
-//                if(user == null) {
-//                    name = "New Glory";
-//                    avator = "";
-//                }
-                    map.put("content", tmp.getContent());
-                    map.put("rate", tmp.getRate());
-                    map.put("name", name);
-                    map.put("avator", avator);
-                    map.put("pic_dc", tmp.getPic_dc());
-                    map.put("time_dc", tmp.getTime_dc());
-                    res.add(map);
-                }
-                System.out.println("successful");
+            Merchant merchant = this.merchantService.selectMerchantByUserId(user_id);
+            if(merchant != null) {
+                res = this.diningCommentService.selectDCMapByMerchantId(merchant.getMerchant_id());
                 return res;
             }
-            else{
+            else {
                 System.out.println("Merchant Does Not Exist");
             }
         }
@@ -76,9 +56,48 @@ public class DiningCommentController {
         }
         return null;
     }
+//    public ArrayList<Map<String, Object>> selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
+//        ArrayList<Map<String, Object>> res = new ArrayList<>();
+//        BigInteger user_id = request.getUser_id();
+//        User user = this.userService.selectUserById(user_id);
+//        if(user != null && user.getType() == 2) {
+//            BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
+//            if(merchant_id != null) {
+//                ArrayList<DiningComment> list = this.diningCommentService.selectDCByMerchantId(merchant_id);
+//                for(DiningComment tmp : list) {
+//                    Map<String, Object> map = new HashMap<>();
+//                    BigInteger customer_id = tmp.getCustomer_id();
+//                    BigInteger tmp_user_id = this.customerService.selectUserIdByCustomerId(customer_id);
+//                    User tmp_user = this.userService.selectUserById(tmp_user_id);
+//                    String name = tmp_user.getName();
+//                    String avator = tmp_user.getAvator();
+////                if(user == null) {
+////                    name = "New Glory";
+////                    avator = "";
+////                }
+//                    map.put("content", tmp.getContent());
+//                    map.put("rate", tmp.getRate());
+//                    map.put("name", name);
+//                    map.put("avator", avator);
+//                    map.put("pic_dc", tmp.getPic_dc());
+//                    map.put("time_dc", tmp.getTime_dc());
+//                    res.add(map);
+//                }
+//                System.out.println("successful");
+//                return res;
+//            }
+//            else{
+//                System.out.println("Merchant Does Not Exist");
+//            }
+//        }
+//        else {
+//            System.out.println("User Does Not Exist");
+//        }
+//        return null;
+//    }
     @PostMapping({"/showAllForCustomer"})
-    public ArrayList<Map<String, Object>> selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
-        ArrayList<Map<String, Object>> res = new ArrayList<>();
+    public ArrayList<HashMap> selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
+        ArrayList<HashMap> res = new ArrayList<>();
         BigInteger customer_user_id = request.getCustomer_user_id();
         BigInteger merchant_user_id = request.getMerchant_user_id();
         User merchant_user = this.userService.selectUserById(merchant_user_id);
@@ -94,38 +113,63 @@ public class DiningCommentController {
                 System.out.println("Customer Does Not Exist");
                 return null;
             }
-            ArrayList<DiningComment> list = this.diningCommentService.selectDCByMerchantId(merchant.getMerchant_id());
-            for(DiningComment tmp : list) {
-                Map<String, Object> map = new HashMap<>();
-                BigInteger customer_id = tmp.getCustomer_id();
-                BigInteger user_id = this.customerService.selectUserIdByCustomerId(customer_id);
-                User user = this.userService.selectUserById(user_id);
-                String name = user.getName();
-                String avator = user.getAvator();
-//                if(user == null) {
-//                    name = "New Glory";
-//                    avator = "";
-//                }
-                map.put("content", tmp.getContent());
-                map.put("rate", tmp.getRate());
-                map.put("name", name);
-                map.put("avator", avator);
-                map.put("pic_dc", tmp.getPic_dc());
-                map.put("time_dc", tmp.getTime_dc());
-                if(tmp.getCustomer_id() == customer.getCustomer_id()) {
-                    map.put("own", 1);
-                }
-                else {
-                    map.put("own", 0);
-                }
-                res.add(map);
-            }
+            res = this.diningCommentService.selectDCMapByMerAndCusId(merchant.getMerchant_id(), customer.getCustomer_id());
+            return res;
         }
         else {
             System.out.println("User Does Not Exist");
         }
-        return res;
+        return null;
     }
+//    public ArrayList<Map<String, Object>> selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
+//        ArrayList<Map<String, Object>> res = new ArrayList<>();
+//        BigInteger customer_user_id = request.getCustomer_user_id();
+//        BigInteger merchant_user_id = request.getMerchant_user_id();
+//        User merchant_user = this.userService.selectUserById(merchant_user_id);
+//        User customer_user = this.userService.selectUserById(customer_user_id);
+//        if(merchant_user != null && merchant_user.getType() == 2 && customer_user != null && customer_user.getType() == 1) {
+//            Merchant merchant = this.merchantService.selectMerchantByUserId(merchant_user_id);
+//            Customer customer = this.customerService.selectCustomerByUserId(customer_user_id);
+//            if(merchant == null) {
+//                System.out.println("Merchant Does Not Exist");
+//                return null;
+//            }
+//            if(customer == null) {
+//                System.out.println("Customer Does Not Exist");
+//                return null;
+//            }
+//            ArrayList<DiningComment> list = this.diningCommentService.selectDCByMerchantId(merchant.getMerchant_id());
+//            for(DiningComment tmp : list) {
+//                Map<String, Object> map = new HashMap<>();
+//                BigInteger customer_id = tmp.getCustomer_id();
+//                BigInteger user_id = this.customerService.selectUserIdByCustomerId(customer_id);
+//                User user = this.userService.selectUserById(user_id);
+//                String name = user.getName();
+//                String avator = user.getAvator();
+////                if(user == null) {
+////                    name = "New Glory";
+////                    avator = "";
+////                }
+//                map.put("content", tmp.getContent());
+//                map.put("rate", tmp.getRate());
+//                map.put("name", name);
+//                map.put("avator", avator);
+//                map.put("pic_dc", tmp.getPic_dc());
+//                map.put("time_dc", tmp.getTime_dc());
+//                if(tmp.getCustomer_id() == customer.getCustomer_id()) {
+//                    map.put("own", 1);
+//                }
+//                else {
+//                    map.put("own", 0);
+//                }
+//                res.add(map);
+//            }
+//        }
+//        else {
+//            System.out.println("User Does Not Exist");
+//        }
+//        return res;
+//    }
     @PostMapping({"/insert"})
     public void insertDC(@RequestBody InsertDiningCommentRequest request) {
         BigInteger customer_user_id = request.getCustomer_user_id();

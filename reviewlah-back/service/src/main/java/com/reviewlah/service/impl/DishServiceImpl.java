@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Service
 public class DishServiceImpl implements DishService {
@@ -25,6 +26,9 @@ public class DishServiceImpl implements DishService {
     }
     public ArrayList<Dish> selectDishByMenuId(BigInteger menu_id) {
         return this.dishDao.selectDishByMenuId(menu_id);
+    }
+    public ArrayList<HashMap> selectDishByMerchantId(BigInteger merchant_id) {
+        return this.dishDao.selectDishByMerchantId(merchant_id);
     }
     public void insertDish(Dish dish) {
         this.dishDao.insertDish(dish);

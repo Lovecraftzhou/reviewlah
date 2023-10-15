@@ -36,11 +36,6 @@ public class UserController {
     public String register(){
         return "register";
     }
-
-    @RequestMapping("/personalInfo")
-    public String personalInfo(){
-        return "personalInfo";
-    }
     @GetMapping("/get")
     public String get(){
         return "user";
@@ -63,6 +58,13 @@ public class UserController {
             if(email == null || email.isEmpty()) {
                 System.out.println("Email Cannot Be Empty!");
                 return;
+            }
+            if(phone_number == null || phone_number.isEmpty()) {
+                System.out.println("phone_number Cannot Be Empty!");
+                return;
+            }
+            if(avator == null || avator.isEmpty()) {
+                avator = "http://defaultUserAvator";
             }
             user = new User(name, phone_number, email, password, type, avator);
             this.userService.insertUser(user);
