@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeletePostCommentByPCIdRequest;
 import com.reviewlah.controller.form.InsertPostCommentRequest;
 import com.reviewlah.controller.form.SelectPostCommentByPostAndCusIdRequest;
@@ -44,7 +45,7 @@ public class PostCommentController {
         return null;
     }
     @PostMapping({"/post_comment"})
-    public ArrayList<HashMap> selectPostCommentByPostAndCusId(@RequestBody SelectPostCommentByPostAndCusIdRequest request) {
+    public RCode selectPostCommentByPostAndCusId(@RequestBody SelectPostCommentByPostAndCusIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
         BigInteger post_id = request.getPost_id();
         BigInteger user_id = request.getUser_id();
@@ -55,20 +56,22 @@ public class PostCommentController {
                 Customer customer = this.customerService.selectCustomerByUserId(user_id);
                 if(customer != null) {
                     res = this.postCommentService.selectPostMapCommentByCusAndPostId(post_id, customer.getCustomer_id());
-                    return res;
                 }
                 else {
                     System.out.println("Customer Does Not Exist");
+                    return RCode.error("Customer Does Not Exist");
                 }
             }
             else {
                 System.out.println("User Does Not Exist");
+                return RCode.error("User Does Not Exist");
             }
         }
         else {
             System.out.println("Post Does Not Exist");
+            return RCode.error("Post Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", res);
     }
 //    public ArrayList<Map<String, Object>> selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
 //        ArrayList<Map<String, Object>> res = new ArrayList<>();
@@ -102,7 +105,7 @@ public class PostCommentController {
 //        return res;
 //    }
     @PostMapping({"/post_comment/insert"})
-    public void insertPostComment(@RequestBody InsertPostCommentRequest request) {
+    public RCode insertPostComment(@RequestBody InsertPostCommentRequest request) {
         BigInteger user_id = request.getUser_id();
         BigInteger post_id = request.getPost_id();
         String content = request.getContent();
@@ -111,7 +114,7 @@ public class PostCommentController {
         if(user != null) {
             if(content == null || content.isEmpty()) {
                 System.out.println("Content Cannot Be Empty");
-                return;
+                return RCode.error("Content Cannot Be Empty");
             }
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             PostComment postComment = new PostComment();
@@ -123,11 +126,13 @@ public class PostCommentController {
             System.out.println("successful");
         }
         else {
-            System.out.println("failed");
+            System.out.println("Failed");
+            return RCode.error("Failed");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/post_comment/delete"})
-    public void deletePostCommentByPCId(@RequestBody DeletePostCommentByPCIdRequest request) {
+    public RCode deletePostCommentByPCId(@RequestBody DeletePostCommentByPCIdRequest request) {
         BigInteger post_com_id = request.getPost_com_id();
         PostComment postComment = this.postCommentService.selectPostCommentByPCId(post_com_id);
         if(postComment != null) {
@@ -136,6 +141,8 @@ public class PostCommentController {
         }
         else {
             System.out.println("PostComment Does Not Exist");
+            return RCode.error("PostComment Does Not Exist");
         }
+        return RCode.ok("successful");
     }
 }

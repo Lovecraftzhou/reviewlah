@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.UpdateAddressRequest;
 import com.reviewlah.db.pojo.Address;
 import com.reviewlah.db.pojo.Merchant;
@@ -25,7 +26,7 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
     @PostMapping({"/update"})
-    public String updateAddress(@RequestBody UpdateAddressRequest request) {
+    public RCode updateAddress(@RequestBody UpdateAddressRequest request) {
         BigInteger user_id = request.getUser_id();
         String address_code = request.getAddress_code();
         String address_detail = request.getAddress_detail();
@@ -40,11 +41,13 @@ public class AddressController {
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("Merchant Does Not Exist");
+            return RCode.error("Merchant Does Not Exist");
         }
-        return "merchant/address";
+        return RCode.ok("successful");
     }
 }

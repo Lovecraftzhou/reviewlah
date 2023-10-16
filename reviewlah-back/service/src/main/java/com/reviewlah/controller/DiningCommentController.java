@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteDiningCommentRequest;
 import com.reviewlah.controller.form.InsertDiningCommentRequest;
 import com.reviewlah.controller.form.SelectDCByMerAndCusIdRequest;
@@ -37,7 +38,7 @@ public class DiningCommentController {
     @Autowired
     private DiningCommentService diningCommentService;
     @PostMapping({"/showAllForMerchant"})
-    public ArrayList<HashMap> selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
+    public RCode selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         ArrayList<HashMap> res = new ArrayList<>();
@@ -45,16 +46,17 @@ public class DiningCommentController {
             Merchant merchant = this.merchantService.selectMerchantByUserId(user_id);
             if(merchant != null) {
                 res = this.diningCommentService.selectDCMapByMerchantId(merchant.getMerchant_id());
-                return res;
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", res);
     }
 //    public ArrayList<Map<String, Object>> selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
 //        ArrayList<Map<String, Object>> res = new ArrayList<>();
@@ -96,7 +98,7 @@ public class DiningCommentController {
 //        return null;
 //    }
     @PostMapping({"/showAllForCustomer"})
-    public ArrayList<HashMap> selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
+    public RCode selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
         BigInteger customer_user_id = request.getCustomer_user_id();
         BigInteger merchant_user_id = request.getMerchant_user_id();
@@ -107,19 +109,19 @@ public class DiningCommentController {
             Customer customer = this.customerService.selectCustomerByUserId(customer_user_id);
             if(merchant == null) {
                 System.out.println("Merchant Does Not Exist");
-                return null;
+                return RCode.error("Merchant Does Not Exist");
             }
             if(customer == null) {
                 System.out.println("Customer Does Not Exist");
-                return null;
+                return RCode.error("Customer Does Not Exist");
             }
             res = this.diningCommentService.selectDCMapByMerAndCusId(merchant.getMerchant_id(), customer.getCustomer_id());
-            return res;
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", res);
     }
 //    public ArrayList<Map<String, Object>> selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
 //        ArrayList<Map<String, Object>> res = new ArrayList<>();
@@ -171,7 +173,7 @@ public class DiningCommentController {
 //        return res;
 //    }
     @PostMapping({"/insert"})
-    public void insertDC(@RequestBody InsertDiningCommentRequest request) {
+    public RCode insertDC(@RequestBody InsertDiningCommentRequest request) {
         BigInteger customer_user_id = request.getCustomer_user_id();
         BigInteger merchant_user_id = request.getMerchant_user_id();
         User merchant_user = this.userService.selectUserById(merchant_user_id);
@@ -181,11 +183,11 @@ public class DiningCommentController {
             Customer customer = this.customerService.selectCustomerByUserId(customer_user_id);
             if(merchant == null) {
                 System.out.println("Merchant Does Not Exist");
-                return;
+                return RCode.error("Merchant Does Not Exist");
             }
             if(customer == null) {
                 System.out.println("Customer Does Not Exist");
-                return;
+                return RCode.error("Customer Does Not Exist");
             }
             String content = request.getContent();
             int rate = request.getRate();
@@ -199,7 +201,7 @@ public class DiningCommentController {
 //            }
             if(StringUtils.isEmpty(String.valueOf(rate))) {
                 System.out.println("Rate Cannot Be Empty");
-                return;
+                return RCode.error("Rate Cannot Be Empty");
             }
             else {
                 DiningComment diningComment = new DiningComment();
@@ -215,7 +217,9 @@ public class DiningCommentController {
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/delete"})
     public void deleteDCById(@RequestBody DeleteDiningCommentRequest request) {

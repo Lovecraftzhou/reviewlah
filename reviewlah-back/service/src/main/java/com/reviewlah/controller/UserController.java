@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteUserRequest;
 import com.reviewlah.controller.form.InsertUserRequest;
 import com.reviewlah.controller.form.LoginRequest;
@@ -41,7 +42,7 @@ public class UserController {
         return "user";
     }
     @PostMapping({"/insert"})
-    public void insertUser(@RequestBody InsertUserRequest request) {
+    public RCode insertUser(@RequestBody InsertUserRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();
@@ -52,16 +53,16 @@ public class UserController {
         //        if(avator == null || avator == "") pic_post = "";
         if(user == null) {
             if(password == null || password.isEmpty()) {
-                System.out.println("Password Cannot Be Empty!");
-                return;
+                System.out.println("Password Cannot Be Empty");
+                return RCode.error("Password Cannot Be Empty");
             }
             if(email == null || email.isEmpty()) {
-                System.out.println("Email Cannot Be Empty!");
-                return;
+                System.out.println("Email Cannot Be Empty");
+                return RCode.error("Email Cannot Be Empty");
             }
             if(phone_number == null || phone_number.isEmpty()) {
-                System.out.println("phone_number Cannot Be Empty!");
-                return;
+                System.out.println("phone_number Cannot Be Empty");
+                return RCode.error("phone_number Cannot Be Empty");
             }
             if(avator == null || avator.isEmpty()) {
                 avator = "http://defaultUserAvator";
@@ -84,8 +85,8 @@ public class UserController {
                 String address_detail = request.getAddress_detail();
                 String unitnum = request.getUnitnum();
                 if(address_code == null || address_code.isEmpty()) {
-                    System.out.println("Address Code Cannot Be Empty!");
-                    return;
+                    System.out.println("Address Code Cannot Be Empty");
+                    return RCode.error("Address Code Cannot Be Empty");
                 }
                 Address address = new Address(address_code, merchant_id,address_detail,unitnum);
                 this.addressService.insertAddress(address);
@@ -101,11 +102,13 @@ public class UserController {
             System.out.println("successful");
         }
         else {
-            System.out.println("failed");
+            System.out.println("Failed");
+            return RCode.error("Failed");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/personalInfo/update"})
-    public String updateUser(@RequestBody UpdateUserRequest request) {
+    public RCode updateUser(@RequestBody UpdateUserRequest request) {
         BigInteger user_id = request.getUser_id();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();
@@ -124,11 +127,12 @@ public class UserController {
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return "personalInfo";
+        return RCode.ok("successful");
     };
     @PostMapping({"/delete"})
-    public void deleteUserById(@RequestBody DeleteUserRequest request) {
+    public RCode deleteUserById(@RequestBody DeleteUserRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -137,23 +141,28 @@ public class UserController {
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     };
     @PostMapping({"/login"})
-    public String login(@RequestBody LoginRequest request) {
+    public RCode login(@RequestBody LoginRequest request) {
         String name = request.getName();
         String password = request.getPassword();
         User user = this.userService.selectUserByName(name);
         if(user != null) {
             if(password.equals(user.getPassword())) {
                 System.out.println("Login Successful");
-                return "true";
             }
-            else System.out.println("Password Error");
+            else {
+                System.out.println("Password Error");
+                return RCode.error("Password Error");
+            }
         }
         else {
             System.out.println("Username Error");
+            return RCode.error("Username Error");
         }
-        return "false";
+        return RCode.ok("Login Successful");
     }
 }

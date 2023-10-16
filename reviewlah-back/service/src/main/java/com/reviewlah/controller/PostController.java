@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Post;
 import com.reviewlah.db.pojo.User;
@@ -24,7 +25,7 @@ public class PostController {
     @Autowired
     private PostService postService;
     @PostMapping({"/insert"})
-    public void insertPost(@RequestBody InsertPostRequest request) {
+    public RCode insertPost(@RequestBody InsertPostRequest request) {
         BigInteger user_id = request.getUser_id();
         String title = request.getTitle();
         String content = request.getContent();
@@ -35,11 +36,11 @@ public class PostController {
         if(user != null) {
             if(content == null || content.isEmpty()) {
                 System.out.println("Content Cannot Be Empty");
-                return;
+                return RCode.error("Content Cannot Be Empty");
             }
             if(title == null || title.isEmpty()) {
                 System.out.println("Title Cannot Be Empty");
-                return;
+                return RCode.error("Title Cannot Be Empty");
             }
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             Post post = new Post();
@@ -52,12 +53,13 @@ public class PostController {
             System.out.println("successful");
         }
         else {
-            System.out.println("failed");
+            System.out.println("Failed");
+            return RCode.error("Failed");
         }
-
+        return RCode.ok("successful");
     }
     @PostMapping({"/delete"})
-    public void deletePost(@RequestBody DeletePostRequest request) {
+    public RCode deletePost(@RequestBody DeletePostRequest request) {
         BigInteger post_id = request.getPost_id();
         Post post = this.postService.selectPostByPostId(post_id);
         if(post != null) {
@@ -66,67 +68,70 @@ public class PostController {
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/mypost"})
-    public ArrayList<Post> selectPostByCustomerId(@RequestBody SelectPostByCustomerIdRequest request) {
+    public RCode selectPostByCustomerId(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_Id = request.getUser_id();
         User user = this.userService.selectUserById(user_Id);
+        ArrayList<Post> list = new ArrayList<>();
         if(user != null) {
-            ArrayList<Post> list = new ArrayList<>();
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_Id);
             list = this.postService.selectPostByCustomerId(customer_id);
             System.out.println("successful");
-            return list;
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", list);
     }
     @PostMapping({"/homepage"})
-    public ArrayList<Post> selectAllPostExceptMine(@RequestBody SelectPostByCustomerIdRequest request) {
+    public RCode selectAllPostExceptMine(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
+        ArrayList<Post> list = new ArrayList<>();
         if(user != null) {
-            ArrayList<Post> list = new ArrayList<>();
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             list = this.postService.selectAllPostExceptMine(customer_id);
             System.out.println("successful");
-            return list;
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", list);
     }
     @PostMapping({"/homepage/relative"})
-    public ArrayList<Post> selectRelativePost(@RequestBody SelectRelativePostRequest request) {
+    public RCode selectRelativePost(@RequestBody SelectRelativePostRequest request) {
         BigInteger user_id = request.getUser_id();
         String keyword = request.getKeyword();
         User user = this.userService.selectUserById(user_id);
+        ArrayList<Post> list = new ArrayList<>();
         if(user != null) {
-            ArrayList<Post> list = new ArrayList<>();
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             list = this.postService.selectRelativePost(keyword, customer_id);
             System.out.println("successful");
-            return list;
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", list);
     }
     @PostMapping({"/detail"})
-    public Post selectPostByPostId(@RequestBody SelectPostByPostIdRequest request) {
+    public RCode selectPostByPostId(@RequestBody SelectPostByPostIdRequest request) {
         BigInteger post_id = request.getPost_id();
         Post post = this.postService.selectPostByPostId(post_id);
         if(post == null) {
             System.out.println("Post Does Not Exist");
+            return RCode.error("Post Does Not Exist");
         }
         else {
             System.out.println("successful");
         }
-        return post;
+        return RCode.ok().put("list", post);
     }
 }

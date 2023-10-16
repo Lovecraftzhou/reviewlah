@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Dish;
 import com.reviewlah.db.pojo.Menu;
@@ -26,7 +27,7 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
     @PostMapping({"/insert"})
-    public void insertMenu(@RequestBody InsertMenuRequest request) {
+    public RCode insertMenu(@RequestBody InsertMenuRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -39,14 +40,17 @@ public class MenuController {
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/delete"})
-    public void deleteMenuById(@RequestBody DeleteMenuByIdRequest request) {
+    public RCode deleteMenuById(@RequestBody DeleteMenuByIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -59,14 +63,18 @@ public class MenuController {
                 }
                 else {
                     System.out.println("Menu Does Not Exist");
+                    return RCode.error("Menu Does Not Exist");
                 }
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     }
 }

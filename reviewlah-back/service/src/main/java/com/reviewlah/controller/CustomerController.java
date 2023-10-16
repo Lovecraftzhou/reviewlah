@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.SelectUserByIdRequest;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.CustomerService;
@@ -20,7 +21,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     @GetMapping("personalPage")
-    public User selectUserById(@RequestBody SelectUserByIdRequest request) {
+    public RCode selectUserById(@RequestBody SelectUserByIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -28,7 +29,8 @@ public class CustomerController {
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return user;
+        return RCode.ok().put("list", user);
     }
 }

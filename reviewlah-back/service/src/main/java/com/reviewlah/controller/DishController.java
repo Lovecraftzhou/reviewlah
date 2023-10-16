@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Dish;
 import com.reviewlah.db.pojo.Menu;
@@ -31,7 +32,7 @@ public class DishController {
     private DishService dishService;
 
     @PostMapping({"/dishes"})
-    public ArrayList<Dish> selectDishByMenuId(@RequestBody SelectDishByMenuIdRequest request) {
+    public RCode selectDishByMenuId(@RequestBody SelectDishByMenuIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         ArrayList<Dish> list = new ArrayList<>();
@@ -45,19 +46,22 @@ public class DishController {
                 }
                 else {
                     System.out.println("Menu Does Not Exist");
+                    return RCode.error("Menu Does Not Exist");
                 }
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return list;
+        return RCode.ok().put("list", list);
     }
     @PostMapping({"/select_dish"})
-    public ArrayList<Dish> selectDishIdByName(@RequestBody SelectDishIdByNameRequest request) {
+    public RCode selectDishIdByName(@RequestBody SelectDishIdByNameRequest request) {
         BigInteger user_id = request.getUser_id();
         String dish_name = request.getDish_name();
         User user = this.userService.selectUserById(user_id);
@@ -72,17 +76,23 @@ public class DishController {
                 }
                 else {
                     System.out.println("Menu Does Not Exist");
+                    return RCode.error("Menu Does Not Exist");
                 }
             }
-            else System.out.println("Merchant Does Not Exist");
+            else {
+                System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
+            }
+
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return list;
+        return RCode.ok().put("list", list);
     }
     @PostMapping({"/insert_dish"})
-    public void insertDish(@RequestBody InsertDishRequest request) {
+    public RCode insertDish(@RequestBody InsertDishRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -96,9 +106,11 @@ public class DishController {
                     BigInteger menu_id = menu.getMenu_id();
                     if(dish_name == null || dish_name.isEmpty()) {
                         System.out.println("Dish Name Cannot Be Empty");
+                        return RCode.error("Dish Name Cannot Be Empty");
                     }
                     if(price <= 0) {
-                        System.out.println("Dish Name Cannot Be Empty");
+                        System.out.println("Dish Price Cannot Be Empty");
+                        return RCode.error("Dish Price Cannot Be Empty");
                     }
 //                    if(pic_dish == null || pic_dish.isEmpty()) {
 //                        pic_dish = "";
@@ -113,18 +125,22 @@ public class DishController {
                 }
                 else {
                     System.out.println("Menu Does Not Exist");
+                    return RCode.error("Menu Does Not Exist");
                 }
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/update_dish"})
-    public void updateDish(@RequestBody UpdateDishRequest request) {
+    public RCode updateDish(@RequestBody UpdateDishRequest request) {
         BigInteger dish_id = request.getDish_id();
         Dish dish = this.dishService.selectDishById(dish_id);
         if(dish != null) {
@@ -142,10 +158,12 @@ public class DishController {
         }
         else {
             System.out.println("Dish Does Not Exist");
+            return RCode.error("Dish Does Not Exist");
         }
+        return RCode.ok("successful");
     }
     @PostMapping({"/delete_dish"})
-    public void deleteDishById(@RequestBody DeleteDishByIdRequest request) {
+    public RCode deleteDishById(@RequestBody DeleteDishByIdRequest request) {
         BigInteger dish_id = request.getDish_id();
         Dish dish = this.dishService.selectDishById(dish_id);
         if(dish != null) {
@@ -154,7 +172,9 @@ public class DishController {
         }
         else {
             System.out.println("Dish Does Not Exist");
+            return RCode.error("Dish Does Not Exist");
         }
+        return RCode.ok("successful");
     }
 
 }

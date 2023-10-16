@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.SelectMerchantByUserIdRequest;
 import com.reviewlah.db.pojo.*;
 import com.reviewlah.service.*;
@@ -37,7 +38,7 @@ public class MerchantController {
     @Autowired
     private MCService mcService;
     @GetMapping("/merchantList")
-    public ArrayList<Map<String, Object>> selectAllMerchant() {
+    public RCode selectAllMerchant() {
         refreshAllMerchantRate();
         ArrayList<Merchant> merchant_list = this.merchantService.selectAllMerchant();
         ArrayList<Map<String, Object>> res = new ArrayList<>();
@@ -57,10 +58,10 @@ public class MerchantController {
                 res.add(map);
             }
         }
-        return res;
+        return RCode.ok().put("list", res);
     }
     @GetMapping("/merchantList/merchantPage")
-    public Map<String, Object> selectMerchantByUserId(@RequestBody SelectMerchantByUserIdRequest request) {
+    public RCode selectMerchantByUserId(@RequestBody SelectMerchantByUserIdRequest request) {
         BigInteger user_id = request.getUser_id();
         Map<String, Object> map = new HashMap<>();
         User user = this.userService.selectUserById(user_id);
@@ -85,12 +86,14 @@ public class MerchantController {
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return map;
+        return RCode.ok().put("list", map);
     }
     public void refreshAllMerchantRate() {
         ArrayList<Merchant> list = this.merchantService.selectAllMerchant();

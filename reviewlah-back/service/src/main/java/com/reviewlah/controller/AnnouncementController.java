@@ -1,6 +1,7 @@
 package com.reviewlah.controller;
 
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Announcement;
 import com.reviewlah.db.pojo.User;
@@ -29,40 +30,42 @@ public class AnnouncementController {
 
 
     @PostMapping({"/announcementDetail"})
-    public Announcement selectAnnouncementByAnnouncementId(@RequestBody SelectAnnouncementByAnnouncementIDRequest request){
+    public RCode selectAnnouncementByAnnouncementId(@RequestBody SelectAnnouncementByAnnouncementIDRequest request){
         BigInteger announcement_id = request.getAnnouncement_id();
         Announcement announcement=this.announcementService.selectAnnouncementByAnnouncementId(announcement_id);
         if(announcement == null) {
             System.out.println("Announcement Does Not Exist");
+            return RCode.error("Announcement Does Not Exist");
         }
         else {
             System.out.println("successful");
         }
-        return announcement;
+        return RCode.ok().put("list", announcement);
     }
     @PostMapping({"/detail"})
-    public ArrayList<Announcement> selectAnnouncementByMerchantId(@RequestBody SelectAnnouncementByMerchantIDRequest request){
+    public RCode selectAnnouncementByMerchantId(@RequestBody SelectAnnouncementByMerchantIDRequest request){
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
+        ArrayList<Announcement> list = new ArrayList<Announcement>();
         if (user != null && user.getType() == 2) {
             BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
             if (merchant_id != null) {
-                ArrayList<Announcement> list = new ArrayList<Announcement>();
                 list = this.announcementService.selectAnnouncementByMerchantId(merchant_id);
                 System.out.println("successful");
-                return list;
             }
             else{
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
         }
         else{
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", list);
     }
     @PostMapping({"/update"})
-    public void updateAnnouncement(@RequestBody UpdateAnnouncementRequest request) {
+    public RCode updateAnnouncement(@RequestBody UpdateAnnouncementRequest request) {
         BigInteger announcement_id = request.getAnnouncement_id();
         Announcement announcement = this.announcementService.selectAnnouncementByAnnouncementId(announcement_id);
         if (announcement != null) {
@@ -76,15 +79,17 @@ public class AnnouncementController {
                 System.out.println("successful");
             } else {
                 System.out.println("Content Cannot be Empty");
+                return RCode.error("Content Does Not Exist");
             }
         }
         else {
             System.out.println("Announcement Does Not Exist");
+            return RCode.error("Announcement Does Not Exist");
         }
-
+        return RCode.ok("successful");
     }
     @PostMapping({"/insert_announcement"})
-    public void insertAnnouncement(@RequestBody InsertAnnouncementRequest request) {
+    public RCode insertAnnouncement(@RequestBody InsertAnnouncementRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if (user != null && user.getType() == 2){
@@ -102,20 +107,24 @@ public class AnnouncementController {
                 }
                 else {
                     System.out.println("Content Cannot Be Empty");
+                    return RCode.error("Content Does Not Exist");
                 }
             }
             else {
                 System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
             }
 
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     }
 
     @PostMapping({"/delete_announcement"})
-    public void deleteAnnouncement(@RequestBody DeleteAnnouncementRequest request){
+    public RCode deleteAnnouncement(@RequestBody DeleteAnnouncementRequest request){
         BigInteger announcement_id = request.getAnnouncement_id();
         Announcement announcement = this.announcementService.selectAnnouncementByAnnouncementId(announcement_id);
         if(announcement !=null){
@@ -124,7 +133,8 @@ public class AnnouncementController {
         }
         else{
             System.out.println("Announcement Does Not Exist");
+            return RCode.error("Announcement Does Not Exist");
         }
-
+        return RCode.ok("successful");
     }
 }

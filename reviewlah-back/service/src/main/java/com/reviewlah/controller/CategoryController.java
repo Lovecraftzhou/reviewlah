@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.db.pojo.Category;
 import com.reviewlah.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     @GetMapping({"showAll"})
-    public ArrayList<String> selectAllCategory() {
+    public RCode selectAllCategory() {
         ArrayList<Category> list = this.categoryService.selectAllCategory();
         ArrayList<String> res = new ArrayList<>();
         for(Category tmp : list) {
             String name = tmp.getCategory_name();
             res.add(name);
         }
-        return res;
+        return RCode.ok().put("list", res);
     }
 }
