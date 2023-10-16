@@ -1,6 +1,7 @@
 package com.reviewlah.db.dao;
 
 import com.reviewlah.db.pojo.BrowseHistory;
+import com.reviewlah.db.pojo.Category;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -8,8 +9,7 @@ import java.util.Date;
 
 public interface BrowseHistoryDao {
     BrowseHistory selectBrowseHistoryByHistoryID(BigInteger history_id);
-    int selectBrowseHistoryByCustomerIDAndCategory(BigInteger customer_id,int category_id);
-    //ArrayList<BrowseHistory>selectBrowseHistoryByCategoryID(int category_id);
+    ArrayList<Integer>selectTop3CategoryFromBrowseHistory(BigInteger customer_id,Date time_his);
     ArrayList<BrowseHistory>selectBrowseHistoryByTimeHis(Date time_his);
     ArrayList<BrowseHistory>selectBrowseHistoryByMerchantID(BigInteger merchant_id);
     void deleteBrowseHistoryByHistoryID(BigInteger history_id);

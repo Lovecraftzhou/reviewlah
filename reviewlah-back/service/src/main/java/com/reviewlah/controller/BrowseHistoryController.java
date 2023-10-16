@@ -1,9 +1,7 @@
 package com.reviewlah.controller;
 
 import com.reviewlah.controller.form.*;
-import com.reviewlah.db.pojo.Announcement;
 import com.reviewlah.db.pojo.BrowseHistory;
-import com.reviewlah.db.pojo.Category;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.BrowseHistoryService;
 import com.reviewlah.service.MerchantService;
@@ -49,32 +47,19 @@ public class BrowseHistoryController {
 
     }
     @PostMapping({"/customerHistory"})
-    public int selectBrowseHistoryByCustomerIDAndCategory(@RequestBody SelectBrowseHistoryByCustomerIDAndCategoryRequest request){
+    public ArrayList<Integer> selectTop3CategoryFromBrowseHistory(@RequestBody SelectTop3CategoryFromBrowseHistoryRequest request){
         BigInteger user_id=request.getUser_id();
-        String category_name=request.getCatgoryName();
-        User user = this.userService.selectUserById(user_id);
-        if (user != null && user.getType() == 1) {
-            BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
-            if (customer_id !=null) {
-                int category_id=this.categoryService.selectCategoryIdByName(category_name);
-                if (category_id!=0){
-                    int time;
-                    time=this.browseHistoryService.selectBrowseHistoryByCustomerIDAndCategory(customer_id,category_id);
-                    System.out.println("successful");
-                    return time;
-                }
-                else{
-                    System.out.println("Category Does Not Exist");
-                }
-            }
-            else{
-                System.out.println("Customer Does Not Exist");
-            }
+        User user=this.userService.selectUserById(user_id);
+        if(user!=null&&user.getType()==1){
+            Date time_his=request.getTime();
+            ArrayList<Integer> list=this.browseHistoryService.selectTop3CategoryFromBrowseHistory(user_id,time_his);
+            System.out.println("successful");
+            return list;
         }
         else{
-            System.out.println("User Does Not Exist");
+            System.out.println("Customer Does Not Exist");
         }
-        return 0;
+        return null;
     }
 
     @PostMapping({"/historyMerchant"})
@@ -116,10 +101,11 @@ public class BrowseHistoryController {
     public void insertBrowseHistory(@RequestBody InsertBrowseHistoryRequest request){
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
+        String category_name=request.getCategory_name();
+        int category_id=this.categoryService.selectCategoryIdByName(category_name);
         if (user != null && user.getType() == 1){
             BigInteger customer_id=this.customerService.selectCustomerIdByUserId(user_id);
             if(customer_id!=null){
-                int category_id=request.getCategory_id();
                 if(category_id!=0){
                     Date time_his = new Date();
                     BrowseHistory browseHistory=new BrowseHistory();

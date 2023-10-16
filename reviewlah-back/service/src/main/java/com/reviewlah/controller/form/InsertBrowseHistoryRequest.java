@@ -3,19 +3,25 @@ package com.reviewlah.controller.form;
 import java.math.BigInteger;
 
 public class InsertBrowseHistoryRequest {
-    private int category_id;
-    public int getCategory_id(){
-        return category_id;
+    private String category_name;
+
+    public String getCategory_name() {
+        return category_name;
     }
-    public void setCategory_id(int category_id){
-        this.category_id=category_id;
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
 
     private BigInteger user_id;
+
     public BigInteger getUser_id() {
         return user_id;
     }
+
     public void setUser_id(BigInteger user_id) {
         this.user_id = user_id;
     }
 }
+
+

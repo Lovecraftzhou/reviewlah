@@ -1,9 +1,11 @@
 package com.reviewlah.controller.form;
 
 import java.math.BigInteger;
+import java.util.Date;
 
-public class SelectBrowseHistoryByCustomerIDAndCategoryRequest {
+public class SelectTop3CategoryFromBrowseHistoryRequest {
     private BigInteger user_id;
+    private Date time_his;
     public BigInteger getUser_id() {
         return user_id;
     }
@@ -14,4 +16,8 @@ public class SelectBrowseHistoryByCustomerIDAndCategoryRequest {
     public String getCatgoryName(){
         return category_name;
     }
+
+    public Date getTime() {return time_his;
+    }
+    public void setTime_his(Date time_his){this.time_his=time_his;}
 }
