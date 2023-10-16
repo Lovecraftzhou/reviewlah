@@ -2,6 +2,7 @@ package com.reviewlah.controller;
 
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.BrowseHistory;
+import com.reviewlah.db.pojo.Customer;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.BrowseHistoryService;
 import com.reviewlah.service.MerchantService;
@@ -49,10 +50,11 @@ public class BrowseHistoryController {
     @PostMapping({"/customerHistory"})
     public ArrayList<Integer> selectTop3CategoryFromBrowseHistory(@RequestBody SelectTop3CategoryFromBrowseHistoryRequest request){
         BigInteger user_id=request.getUser_id();
-        User user=this.userService.selectUserById(user_id);
-        if(user!=null&&user.getType()==1){
+        //BigInteger customer_id=request.getCustomer_id();
+        BigInteger customer_id=this.customerService.selectCustomerIdByUserId(user_id);
+        if(customer_id!=null){
             Date time_his=request.getTime();
-            ArrayList<Integer> list=this.browseHistoryService.selectTop3CategoryFromBrowseHistory(user_id,time_his);
+            ArrayList<Integer> list=this.browseHistoryService.selectTop3CategoryFromBrowseHistory(customer_id,time_his);
             System.out.println("successful");
             return list;
         }

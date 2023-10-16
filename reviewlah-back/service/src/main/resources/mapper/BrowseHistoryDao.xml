@@ -6,7 +6,7 @@
         FROM browseHistory
         WHERE history_id = #{history_id}
     </select>
-    <select id="selectTop3CategoryFromBrowseHistory" parameterType="map" resultType="com.reviewlah.db.pojo.BrowseHistory">
+    <select id="selectTop3CategoryFromBrowseHistory" parameterType="map" resultType="Integer">
         SELECT category_id, COUNT(*) AS view_count
         FROM browseHistory
         WHERE customer_id = #{customer_id}
