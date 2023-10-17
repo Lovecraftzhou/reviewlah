@@ -69,20 +69,20 @@ public class BrowseHistoryController {
         return RCode.ok().put("list", list);
     }
 
-    @PostMapping({"/historyMerchant"})
-    public RCode selectBrowseHistoryByMerchantID(@RequestBody SelectBrowseHistoryByMerchantIDRequest request){
-        BigInteger user_id=request.getUser_id();
+    @PostMapping({"/allHistoryForCustomer"})
+    public RCode selectBrowseHistoryByCustomerId(@RequestBody SelectBrowseHistoryByCustomerIdRequest request){
+        BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         ArrayList<BrowseHistory> list = new ArrayList<BrowseHistory>();
-        if (user != null && user.getType() == 2) {
-            BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
-            if (merchant_id !=null) {
-                list =this.browseHistoryService.selectBrowseHistoryByMerchantID(merchant_id);
+        if (user != null && user.getType() == 1) {
+            Customer customer = this.customerService.selectCustomerByUserId(user_id);
+            if (customer !=null) {
+                list = this.browseHistoryService.selectBrowseHistoryByCustomerId(customer.getCustomer_id());
                 System.out.println("successful");
             }
             else{
-                System.out.println("Merchant Does Not Exist");
-                return RCode.error("Merchant Does Not Exist");
+                System.out.println("Customer Does Not Exist");
+                return RCode.error("Customer Does Not Exist");
             }
         }
         else{
@@ -110,7 +110,7 @@ public class BrowseHistoryController {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         String category_name=request.getCategory_name();
-        int category_id=this.categoryService.selectCategoryIdByName(category_name);
+        int category_id = this.categoryService.selectCategoryByName(category_name).getCategory_id();
         if (user != null && user.getType() == 1){
             BigInteger customer_id=this.customerService.selectCustomerIdByUserId(user_id);
             if(customer_id!=null){

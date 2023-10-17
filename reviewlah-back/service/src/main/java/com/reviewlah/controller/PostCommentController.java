@@ -31,18 +31,18 @@ public class PostCommentController {
     @Autowired
     private PostCommentService postCommentService;
     @PostMapping({"/post_commentForPostOwner"})
-    public ArrayList<HashMap> selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
+    public RCode selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
         BigInteger post_id = request.getPost_id();
         Post post = this.postService.selectPostByPostId(post_id);
         if(post != null) {
             res = this.postCommentService.selectPostMapCommentByPostId(post_id);
-            return res;
         }
         else {
             System.out.println("Post Does Not Exist");
+            return RCode.error("Post Does Not Exist");
         }
-        return null;
+        return RCode.ok().put("list", res);
     }
     @PostMapping({"/post_comment"})
     public RCode selectPostCommentByPostAndCusId(@RequestBody SelectPostCommentByPostAndCusIdRequest request) {
@@ -110,24 +110,31 @@ public class PostCommentController {
         BigInteger post_id = request.getPost_id();
         String content = request.getContent();
         User user = this.userService.selectUserById(user_id);
+        Post post = this.postService.selectPostByPostId(post_id);
         Date date = new Date();
-        if(user != null) {
-            if(content == null || content.isEmpty()) {
-                System.out.println("Content Cannot Be Empty");
-                return RCode.error("Content Cannot Be Empty");
+        if(post != null) {
+            if(user != null) {
+                if(content == null || content.isEmpty()) {
+                    System.out.println("Content Cannot Be Empty");
+                    return RCode.error("Content Cannot Be Empty");
+                }
+                BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
+                PostComment postComment = new PostComment();
+                postComment.setCustomer_id(customer_id);
+                postComment.setPost_id(post_id);
+                postComment.setContent(content);
+                postComment.setTime_pc(date);
+                this.postCommentService.insertPostComment(postComment);
+                System.out.println("successful");
             }
-            BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
-            PostComment postComment = new PostComment();
-            postComment.setCustomer_id(customer_id);
-            postComment.setPost_id(post_id);
-            postComment.setContent(content);
-            postComment.setTime_pc(date);
-            this.postCommentService.insertPostComment(postComment);
-            System.out.println("successful");
+            else {
+                System.out.println("User Does Not Exist");
+                return RCode.error("User Does Not Exist");
+            }
         }
         else {
-            System.out.println("Failed");
-            return RCode.error("Failed");
+            System.out.println("Post Does Not Exist");
+            return RCode.error("Post Does Not Exist");
         }
         return RCode.ok("successful");
     }

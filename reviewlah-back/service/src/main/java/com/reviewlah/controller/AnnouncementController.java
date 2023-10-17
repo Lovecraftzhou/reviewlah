@@ -107,7 +107,7 @@ public class AnnouncementController {
                 }
                 else {
                     System.out.println("Content Cannot Be Empty");
-                    return RCode.error("Content Does Not Exist");
+                    return RCode.error("Content Cannot Be Empty");
                 }
             }
             else {

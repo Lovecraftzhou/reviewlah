@@ -95,5 +95,4 @@ public class InsertUserRequest {
         this.avator = avator;
     }
 
-
 }

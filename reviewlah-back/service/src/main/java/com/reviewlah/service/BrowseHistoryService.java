@@ -11,7 +11,7 @@ public interface BrowseHistoryService {
     ArrayList<Integer> selectTop3CategoryFromBrowseHistory(BigInteger customer_id, Date time_his);
     //ArrayList<BrowseHistory>selectBrowseHistoryByCategoryID(int category_id);
     ArrayList<BrowseHistory>selectBrowseHistoryByTimeHis(Date time_his);
-    ArrayList<BrowseHistory>selectBrowseHistoryByMerchantID(BigInteger merchant_id);
+    ArrayList<BrowseHistory>selectBrowseHistoryByCustomerId(BigInteger customer_id);
     void deleteBrowseHistoryByHistoryID(BigInteger history_id);
     void insertBrowseHistory(BrowseHistory browseHistory);
 }

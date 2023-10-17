@@ -2,6 +2,7 @@ package com.reviewlah.controller;
 
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
+import com.reviewlah.db.pojo.Customer;
 import com.reviewlah.db.pojo.Post;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.CustomerService;
@@ -14,6 +15,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping({"/post"})
@@ -30,7 +32,6 @@ public class PostController {
         String title = request.getTitle();
         String content = request.getContent();
         String pic_post = request.getPic_post();
-//        if(pic_post == null || pic_post == "") pic_post = "";
         Date date = new Date();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -42,6 +43,7 @@ public class PostController {
                 System.out.println("Title Cannot Be Empty");
                 return RCode.error("Title Cannot Be Empty");
             }
+            if(pic_post == null || pic_post.isEmpty()) pic_post = "http://defaultPostPic";
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             Post post = new Post();
             post.setCustomer_id(customer_id);
@@ -76,11 +78,14 @@ public class PostController {
     public RCode selectPostByCustomerId(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_Id = request.getUser_id();
         User user = this.userService.selectUserById(user_Id);
-        ArrayList<Post> list = new ArrayList<>();
-        if(user != null) {
-            BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_Id);
-            list = this.postService.selectPostByCustomerId(customer_id);
-            System.out.println("successful");
+        ArrayList<HashMap> list = new ArrayList<>();
+        if(user != null && user.getType() == 1) {
+            Customer customer = this.customerService.selectCustomerByUserId(user_Id);
+            if(customer != null) {
+                list = this.postService.selectPostByCustomerId(customer.getCustomer_id());
+                System.out.println("successful");
+            }
+
         }
         else {
             System.out.println("User Does Not Exist");
@@ -92,7 +97,7 @@ public class PostController {
     public RCode selectAllPostExceptMine(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
-        ArrayList<Post> list = new ArrayList<>();
+        ArrayList<HashMap> list = new ArrayList<>();
         if(user != null) {
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             list = this.postService.selectAllPostExceptMine(customer_id);
@@ -109,7 +114,7 @@ public class PostController {
         BigInteger user_id = request.getUser_id();
         String keyword = request.getKeyword();
         User user = this.userService.selectUserById(user_id);
-        ArrayList<Post> list = new ArrayList<>();
+        ArrayList<HashMap> list = new ArrayList<>();
         if(user != null) {
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             list = this.postService.selectRelativePost(keyword, customer_id);

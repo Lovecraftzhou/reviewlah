@@ -34,6 +34,9 @@ public class AddressController {
         User user = this.userService.selectUserById(user_id);
         if(user != null && user.getType() == 2) {
             BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
+            if(address_code == null || address_code.isEmpty()) {
+                address_code = this.addressService.selectAddressByMerchantId(merchant_id).getAddress_code();
+            }
             if(merchant_id != null) {
                 Address address = new Address(address_code, merchant_id, address_detail, unitnum);
                 this.addressService.updateAddress(address);

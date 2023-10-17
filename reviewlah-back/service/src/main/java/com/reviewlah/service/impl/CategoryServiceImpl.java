@@ -14,8 +14,8 @@ public class CategoryServiceImpl implements CategoryService {
     public ArrayList<Category> selectAllCategory() {
         return this.categoryDao.selectAllCategory();
     }
-    public int selectCategoryIdByName(String category_name) {
-        return this.categoryDao.selectCategoryIdByName(category_name);
+    public Category selectCategoryByName(String category_name) {
+        return this.categoryDao.selectCategoryByName(category_name);
     }
     public void insertCategory(String category_name) {
         this.categoryDao.insertCategory(category_name);

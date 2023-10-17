@@ -17,7 +17,8 @@
         ORDER BY time_dc DESC
     </select>
     <select id="selectDCMapByMerchantId" parameterType="BigInteger" resultType="HashMap">
-        SELECT d.content AS content,
+        SELECT d.dining_com_id AS dining_com_id,
+               d.content AS content,
                d.rate AS rate,
                d.pic_dc AS pic_dc,
                d.time_dc AS time_dc,
@@ -29,7 +30,8 @@
         ORDER BY d.time_dc DESC
     </select>
     <select id="selectDCMapByMerAndCusId" resultType="HashMap">
-        SELECT d.content AS content,
+        SELECT d.dining_com_id AS dining_com_id,
+               d.content AS content,
                d.rate AS rate,
                d.pic_dc AS pic_dc,
                d.time_dc AS time_dc,

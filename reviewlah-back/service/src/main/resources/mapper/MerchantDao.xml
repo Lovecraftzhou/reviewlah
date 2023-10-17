@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.MerchantDao">
-    <insert id = "insertMerchant" parameterType="BigInteger">
+    <insert id = "insertMerchant" parameterType="com.reviewlah.db.pojo.Merchant">
         INSERT INTO merchant
         SET
-            user_id = #{user_id}
-            avg_rate = 0
+            user_id = #{user_id},
+            avg_rate = #{avg_rate}
     </insert>
     <select id = "selectMerchantIdByUserId" parameterType="BigInteger" resultType="BigInteger">
         SELECT merchant_id
@@ -16,6 +16,11 @@
         SELECT *
         FROM merchant
         WHERE user_id = #{user_id}
+    </select>
+    <select id="selectMerchantById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Merchant">
+        SELECT *
+        FROM merchant
+        WHERE merchant_id = #{merchant_id}
     </select>
     <select id="selectAllMerchant" resultType="com.reviewlah.db.pojo.Merchant">
         SELECT *
@@ -31,6 +36,13 @@
         </set>
         WHERE merchant_id = #{merchant_id}
     </update>
+    <select id="selectRecMerchantByCategoryId" parameterType="Integer" resultType="BigInteger">
+        SELECT m.merchant_id AS merchant_id
+        FROM merchant m LEFT JOIN merchantsCategory mc ON m.merchant_id = mc.merchant_id
+        WHERE mc.category_id = #{category_id}
+        ORDER BY avg_rate DESC
+        Limit 3
+    </select>
 <!--    <select id="selectAllMerchant" resultType="HashMap">-->
 <!--        SELECT u.user_id AS user_id,-->
 <!--               u.name AS name,-->

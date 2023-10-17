@@ -112,9 +112,9 @@ public class DishController {
                         System.out.println("Dish Price Cannot Be Empty");
                         return RCode.error("Dish Price Cannot Be Empty");
                     }
-//                    if(pic_dish == null || pic_dish.isEmpty()) {
-//                        pic_dish = "";
-//                    }
+                    if(pic_dish == null || pic_dish.isEmpty()) {
+                        pic_dish = "http://defaultFoodPic";
+                    }
                     Dish dish = new Dish();
                     dish.setDish_name(dish_name);
                     dish.setPrice(price);

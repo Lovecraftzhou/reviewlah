@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 public class UpdateUserRequest {
     private BigInteger user_id;
+    private String name;
     private String phone_number;
     private String email;
     private String password;
@@ -14,6 +15,13 @@ public class UpdateUserRequest {
 
     public void setUser_id(BigInteger user_id) {
         this.user_id = user_id;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone_number() {

@@ -222,7 +222,7 @@ public class DiningCommentController {
         return RCode.ok("successful");
     }
     @PostMapping({"/delete"})
-    public void deleteDCById(@RequestBody DeleteDiningCommentRequest request) {
+    public RCode deleteDCById(@RequestBody DeleteDiningCommentRequest request) {
         BigInteger dining_com_id = request.getDining_com_id();
         DiningComment diningComment = this.diningCommentService.selectDCById(dining_com_id);
         if(diningComment != null) {
@@ -231,7 +231,9 @@ public class DiningCommentController {
         }
         else {
             System.out.println("Dining Comment Does Not Exist");
+            return RCode.error("Dining Comment Does Not Exist");
         }
+        return RCode.ok("successful");
     }
 
 }

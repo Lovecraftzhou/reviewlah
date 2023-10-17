@@ -5,7 +5,7 @@
         SELECT *
         FROM category
     </select>
-    <select id = "selectCategoryIdByName" parameterType="String" resultType="int">
+    <select id = "selectCategoryByName" parameterType="String" resultType="com.reviewlah.db.pojo.Category">
         SELECT category_id
         FROM category
         WHERE category_name = #{category_name}

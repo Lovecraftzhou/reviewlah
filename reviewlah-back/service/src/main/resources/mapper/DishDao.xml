@@ -22,7 +22,8 @@
         ORDER BY price DESC
     </select>
     <select id="selectDishByMerchantId" parameterType="BigInteger" resultType="HashMap">
-        SELECT d.dish_name AS dish_name,
+        SELECT d.dish_id AS dish_id,
+               d.dish_name AS dish_name,
                d.price AS price,
                d.pic_dish AS pic_dish
         FROM merchant m INNER JOIN menu me ON m.merchant_id = me.merchant_id

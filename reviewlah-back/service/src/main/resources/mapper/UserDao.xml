@@ -40,6 +40,9 @@
     <update id = "updateUser" parameterType = "com.reviewlah.db.pojo.User">
         UPDATE user
         <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
             <if test="password!=null">
                 password = #{password},
             </if>

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface CategoryService {
     ArrayList<Category> selectAllCategory();
-    int selectCategoryIdByName(String category_name);
+    Category selectCategoryByName(String category_name);
     void insertCategory(String category_name);
     void updateCategory(Category category);
     void deleteCategoryByName(String category_name);

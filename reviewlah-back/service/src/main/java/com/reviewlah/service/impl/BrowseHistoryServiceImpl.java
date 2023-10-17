@@ -27,10 +27,8 @@ public class BrowseHistoryServiceImpl implements BrowseHistoryService {
         return list;
     }
 
-    @Override
-    public ArrayList<BrowseHistory> selectBrowseHistoryByMerchantID(BigInteger merchant_id) {
-        ArrayList<BrowseHistory> list=this.browseHistoryDao.selectBrowseHistoryByMerchantID(merchant_id);
-        return list;
+    public ArrayList<BrowseHistory>selectBrowseHistoryByCustomerId(BigInteger customer_id) {
+        return this.browseHistoryDao.selectBrowseHistoryByCustomerId(customer_id);
     }
 
 

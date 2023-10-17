@@ -12,4 +12,5 @@ public interface MCService {
     void updateMC(MC mc);
     void deleteMCByMerchantId(BigInteger merchant_id);
     ArrayList<String> selectMCByMerchantId(BigInteger merchant_id);
+
 }

@@ -27,4 +27,5 @@ public class MCServiceImpl implements MCService {
     public ArrayList<String> selectMCByMerchantId(BigInteger merchant_id) {
         return this.mcDao.selectMCByMerchantId(merchant_id);
     }
+
 }

@@ -27,10 +27,10 @@
         WHERE time_his > #{time_his}
         ORDER BY time_his DESC
     </select>
-    <select id="selectBrowseHistoryByMerchantID" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.BrowseHistory">
+    <select id="selectBrowseHistoryByCustomerId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.BrowseHistory">
         select *
         FROM browseHistory
-        WHERE merchant_id = #{merchant_id}
+        WHERE customer_id = #{customer_id}
         ORDER BY time_his DESC
     </select>
     <insert id="insertBrowseHistory" parameterType="com.reviewlah.db.pojo.BrowseHistory">
