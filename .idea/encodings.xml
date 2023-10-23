@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/reviewlah-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reviewlah-comment/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reviewlah-customer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reviewlah-eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reviewlah-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reviewlah-merchant/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reviewlah-message/src/main/java" charset="UTF-8" />
+  </component>
+</project>

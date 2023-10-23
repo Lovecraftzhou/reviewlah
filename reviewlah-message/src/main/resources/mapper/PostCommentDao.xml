@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.MessageDao">
+    <insert id="insertPostComment" parameterType="com.reviewlah.db.pojo.PostCommentMessage">
+        INSERT INTO postCommentMessage (
+            customer_id,
+            post_id,
+            post_com_id,
+            content,
+            time)
+        values (
+            #{customer_id},
+            #{post_id},
+            #{post_com_id},
+            #{content},
+            #{time}
+        )
+    </insert>
+</mapper>

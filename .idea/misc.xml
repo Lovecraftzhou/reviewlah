@@ -1,0 +1,19 @@
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/reviewlah-admin/pom.xml" />
+        <option value="$PROJECT_DIR$/reviewlah-eureka/pom.xml" />
+        <option value="$PROJECT_DIR$/reviewlah-comment/pom.xml" />
+        <option value="$PROJECT_DIR$/reviewlah-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/reviewlah-message/pom.xml" />
+        <option value="$PROJECT_DIR$/reviewlah-customer/pom.xml" />
+        <option value="$PROJECT_DIR$/reviewlah-merchant/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="18" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.MerchantDao">
+    <insert id = "insertMerchant" parameterType="com.reviewlah.db.pojo.Merchant" useGeneratedKeys="true" keyProperty="merchant_id">
+        INSERT INTO merchant (
+            name,
+            phone_number,
+            email,
+            password,
+            avator,
+            avg_rate
+        ) VALUES (
+            #{name},
+            #{phone_number},
+            #{email},
+            #{password},
+            #{avator},
+            #{avg_rate}
+        )
+    </insert>
+    <select id = "selectMerchantIdByUserId" parameterType="BigInteger" resultType="BigInteger">
+        SELECT merchant_id
+        FROM merchant
+        WHERE merchant_id = #{user_id}
+    </select>
+    <select id="selectMerchantById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Merchant">
+        SELECT *
+        FROM merchant
+        WHERE merchant_id = #{merchant_id}
+    </select>
+    <select id="selectAllMerchant" resultType="com.reviewlah.db.pojo.Merchant">
+        SELECT *
+        FROM merchant
+        ORDER BY avg_rate DESC
+    </select>
+    <update id="updateRateByMerchantId">
+        UPDATE merchant
+        <set>
+            <if test="avg_rate!=null">
+                avg_rate = #{avg_rate},
+            </if>
+        </set>
+        WHERE merchant_id = #{merchant_id}
+    </update>
+    <select id="selectRecMerchantByCategoryId" parameterType="Integer" resultType="BigInteger">
+        SELECT m.merchant_id AS merchant_id
+        FROM merchant m LEFT JOIN merchantsCategory mc ON m.merchant_id = mc.merchant_id
+        WHERE mc.category_id = #{category_id}
+        ORDER BY avg_rate DESC
+        Limit 3
+    </select>
+<!--    <select id="selectAllMerchant" resultType="HashMap">-->
+<!--        SELECT u.user_id AS user_id,-->
+<!--               u.name AS name,-->
+<!--               u.avator AS avator,-->
+<!--               m.merchant_id AS merchant_id,-->
+<!--               m.avg_rate AS avg_rate,-->
+<!--               a.address_code AS address_code,-->
+<!--               c.category_name AS category_name-->
+<!--        FROM user u INNER JOIN merchant m ON u.user_id = m.user_id-->
+<!--        LEFT JOIN address a ON m.merchant_id = a.merchant_id-->
+<!--        LEFT JOIN merchantsCategory mc ON m.merchant_id = mc.merchant_id-->
+<!--        LEFT JOIN category c ON mc.category_id = c.category_id-->
+<!--        WHERE u.type = 2-->
+<!--    </select>-->
+    <update id="updateMerchant" parameterType = "com.reviewlah.db.pojo.Merchant">
+        UPDATE merchant
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="password!=null">
+                password = #{password},
+            </if>
+            <if test="phone_number!=null">
+                phone_number = #{phone_number},
+            </if>
+            <if test="email!=null">
+                email = #{email},
+            </if>
+            <if test="avator!=null">
+                avator = #{avator},
+            </if>
+            <if test="avg_rate!=null">
+                avg_rate = #{avg_rate},
+            </if>
+        </set>
+        where merchant_id = #{merchant_id}
+    </update>
+    <delete id="deleteMerchantById" parameterType="BigInteger">
+        DELETE FROM merchant
+        where merchant_id = #{merchant_id}
+    </delete>
+    <select id="selectMerchantByName" parameterType="String" resultType="com.reviewlah.db.pojo.Merchant">
+        SELECT *
+        FROM merchant
+        WHERE name = #{name}
+    </select>
+</mapper>

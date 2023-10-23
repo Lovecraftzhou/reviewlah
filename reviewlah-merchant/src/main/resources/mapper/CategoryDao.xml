@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.CategoryDao">
+    <select id = "selectAllCategory" resultType="com.reviewlah.db.pojo.Category">
+        SELECT *
+        FROM category
+    </select>
+    <select id = "selectCategoryByName" parameterType="String" resultType="com.reviewlah.db.pojo.Category">
+        SELECT *
+        FROM category
+        WHERE category_name = #{category_name}
+    </select>
+    <insert id = "insertCategory" parameterType="String">
+        INSERT INTO category
+        SET
+            category_name = #{category_name}
+    </insert>
+    <update id = "updateCategory" parameterType="com.reviewlah.db.pojo.Category">
+        UPDATE category
+        <set>
+            <if test="category_name!=null">
+                category_name = #{category_name},
+            </if>
+        </set>
+        WHERE category_id = #{category_id}
+    </update>
+    <delete id = "deleteCategoryByName" parameterType="String">
+        DELETE FROM category
+        WHERE category_name = #{category_name}
+    </delete>
+</mapper>

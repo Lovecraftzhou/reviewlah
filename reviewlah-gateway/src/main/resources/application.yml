@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: "admin"
+          uri: lb://admin
+          predicates:
+            - Path=/admin/**
+        - id: "comment"
+          uri: lb://comment
+          predicates:
+            - Path=/comment/**
+        - id: "customer"
+          uri: lb://customer
+          predicates:
+            - Path=/customer/**
+        - id: "merchant"
+          uri: lb://merchant
+          predicates:
+            - Path=/merchant/**
+        - id: "customer"
+          uri: lb://message
+          predicates:
+            - Path=/message/**
+server:
+  port: 8081
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

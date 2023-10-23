@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.CustomerDao">
+    <select id="selectCustomerByCustomerId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Customer">
+        SELECT *
+        FROM customer
+        WHERE customer_id = #{customer_id}
+    </select>
+    <insert id="insertCustomer" parameterType="com.reviewlah.db.pojo.Customer" useGeneratedKeys="true" keyProperty="customer_id">
+        INSERT INTO customer (
+        <if test="name!=null">
+            name,
+        </if>
+        <if test="password!=null">
+            password,
+        </if>
+        <if test="phone_number!=null">
+            phone_number,
+        </if>
+        <if test="email!=null">
+            email,
+        </if>
+        avator) values (
+        <if test="name!=null">
+            #{name},
+        </if>
+        <if test="password!=null">
+            #{password},
+        </if>
+        <if test="phone_number!=null">
+            #{phone_number},
+        </if>
+        <if test="email!=null">
+            #{email},
+        </if>
+        #{avator}
+        )
+    </insert>
+    <update id="updateCustomer" parameterType="com.reviewlah.db.pojo.Customer">
+        UPDATE customer
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="password!=null">
+                password = #{password},
+            </if>
+            <if test="phone_number!=null">
+                phone_number = #{phone_number},
+            </if>
+            <if test="email!=null">
+                email = #{email},
+            </if>
+            <if test="avator!=null">
+                avator = #{avator},
+            </if>
+        </set>
+        where customer_id = #{customer_id}
+    </update>
+    <delete id="deleteCustomerById" parameterType="BigInteger">
+        DELETE FROM customer
+        where customer_id = #{customer_id}
+    </delete>
+    <select id="selectCustomerByName" parameterType="String" resultType="com.reviewlah.db.pojo.Customer">
+        SELECT *
+        FROM customer
+        WHERE name = #{name}
+    </select>
+</mapper>

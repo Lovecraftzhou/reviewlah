@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="reviewlah-admin" />
+        <module name="reviewlah-eureka" />
+        <module name="reviewlah-comment" />
+        <module name="reviewlah-customer" />
+        <module name="reviewlah-message" />
+        <module name="reviewlah-merchant" />
+        <module name="reviewlah-gateway" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="reviewlah-admin" options="-parameters" />
+      <module name="reviewlah-comment" options="-parameters" />
+      <module name="reviewlah-customer" options="-parameters" />
+      <module name="reviewlah-eureka" options="-parameters" />
+      <module name="reviewlah-gateway" options="-parameters" />
+      <module name="reviewlah-merchant" options="-parameters" />
+      <module name="reviewlah-message" options="-parameters" />
+    </option>
+  </component>
+</project>
