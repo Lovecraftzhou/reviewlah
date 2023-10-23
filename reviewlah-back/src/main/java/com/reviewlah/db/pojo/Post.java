@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class Post {
-    private BigInteger posts_id;
+    private BigInteger post_id;
     private BigInteger customer_id;
     private String title;
     private String content;
@@ -17,11 +17,11 @@ public class Post {
 
     }
     public BigInteger getPosts_id() {
-        return posts_id;
+        return post_id;
     }
 
-    public void setPosts_id(BigInteger posts_id) {
-        this.posts_id = posts_id;
+    public void setPosts_id(BigInteger post_id) {
+        this.post_id = post_id;
     }
 
     public BigInteger getCustomer_id() {

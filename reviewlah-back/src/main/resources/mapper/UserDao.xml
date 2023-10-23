@@ -12,8 +12,12 @@
         <if test="type!=null">
             type,
         </if>
-        phone_number,
-        email,
+        <if test="phone_number!=null">
+            phone_number,
+        </if>
+        <if test="email!=null">
+            email,
+        </if>
         avator) values (
         <if test="name!=null">
             #{name},
@@ -24,14 +28,21 @@
         <if test="type!=null">
             #{type},
         </if>
-        #{phone_number},
-        #{email},
+        <if test="phone_number!=null">
+            #{phone_number},
+        </if>
+        <if test="email!=null">
+            #{email},
+        </if>
         #{avator}
         )
     </insert>
     <update id = "updateUser" parameterType = "com.reviewlah.db.pojo.User">
         UPDATE user
         <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
             <if test="password!=null">
                 password = #{password},
             </if>
@@ -60,5 +71,10 @@
         SELECT *
         FROM user
         WHERE user_id = #{user_id}
+    </select>
+    <select id="selectUserByType" parameterType="Integer" resultType="com.reviewlah.db.pojo.User">
+        SELECT *
+        FROM user
+        WHERE type = #{type}
     </select>
 </mapper>

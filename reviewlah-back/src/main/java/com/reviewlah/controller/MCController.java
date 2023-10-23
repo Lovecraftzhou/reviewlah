@@ -1,11 +1,9 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.UpdateAddressRequest;
 import com.reviewlah.controller.form.UpdateMCRequest;
-import com.reviewlah.db.pojo.Address;
-import com.reviewlah.db.pojo.MC;
-import com.reviewlah.db.pojo.Merchant;
-import com.reviewlah.db.pojo.User;
+import com.reviewlah.db.pojo.*;
 import com.reviewlah.service.CategoryService;
 import com.reviewlah.service.MCService;
 import com.reviewlah.service.MerchantService;
@@ -31,23 +29,38 @@ public class MCController {
     @Autowired
     private CategoryService categoryService;
     @PostMapping({"/update"})
-    public String updateMC(@RequestBody UpdateMCRequest request) {
+    public RCode updateMC(@RequestBody UpdateMCRequest request) {
         BigInteger user_id = request.getUser_id();
-        ArrayList<String> category = request.getCategory();
+        ArrayList<String> category_list = request.getCategory();
         User user = this.userService.selectUserById(user_id);
+        Boolean flag = false;
         if(user != null && user.getType() == 2) {
             BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
-            this.mcService.deleteMCByMerchantId(merchant_id);
-            for(String category_name : category) {
-                int category_id = this.categoryService.selectCategoryIdByName(category_name);
-                MC mc = new MC(category_id, merchant_id);
-                this.mcService.insertMC(mc);
+            if(merchant_id != null) {
+                for(String category_name : category_list) {
+                    Category category = this.categoryService.selectCategoryByName(category_name);
+                    if(category == null) {
+                        System.out.println("Category Does Not Exist");
+                        return RCode.error("Category Does Not Exist");
+                    }
+                    if(!flag) {
+                        this.mcService.deleteMCByMerchantId(merchant_id);
+                        flag = true;
+                    }
+                    MC mc = new MC(category.getCategory_id(), merchant_id);
+                    this.mcService.insertMC(mc);
+                    System.out.println("successful");
+                }
             }
-            System.out.println("successful");
+            else {
+                System.out.println("Merchant Does Not Exist");
+                return RCode.error("Merchant Does Not Exist");
+            }
         }
         else {
             System.out.println("Merchant Does Not Exist");
+            return RCode.error("Merchant Does Not Exist");
         }
-        return "merchant/address";
+        return RCode.ok("successful");
     }
 }

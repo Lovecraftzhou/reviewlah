@@ -1,6 +1,7 @@
 package com.reviewlah.service.impl;
 
 import com.reviewlah.db.dao.CustomerDao;
+import com.reviewlah.db.pojo.Customer;
 import com.reviewlah.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,12 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerDao.insertCustomer(user_id);
     }
     public BigInteger selectCustomerIdByUserId(BigInteger user_id) {
-        BigInteger customer_id = this.customerDao.selectCustomerIdByUserId(user_id);
-        return customer_id;
+        return this.customerDao.selectCustomerIdByUserId(user_id);
     }
+    public BigInteger selectUserIdByCustomerId(BigInteger customer_id) {
+        return this.customerDao.selectUserIdByCustomerId(customer_id);
+    }
+   public Customer selectCustomerByUserId(BigInteger user_id) {
+        return this.customerDao.selectCustomerByUserId(user_id);
+   }
 }

@@ -1,23 +1,26 @@
 package com.reviewlah.controller;
 
-import com.reviewlah.controller.form.DeleteUserRequest;
-import com.reviewlah.controller.form.InsertUserRequest;
-import com.reviewlah.controller.form.LoginRequest;
-import com.reviewlah.controller.form.UpdateUserRequest;
+import com.reviewlah.common.util.RCode;
+import com.reviewlah.controller.form.*;
+import com.reviewlah.db.dao.UserDao;
 import com.reviewlah.db.pojo.Address;
 import com.reviewlah.db.pojo.MC;
+import com.reviewlah.db.pojo.Merchant;
 import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.*;
-import jakarta.annotation.Resource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 
 @RestController
 @RequestMapping({"/user"})
+@Tag(name = "用户模块")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -28,28 +31,29 @@ public class UserController {
     @Autowired
     private AddressService addressService;
     @Autowired
-    @Resource
     private MCService mcService;
     @Autowired
     private CategoryService categoryService;
     @RequestMapping("/register")
+    @Operation(summary = "用户注册")
     public String register(){
         return "register";
     }
-
-    @RequestMapping("/personalInfo")
-    public String personalInfo(){
-        return "personalInfo";
-    }
     @GetMapping("/get")
-    public String get(){
-        return "user";
+    @Operation(summary = "")
+    public RCode selectUserById(@RequestBody SelectUserByIdRequest request){
+        BigInteger user_id = request.getUser_id();
+        User user = this.userService.selectUserById(user_id);
+        if(user == null) {
+            System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
+        }
+        return RCode.ok().put("list", user);
     }
-
-
     @PostMapping({"/insert"})
-//    @ApiOperation(value = )
-    public String insertUser(@RequestBody InsertUserRequest request) {
+    @Operation(summary = "用户注册")
+
+    public RCode insertUser(@RequestBody InsertUserRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();
@@ -57,31 +61,59 @@ public class UserController {
         int type = request.getType();
         String avator = request.getAvator();
         User user = this.userService.selectUserByName(name);
-        //        if(avator == null || avator == "") pic_post = "";
         if(user == null) {
-            user = new User(name, phone_number, email, password, type, avator);
-            this.userService.insertUser(user);
+            if(password == null || password.isEmpty()) {
+                System.out.println("Password Cannot Be Empty");
+                return RCode.error("Password Cannot Be Empty");
+            }
+            if(email == null || email.isEmpty()) {
+                System.out.println("Email Cannot Be Empty");
+                return RCode.error("Email Cannot Be Empty");
+            }
+            if(phone_number == null || phone_number.isEmpty()) {
+                System.out.println("phone_number Cannot Be Empty");
+                return RCode.error("phone_number Cannot Be Empty");
+            }
+            if(avator == null || avator.isEmpty()) {
+                avator = "http://defaultUserAvator";
+            }
+
             if(type == 1) {
+                user = new User(name, phone_number, email, password, type, avator);
+                this.userService.insertUser(user);
                 User tmp = this.userService.selectUserByName(name);
                 BigInteger user_id = tmp.getUser_id();
                 this.customerService.insertCustomer(user_id);
             }
             if(type == 2) {
-                //insert merchant
-                User tmp = this.userService.selectUserByName(name);
-                BigInteger user_id = tmp.getUser_id();
-                this.merchantService.insertMerchant(user_id);
-                //insert address
-                BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
                 String address_code = request.getAddress_code();
                 String address_detail = request.getAddress_detail();
                 String unitnum = request.getUnitnum();
+                if(address_code == null || address_code.isEmpty()) {
+                    System.out.println("Address Code Cannot Be Empty");
+                    return RCode.error("Address Code Cannot Be Empty");
+                }
+                else if(address_code.length() != 6) {
+                    System.out.println("Address Code is Invalid");
+                    return RCode.error("Address Code is Invalid");
+                }
+                user = new User(name, phone_number, email, password, type, avator);
+                this.userService.insertUser(user);
+                //insert merchant
+                User tmp = this.userService.selectUserByName(name);
+                BigInteger user_id = tmp.getUser_id();
+                Merchant merchant = new Merchant();
+                merchant.setUser_id(user_id);
+                merchant.setAvg_rate(0);
+                this.merchantService.insertMerchant(merchant);
+                //insert address
+                BigInteger merchant_id = this.merchantService.selectMerchantIdByUserId(user_id);
                 Address address = new Address(address_code, merchant_id,address_detail,unitnum);
                 this.addressService.insertAddress(address);
                 //insert MC
                 ArrayList<String> category = request.getCategory();
                 for(String category_name : category) {
-                    int category_id = this.categoryService.selectCategoryIdByName(category_name);
+                    int category_id = this.categoryService.selectCategoryByName(category_name).getCategory_id();
                     MC mc = new MC(category_id, merchant_id);
                     this.mcService.insertMC(mc);
                 }
@@ -90,30 +122,57 @@ public class UserController {
             System.out.println("successful");
         }
         else {
-            System.out.println("failed");
+            System.out.println("Failed");
+            return RCode.error("Failed");
         }
-        return "register";
+        return RCode.ok("successful");
     }
     @PostMapping({"/personalInfo/update"})
-    public String updateUser(@RequestBody UpdateUserRequest request) {
+    public RCode updateUser(@RequestBody UpdateUserRequest request) {
         BigInteger user_id = request.getUser_id();
+        String name = request.getName();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();
         String password = request.getPassword();
         String avator = request.getAvator();
         User user = this.userService.selectUserById(user_id);
+        User tmp = this.userService.selectUserByName(name);
         if(user != null) {
-            user = new User(user_id, phone_number, email, password, avator);
+            if(tmp != null && tmp != user) {
+                System.out.println("UserName Already Exists");
+                return RCode.error("UserName Already Exists");
+            }
+            if(password == null || password.isEmpty()) {
+                System.out.println("Password Cannot Be Empty");
+                return RCode.error("Password Cannot Be Empty");
+            }
+            if(email == null || email.isEmpty()) {
+                System.out.println("Email Cannot Be Empty");
+                return RCode.error("Email Cannot Be Empty");
+            }
+            if(phone_number == null || phone_number.isEmpty()) {
+                System.out.println("PhoneNumber Cannot Be Empty");
+                return RCode.error("PhoneNumber Cannot Be Empty");
+            }
+            if(avator == null || avator.isEmpty()) {
+                avator = "http://defaultUserAvator";
+            }
+            user.setName(name);
+            user.setPhone_number(phone_number);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setAvator(avator);
             this.userService.updateUser(user);
             System.out.println("successful");
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
-        return "personalInfo";
+        return RCode.ok("successful");
     };
     @PostMapping({"/delete"})
-    public void deleteUserById(@RequestBody DeleteUserRequest request) {
+    public RCode deleteUserById(@RequestBody DeleteUserRequest request) {
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
         if(user != null) {
@@ -122,23 +181,28 @@ public class UserController {
         }
         else {
             System.out.println("User Does Not Exist");
+            return RCode.error("User Does Not Exist");
         }
+        return RCode.ok("successful");
     };
     @PostMapping({"/login"})
-    public String login(@RequestBody LoginRequest request) {
+    public RCode login(@RequestBody LoginRequest request) {
         String name = request.getName();
         String password = request.getPassword();
         User user = this.userService.selectUserByName(name);
         if(user != null) {
             if(password.equals(user.getPassword())) {
                 System.out.println("Login Successful");
-                return "true";
             }
-            else System.out.println("Password Error");
+            else {
+                System.out.println("Password Error");
+                return RCode.error("Password Error");
+            }
         }
         else {
             System.out.println("Username Error");
+            return RCode.error("Username Error");
         }
-        return "false";
+        return RCode.ok("Login Successful");
     }
 }

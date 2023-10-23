@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -21,11 +23,12 @@ public class UserServiceImpl implements UserService {
         this.userDao.deleteUserById(user_id);
     };
     public User selectUserByName(String name) {
-        User user = this.userDao.selectUserByName(name);
-        return user;
+        return this.userDao.selectUserByName(name);
     }
     public User selectUserById(BigInteger user_id) {
-        User user = this.userDao.selectUserById(user_id);
-        return user;
+        return this.userDao.selectUserById(user_id);
+    }
+    public ArrayList<User> selectUserByType(int type) {
+        return this.userDao.selectUserByType(type);
     }
 }

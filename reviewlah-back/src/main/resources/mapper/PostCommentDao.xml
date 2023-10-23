@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.PostCommentDao">
+    <select id="selectPostCommentByPostId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.PostComment">
+        select *
+        FROM postComment
+        WHERE post_id = #{post_id}
+        ORDER BY time_pc DESC
+    </select>
+    <select id="selectPostCommentByPCId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.PostComment">
+        select *
+        FROM postComment
+        WHERE post_com_id = #{post_com_id}
+    </select>
+    <select id="selectPostMapCommentByPostId" parameterType="BigInteger" resultType="HashMap">
+        SELECT pc.post_com_id AS post_com_id,
+               pc.content AS content,
+               pc.time_pc AS time_pc,
+               u.name AS name,
+               u.avator AS avator
+        FROM postComment pc INNER JOIN customer c ON pc.customer_id = c.customer_id
+        LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE pc.post_id = #{post_id}
+        ORDER BY pc.time_pc DESC
+    </select>
+    <select id="selectPostMapCommentByCusAndPostId" resultType="HashMap">
+        SELECT p.post_com_id AS post_com_id,
+               p.content AS content,
+               p.time_pc AS time_pc,
+               u.name AS name,
+               u.avator AS avator,
+               p.customer_id = #{customer_id} AS own
+        FROM postComment p INNER JOIN customer c ON p.customer_id = c.customer_id
+                           LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE p.post_id = #{post_id}
+        ORDER BY p.time_pc DESC
+    </select>
+    <insert id="insertPostComment" parameterType="com.reviewlah.db.pojo.PostComment">
+        INSERT INTO postComment (
+        <if test="customer_id!=null">
+            customer_id,
+        </if>
+        <if test="post_id!=null">
+            post_id,
+        </if>
+        <if test="content!=null">
+            content,
+        </if>
+        time_pc
+        )values (
+        <if test="customer_id!=null">
+            #{customer_id},
+        </if>
+        <if test="post_id!=null">
+            #{post_id},
+        </if>
+        <if test="content!=null">
+            #{content},
+        </if>
+        #{time_pc}
+        )
+    </insert>
+    <delete id="deletePostCommentByPCId" parameterType="BigInteger">
+        DELETE FROM postComment
+        WHERE post_com_id = #{post_com_id}
+    </delete>
+</mapper>

@@ -23,4 +23,9 @@
         DELETE FROM merchantsCategory
         WHERE merchant_id = #{merchant_id}
     </delete>
+    <select id="selectMCByMerchantId" parameterType="BigInteger" resultType="String">
+        SELECT c.category_name
+        FROM merchantsCategory mc LEFT JOIN category c ON mc.category_id = c.category_id
+        WHERE mc.merchant_id = #{merchant_id}
+    </select>
 </mapper>

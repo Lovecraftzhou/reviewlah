@@ -12,12 +12,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryDao categoryDao;
     public ArrayList<Category> selectAllCategory() {
-        ArrayList<Category> list = this.categoryDao.selectAllCategory();
-        return list;
+        return this.categoryDao.selectAllCategory();
     }
-    public int selectCategoryIdByName(String category_name) {
-        int category_id = this.categoryDao.selectCategoryIdByName(category_name);
-        return category_id;
+    public Category selectCategoryByName(String category_name) {
+        return this.categoryDao.selectCategoryByName(category_name);
     }
     public void insertCategory(String category_name) {
         this.categoryDao.insertCategory(category_name);

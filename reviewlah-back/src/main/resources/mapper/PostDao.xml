@@ -1,19 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.PostDao">
-    <select id="selectPostByCustomerId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Post">
-        select *
-        FROM posts
-        WHERE customer_id = #{customer_id}
-        ORDER BY time_post DESC
+    <select id="selectPostByCustomerId" parameterType="BigInteger" resultType="HashMap">
+        select p.post_id AS post_id,
+               p.title AS title,
+               p.content AS content,
+               p.pic_post AS pic_post,
+               p.time_post AS time_post,
+               u.name AS name,
+               u.avator AS avator
+        FROM post p INNER JOIN customer c ON p.customer_id = c.customer_id
+        LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE p.customer_id = #{customer_id}
+        ORDER BY p.time_post DESC
     </select>
     <select id="selectPostByPostId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Post">
         select *
-        FROM posts
+        FROM post
         WHERE post_id = #{post_id}
     </select>
+    <select id="selectAllPostExceptMine" parameterType="BigInteger" resultType="HashMap">
+        select p.post_id AS post_id,
+               p.title AS title,
+               p.content AS content,
+               p.pic_post AS pic_post,
+               p.time_post AS time_post,
+               u.name AS name,
+               u.avator AS avator
+        FROM post p INNER JOIN customer c ON p.customer_id = c.customer_id
+                    LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE p.customer_id != #{customer_id}
+        ORDER BY p.time_post DESC
+    </select>
+    <select id="selectRelativePost" resultType="HashMap">
+        select p.post_id AS post_id,
+               p.title AS title,
+               p.content AS content,
+               p.pic_post AS pic_post,
+               p.time_post AS time_post,
+               u.name AS name,
+               u.avator AS avator
+        FROM post p INNER JOIN customer c ON p.customer_id = c.customer_id
+                    LEFT JOIN user u ON c.user_id = u.user_id
+        WHERE p.title like concat('%',#{keyword},'%') AND p.customer_id != #{customer_id}
+        ORDER BY p.time_post DESC
+    </select>
     <insert id="insertPost" parameterType="com.reviewlah.db.pojo.Post">
-        INSERT INTO posts (
+        INSERT INTO post (
         <if test="customer_id!=null">
             customer_id,
         </if>
@@ -43,7 +76,7 @@
         )
     </insert>
     <delete id="deletePostByPostId" parameterType="BigInteger">
-        DELETE FROM posts
+        DELETE FROM post
         WHERE post_id = #{post_id}
     </delete>
 </mapper>

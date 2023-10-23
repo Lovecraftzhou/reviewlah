@@ -1,12 +1,27 @@
 version: "3"
 
 services:
-  webapp:
-    image: reviewlah/back
+  reviewlah-back:
+    restart: always
+    container_name: reviewlah-back
+    image: reviewlah-back
     build:
-      context:  ./
+      context:  ./reviewlah-back
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
       - "/data"
+
+  reviewlah-vue:
+    restart: always
+    container_name: reviewlah-vue
+    image: reviewlah-vue
+    build:
+      context: ./reviewlah-vue
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ".:/reviewlah-vue"
+      - "/reviewlah-vue/node_nodules"
