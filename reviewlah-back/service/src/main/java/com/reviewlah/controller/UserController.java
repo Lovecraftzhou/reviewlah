@@ -131,7 +131,7 @@ public class UserController {
         User user = this.userService.selectUserById(user_id);
         User tmp = this.userService.selectUserByName(name);
         if(user != null) {
-            if(tmp != null && tmp != user) {
+            if(tmp != null && tmp.getUser_id() != user.getUser_id()) {
                 System.out.println("UserName Already Exists");
                 return RCode.error("UserName Already Exists");
             }
