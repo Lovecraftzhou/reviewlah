@@ -14,6 +14,8 @@ import com.reviewlah.service.DiningCommentService;
 import com.reviewlah.service.MerchantService;
 import com.reviewlah.service.UserService;
 import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name = "餐厅评论模块")
 @RestController
 @RequestMapping({"/merchant/diningComment"})
 public class DiningCommentController {
@@ -37,6 +40,7 @@ public class DiningCommentController {
     private CustomerService customerService;
     @Autowired
     private DiningCommentService diningCommentService;
+    @Operation(summary = "显示所有商家评论")
     @PostMapping({"/showAllForMerchant"})
     public RCode selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -97,6 +101,7 @@ public class DiningCommentController {
 //        }
 //        return null;
 //    }
+    @Operation(summary = "获取当前用户在商家下的评论")
     @PostMapping({"/showAllForCustomer"})
     public RCode selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
@@ -172,6 +177,7 @@ public class DiningCommentController {
 //        }
 //        return res;
 //    }
+    @Operation(summary = "发布新评论")
     @PostMapping({"/insert"})
     public RCode insertDC(@RequestBody InsertDiningCommentRequest request) {
         BigInteger customer_user_id = request.getCustomer_user_id();
@@ -221,6 +227,7 @@ public class DiningCommentController {
         }
         return RCode.ok("successful");
     }
+    @Operation(summary = "删除新评论")
     @PostMapping({"/delete"})
     public RCode deleteDCById(@RequestBody DeleteDiningCommentRequest request) {
         BigInteger dining_com_id = request.getDining_com_id();

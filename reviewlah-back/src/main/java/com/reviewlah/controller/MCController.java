@@ -8,6 +8,8 @@ import com.reviewlah.service.CategoryService;
 import com.reviewlah.service.MCService;
 import com.reviewlah.service.MerchantService;
 import com.reviewlah.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+
+@Tag(name = "商家种类模块")
 @RestController
 @RequestMapping({"/merchant/category"})
 public class MCController {
@@ -28,6 +32,7 @@ public class MCController {
     private MCService mcService;
     @Autowired
     private CategoryService categoryService;
+    @Operation(summary = "更新商家种类")
     @PostMapping({"/update"})
     public RCode updateMC(@RequestBody UpdateMCRequest request) {
         BigInteger user_id = request.getUser_id();

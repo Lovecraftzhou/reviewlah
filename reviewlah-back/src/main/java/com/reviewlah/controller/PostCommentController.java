@@ -10,6 +10,8 @@ import com.reviewlah.service.CustomerService;
 import com.reviewlah.service.PostCommentService;
 import com.reviewlah.service.PostService;
 import com.reviewlah.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.util.*;
 
+@Tag(name = "评论模块")
 @RestController
 @RequestMapping({"/post/detail"})
 public class PostCommentController {
@@ -30,6 +33,7 @@ public class PostCommentController {
     private PostService postService;
     @Autowired
     private PostCommentService postCommentService;
+    @Operation(summary = "获取帖主发的帖子")
     @PostMapping({"/post_commentForPostOwner"})
     public RCode selectPostCommentByPostId(@RequestBody SelectPostCommentByPostIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
@@ -44,6 +48,8 @@ public class PostCommentController {
         }
         return RCode.ok().put("list", res);
     }
+
+    @Operation(summary = "获取当前用户发的帖子")
     @PostMapping({"/post_comment"})
     public RCode selectPostCommentByPostAndCusId(@RequestBody SelectPostCommentByPostAndCusIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
@@ -104,6 +110,7 @@ public class PostCommentController {
 //        }
 //        return res;
 //    }
+    @Operation(summary = "发布评论")
     @PostMapping({"/post_comment/insert"})
     public RCode insertPostComment(@RequestBody InsertPostCommentRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -138,6 +145,8 @@ public class PostCommentController {
         }
         return RCode.ok("successful");
     }
+
+    @Operation(summary = "删除评论")
     @PostMapping({"/post_comment/delete"})
     public RCode deletePostCommentByPCId(@RequestBody DeletePostCommentByPCIdRequest request) {
         BigInteger post_com_id = request.getPost_com_id();

@@ -10,6 +10,8 @@ import com.reviewlah.service.MerchantService;
 import com.reviewlah.service.UserService;
 import com.reviewlah.service.CategoryService;
 import com.reviewlah.service.CustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +22,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
+@Tag(name = "游览记录模块")
 @RestController
 @RequestMapping({"/user/browseHistory"})
 public class BrowseHistoryController {
@@ -35,6 +37,7 @@ public class BrowseHistoryController {
     @Autowired
     private BrowseHistoryService browseHistoryService;
 
+    @Operation(summary = "获取游览记录")
     @PostMapping({"/historyDetail"})
     public RCode selectBrowseHistoryByHistoryID(@RequestBody SelectBrowseHistoryByHistoryIDRequest request){
         BigInteger history_id=request.getHistory_id();
@@ -49,6 +52,7 @@ public class BrowseHistoryController {
         return RCode.ok().put("list", browseHistory);
 
     }
+    @Operation(summary = "获取游览最多的餐厅种类")
     @PostMapping({"/customerHistory"})
     public RCode selectTop3CategoryFromBrowseHistory(@RequestBody SelectTop3CategoryFromBrowseHistoryRequest request){
         BigInteger user_id=request.getUser_id();
@@ -69,6 +73,7 @@ public class BrowseHistoryController {
         return RCode.ok().put("list", list);
     }
 
+    @Operation(summary = "获取用户所有游览记录")
     @PostMapping({"/allHistoryForCustomer"})
     public RCode selectBrowseHistoryByCustomerId(@RequestBody SelectBrowseHistoryByCustomerIdRequest request){
         BigInteger user_id = request.getUser_id();
@@ -91,6 +96,7 @@ public class BrowseHistoryController {
         }
         return RCode.ok().put("list", list);
     }
+    @Operation(summary = "获取某时间之前的游览记录")
     @PostMapping({"/historyBeforeTimeStamp"})
     public RCode selectBrowseHistoryByTimeHis(@RequestBody SelectBrowseHistoryByTimeHisRequest request){
         Date time_his=request.getTime_his();
@@ -105,6 +111,7 @@ public class BrowseHistoryController {
         }
         return RCode.ok().put("list", list);
     }
+    @Operation(summary = "新游览记录")
     @PostMapping({"/insertHistory"})
     public RCode insertBrowseHistory(@RequestBody InsertBrowseHistoryRequest request){
         BigInteger user_id = request.getUser_id();
@@ -139,6 +146,7 @@ public class BrowseHistoryController {
         }
         return RCode.ok("successful");
     }
+    @Operation(summary = "删除游览记录")
     @PostMapping({"/deleteHistory"})
     public RCode deleteBrowseHistoryByHistoryID(@RequestBody DeleteBrowseHistoryByHistoryIDRequest request){
         BigInteger history_id=request.getHistory_id();

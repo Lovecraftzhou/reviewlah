@@ -6,6 +6,8 @@ import com.reviewlah.controller.form.SelectMerchantByUserIdRequest;
 import com.reviewlah.controller.form.SelectTop3CategoryFromBrowseHistoryRequest;
 import com.reviewlah.db.pojo.*;
 import com.reviewlah.service.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+@Tag(name = "商家模块")
 @RestController
 @RequestMapping({"/merchant"})
 public class MerchantController {
@@ -38,6 +41,7 @@ public class MerchantController {
     private CategoryService categoryService;
     @Autowired
     private MCService mcService;
+    @Operation(summary = "获取所有商家")
     @GetMapping("/merchantList")
     public RCode selectAllMerchant() {
         this.refreshAllMerchantRate();
@@ -62,6 +66,8 @@ public class MerchantController {
         }
         return RCode.ok().put("list", res);
     }
+
+    @Operation(summary = "获取推荐列表")
     @PostMapping("/merchantRecommendList")
     public RCode selectAllRecommendMerchant(@RequestBody SelectAllRecommendMerchantRequest request) {
         this.refreshAllMerchantRate();
@@ -103,6 +109,8 @@ public class MerchantController {
         }
         return RCode.ok().put("list", res);
     }
+
+    @Operation(summary = "获取商家页面")
     @GetMapping("/merchantList/merchantPage")
     public RCode selectMerchantByUserId(@RequestBody SelectMerchantByUserIdRequest request) {
         BigInteger user_id = request.getUser_id();

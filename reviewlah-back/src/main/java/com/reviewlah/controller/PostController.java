@@ -8,6 +8,8 @@ import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.CustomerService;
 import com.reviewlah.service.PostService;
 import com.reviewlah.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping({"/post"})
+@Tag(name = "帖子模块")
 public class PostController {
     @Autowired
     private UserService userService;
@@ -26,6 +29,8 @@ public class PostController {
     private CustomerService customerService;
     @Autowired
     private PostService postService;
+
+    @Operation(summary = "发布新帖子")
     @PostMapping({"/insert"})
     public RCode insertPost(@RequestBody InsertPostRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -60,6 +65,7 @@ public class PostController {
         }
         return RCode.ok("successful");
     }
+    @Operation(summary = "删除帖子")
     @PostMapping({"/delete"})
     public RCode deletePost(@RequestBody DeletePostRequest request) {
         BigInteger post_id = request.getPost_id();
@@ -74,6 +80,8 @@ public class PostController {
         }
         return RCode.ok("successful");
     }
+
+    @Operation(summary = "获取帖子")
     @PostMapping({"/mypost"})
     public RCode selectPostByCustomerId(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_Id = request.getUser_id();
@@ -93,6 +101,8 @@ public class PostController {
         }
         return RCode.ok().put("list", list);
     }
+
+    @Operation(summary = "获取所有帖子")
     @PostMapping({"/homepage"})
     public RCode selectAllPostExceptMine(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -109,6 +119,8 @@ public class PostController {
         }
         return RCode.ok().put("list", list);
     }
+
+    @Operation(summary = "获取相对Post")
     @PostMapping({"/homepage/relative"})
     public RCode selectRelativePost(@RequestBody SelectRelativePostRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -126,6 +138,8 @@ public class PostController {
         }
         return RCode.ok().put("list", list);
     }
+
+    @Operation(summary = "获取详细信息")
     @PostMapping({"/detail"})
     public RCode selectPostByPostId(@RequestBody SelectPostByPostIdRequest request) {
         BigInteger post_id = request.getPost_id();

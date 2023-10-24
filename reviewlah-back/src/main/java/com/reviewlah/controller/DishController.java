@@ -9,6 +9,8 @@ import com.reviewlah.service.DishService;
 import com.reviewlah.service.MenuService;
 import com.reviewlah.service.MerchantService;
 import com.reviewlah.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-
+@Tag(name = "菜单模块")
 @RestController
 @RequestMapping({"/menu"})
 public class DishController {
@@ -31,6 +33,7 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Operation(summary = "根据Menu_ID获取菜")
     @PostMapping({"/dishes"})
     public RCode selectDishByMenuId(@RequestBody SelectDishByMenuIdRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -60,6 +63,7 @@ public class DishController {
         }
         return RCode.ok().put("list", list);
     }
+    @Operation(summary = "根据名字获取菜")
     @PostMapping({"/select_dish"})
     public RCode selectDishIdByName(@RequestBody SelectDishIdByNameRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -91,6 +95,7 @@ public class DishController {
         }
         return RCode.ok().put("list", list);
     }
+    @Operation(summary = "发布新菜")
     @PostMapping({"/insert_dish"})
     public RCode insertDish(@RequestBody InsertDishRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -139,6 +144,7 @@ public class DishController {
         }
         return RCode.ok("successful");
     }
+    @Operation(summary = "更新菜的信息")
     @PostMapping({"/update_dish"})
     public RCode updateDish(@RequestBody UpdateDishRequest request) {
         BigInteger dish_id = request.getDish_id();
@@ -162,6 +168,7 @@ public class DishController {
         }
         return RCode.ok("successful");
     }
+    @Operation(summary = "删除菜")
     @PostMapping({"/delete_dish"})
     public RCode deleteDishById(@RequestBody DeleteDishByIdRequest request) {
         BigInteger dish_id = request.getDish_id();

@@ -34,13 +34,9 @@ public class UserController {
     private MCService mcService;
     @Autowired
     private CategoryService categoryService;
-    @RequestMapping("/register")
-    @Operation(summary = "用户注册")
-    public String register(){
-        return "register";
-    }
+
     @GetMapping("/get")
-    @Operation(summary = "")
+    @Operation(summary = "用户ID获取")
     public RCode selectUserById(@RequestBody SelectUserByIdRequest request){
         BigInteger user_id = request.getUser_id();
         User user = this.userService.selectUserById(user_id);
@@ -52,7 +48,6 @@ public class UserController {
     }
     @PostMapping({"/insert"})
     @Operation(summary = "用户注册")
-
     public RCode insertUser(@RequestBody InsertUserRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
@@ -127,6 +122,8 @@ public class UserController {
         }
         return RCode.ok("successful");
     }
+
+    @Operation(summary = "用户个人信息更新")
     @PostMapping({"/personalInfo/update"})
     public RCode updateUser(@RequestBody UpdateUserRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -171,6 +168,8 @@ public class UserController {
         }
         return RCode.ok("successful");
     };
+
+    @Operation(summary = "用户删除")
     @PostMapping({"/delete"})
     public RCode deleteUserById(@RequestBody DeleteUserRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -185,6 +184,8 @@ public class UserController {
         }
         return RCode.ok("successful");
     };
+
+    @Operation(summary = "用户登录")
     @PostMapping({"/login"})
     public RCode login(@RequestBody LoginRequest request) {
         String name = request.getName();
