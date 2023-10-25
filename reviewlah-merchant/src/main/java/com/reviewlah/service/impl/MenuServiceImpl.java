@@ -15,6 +15,9 @@ public class MenuServiceImpl implements MenuService {
     public ArrayList<Menu> selectAllMenu() {
         return this.menuDao.selectAllMenu();
     }
+    public Menu selectMenuById(BigInteger menu_id) {
+        return this.menuDao.selectMenuById(menu_id);
+    }
     public Menu selectMenuByMerchantId(BigInteger merchant_id) {
         return this.menuDao.selectMenuByMerchantId(merchant_id);
     }

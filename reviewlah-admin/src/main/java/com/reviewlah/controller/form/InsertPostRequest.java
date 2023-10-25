@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class InsertPostRequest {
+
     private BigInteger user_id;
     private String title;
     private String content;
@@ -15,7 +16,6 @@ public class InsertPostRequest {
     public void setTitle(String title) {
         this.title = title;
     }
-
 
     public BigInteger getUser_id() {
         return user_id;

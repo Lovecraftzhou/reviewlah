@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.reviewlah.db.dao.BrowseHistoryDao">
+    <select id="selectAllBrowseHistory" resultType="com.reviewlah.db.pojo.BrowseHistory">
+        SELECT *
+        FROM browseHistory
+        ORDER BY time_his DESC
+    </select>
     <select id="selectBrowseHistoryByHistoryID" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.BrowseHistory">
         select *
         FROM browseHistory

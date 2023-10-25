@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -20,5 +21,14 @@ public class AddressServiceImpl implements AddressService {
     }
     public Address selectAddressByMerchantId(BigInteger merchant_id) {
         return this.addressDao.selectAddressByMerchantId(merchant_id);
+    }
+    public ArrayList<Address> selectAllAddress() {
+        return this.addressDao.selectAllAddress();
+    }
+    public void deleteAddress(BigInteger address_id) {
+        this.addressDao.deleteAddress(address_id);
+    }
+    public Address selectAddressById(BigInteger address_id) {
+        return this.addressDao.selectAddressById(address_id);
     }
 }

@@ -10,6 +10,11 @@
         FROM category
         WHERE category_name = #{category_name}
     </select>
+    <select id = "selectCategoryById" parameterType="Integer" resultType="com.reviewlah.db.pojo.Category">
+        SELECT *
+        FROM category
+        WHERE category_id = #{category_id}
+    </select>
     <insert id = "insertCategory" parameterType="String">
         INSERT INTO category
         SET

@@ -41,4 +41,18 @@
         FROM address
         WHERE merchant_id = #{merchant_id}
     </select>
+    <select id="selectAllAddress" resultType="com.reviewlah.db.pojo.Address">
+        SELECT *
+        FROM address
+        ORDER BY address_id
+    </select>
+    <select id="selectAddressById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Address">
+        SELECT *
+        FROM address
+        WHERE address_id = #{address_id}
+    </select>
+    <delete id="deleteAddress" parameterType="BigInteger">
+        DELETE FROM address
+        WHERE address_id = #{address_id}
+    </delete>
 </mapper>

@@ -3,18 +3,11 @@ package com.reviewlah.controller;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import com.reviewlah.controller.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.reviewlah.common.util.RCode;
-import com.reviewlah.controller.form.DeleteDishByIdRequest;
-import com.reviewlah.controller.form.InsertDishRequest;
-import com.reviewlah.controller.form.SelectDishByMenuIdRequest;
-import com.reviewlah.controller.form.SelectDishIdByNameRequest;
-import com.reviewlah.controller.form.UpdateDishRequest;
 import com.reviewlah.db.pojo.Dish;
 import com.reviewlah.db.pojo.Menu;
 import com.reviewlah.service.DishService;
@@ -31,6 +24,23 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @GetMapping({"/showAllDish"})
+    public RCode selectAllDish() {
+        ArrayList<Dish> list = this.dishService.selectAllDish();
+        return RCode.ok().put("list", list);
+    }
+    @PostMapping({"/dish"})
+    public RCode selectDishById(@RequestBody SelectDishByIdRequest request) {
+        BigInteger dish_id = request.getDish_id();
+        Dish dish = this.dishService.selectDishById(dish_id);
+        if(dish != null) {
+            return RCode.ok().put("list", dish);
+        }
+        else {
+            System.out.println("Dish Does Not Exist");
+            return RCode.error("Dish Does Not Exist");
+        }
+    }
     @PostMapping({"/dishes"})
     public RCode selectDishByMenuId(@RequestBody SelectDishByMenuIdRequest request) {
         BigInteger user_id = request.getUser_id();

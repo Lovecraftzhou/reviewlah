@@ -5,6 +5,11 @@
         SELECT *
         FROM menu
     </select>
+    <select id="selectMenuById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Menu">
+        SELECT *
+        FROM menu
+        WHERE menu_id = #{menu_id}
+    </select>
     <select id="selectMenuByMerchantId" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Menu">
         SELECT *
         FROM menu

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public interface BrowseHistoryService {
+    ArrayList<BrowseHistory> selectAllBrowseHistory();
     BrowseHistory selectBrowseHistoryByHistoryID(BigInteger history_id);
     ArrayList<Integer> selectTop3CategoryFromBrowseHistory(BigInteger customer_id, Date time_his);
     //ArrayList<BrowseHistory>selectBrowseHistoryByCategoryID(int category_id);

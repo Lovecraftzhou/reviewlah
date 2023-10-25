@@ -11,4 +11,5 @@ public interface AnnouncementDao {
     void deleteAnnouncementByAnnouncementId(BigInteger announcement_id);
     ArrayList<Announcement> selectAnnouncementByMerchantId(BigInteger merchant_id);
     Announcement selectAnnouncementByAnnouncementId(BigInteger announcement_id);
+    ArrayList<Announcement> selectAllAnnouncement();
 }

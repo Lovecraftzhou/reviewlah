@@ -3,6 +3,7 @@ package com.reviewlah.db.dao;
 import com.reviewlah.db.pojo.Customer;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 public interface CustomerDao {
     void insertCustomer(Customer customer);
@@ -14,4 +15,5 @@ public interface CustomerDao {
     void deleteCustomerById(BigInteger user_id);
 
     Customer selectCustomerByName(String name);
+    ArrayList<Customer> selectAllCustomer();
 }

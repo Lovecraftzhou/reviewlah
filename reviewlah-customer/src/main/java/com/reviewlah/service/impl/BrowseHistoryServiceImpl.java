@@ -13,6 +13,11 @@ import java.util.Date;
 public class BrowseHistoryServiceImpl implements BrowseHistoryService {
     @Autowired
     BrowseHistoryDao browseHistoryDao;
+
+    public ArrayList<BrowseHistory> selectAllBrowseHistory() {
+        ArrayList<BrowseHistory> list = this.browseHistoryDao.selectAllBrowseHistory();
+        return list;
+    }
     public BrowseHistory selectBrowseHistoryByHistoryID(BigInteger history_id){
         BrowseHistory browseHistory=this.browseHistoryDao.selectBrowseHistoryByHistoryID(history_id);
         return browseHistory;

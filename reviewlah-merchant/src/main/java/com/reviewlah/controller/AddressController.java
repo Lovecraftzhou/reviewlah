@@ -1,12 +1,13 @@
 package com.reviewlah.controller;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
+import com.reviewlah.controller.form.DeleteAddressRequest;
+import com.reviewlah.controller.form.InsertAddressRequest;
+import com.reviewlah.db.pojo.Merchant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.UpdateAddressRequest;
@@ -41,5 +42,66 @@ public class AddressController {
             return RCode.error("Merchant Does Not Exist");
         }
         return RCode.ok("successful");
+    }
+    @PostMapping({"/insert"})
+    public RCode insertAddress(@RequestBody InsertAddressRequest request) {
+        BigInteger user_id = request.getUser_id();
+        String address_code = request.getAddress_code();
+        String address_detail = request.getAddress_detail();
+        String unitnum = request.getUnitnum();
+        Merchant merchant = this.merchantService.selectMerchantById(user_id);
+        if(merchant != null) {
+            Address tmp = this.addressService.selectAddressByMerchantId(merchant.getMerchant_id());
+            if(tmp == null) {
+                if(address_code == null || address_code.isEmpty()) {
+                    System.out.println("AddressCode Cannot Be Empty");
+                    return RCode.error("AddressCode Cannot Be Empty");
+                }
+                Address address = new Address(address_code, merchant.getMerchant_id(), address_detail, unitnum);
+                this.addressService.insertAddress(address);
+                System.out.println("successful");
+            }
+            else {
+                System.out.println("Merchant Address Does Already Exist");
+                return RCode.error("Merchant Address Does Already Exist");
+            }
+
+        }
+        else {
+            System.out.println("Merchant Does Not Exist");
+            return RCode.error("Merchant Does Not Exist");
+        }
+        return RCode.ok("successful");
+    }
+    @PostMapping({"/{merchant_id}"})
+    public RCode selectAddressByMerchantId(@PathVariable BigInteger merchant_id) {
+        Merchant merchant = this.merchantService.selectMerchantById(merchant_id);
+        if(merchant != null) {
+            Address address = this.addressService.selectAddressByMerchantId(merchant_id);
+            return RCode.ok().put("list", address);
+        }
+        else {
+            System.out.println("Merchant Does Not Exist");
+            return RCode.error("Merchant Does Not Exist");
+        }
+    }
+    @GetMapping({"/showAll"})
+    public RCode selectAllAddress() {
+        ArrayList<Address> list = this.addressService.selectAllAddress();
+        return RCode.ok().put("list", list);
+    }
+
+    @PostMapping({"/delete"})
+    public RCode deleteAddress(@RequestBody DeleteAddressRequest request) {
+        BigInteger address_id = request.getAddress_id();
+        Address address = this.addressService.selectAddressById(address_id);
+        if(address != null) {
+            this.addressService.deleteAddress(address_id);
+            return RCode.ok("successful");
+        }
+        else {
+            System.out.println("Address Does Not Exist");
+            return RCode.error("Address Does Not Exist");
+        }
     }
 }

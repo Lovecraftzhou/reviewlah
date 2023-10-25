@@ -2,7 +2,7 @@ package com.reviewlah.controller.form;
 
 import java.util.ArrayList;
 
-public class InsertUserRequest {
+public class InsertMerchantRequest {
     private String name;
     private String phone_number;
     private String email;

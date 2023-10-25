@@ -66,4 +66,9 @@
         FROM customer
         WHERE name = #{name}
     </select>
+    <select id="selectAllCustomer" resultType="com.reviewlah.db.pojo.Customer">
+        SELECT *
+        FROM customer
+        ORDER BY customer_id
+    </select>
 </mapper>

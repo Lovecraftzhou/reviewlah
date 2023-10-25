@@ -35,4 +35,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public Announcement selectAnnouncementByAnnouncementId(BigInteger announcement_id) {
         return this.announcementDao.selectAnnouncementByAnnouncementId(announcement_id);
     }
+    public ArrayList<Announcement> selectAllAnnouncement() {
+        return this.announcementDao.selectAllAnnouncement();
+    }
 }

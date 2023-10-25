@@ -1,6 +1,7 @@
 package com.reviewlah.service.impl;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer selectCustomerByName(String name) {
         return this.customerDao.selectCustomerByName(name);
+    }
+    public ArrayList<Customer> selectAllCustomer(){
+        return this.customerDao.selectAllCustomer();
     }
 }

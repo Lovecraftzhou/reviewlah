@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteAnnouncementRequest;
@@ -30,6 +27,11 @@ public class AnnouncementController {
     private AnnouncementService announcementService;
 
 
+    @GetMapping({"/showAll"})
+    public RCode selectAllAnnouncement() {
+        ArrayList<Announcement> list = this.announcementService.selectAllAnnouncement();
+        return RCode.ok().put("list", list);
+    }
     @PostMapping({"/announcementDetail"})
     public RCode selectAnnouncementByAnnouncementId(@RequestBody SelectAnnouncementByAnnouncementIDRequest request){
         BigInteger announcement_id = request.getAnnouncement_id();

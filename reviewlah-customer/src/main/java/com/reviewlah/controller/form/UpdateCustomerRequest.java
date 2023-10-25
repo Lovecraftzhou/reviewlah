@@ -2,7 +2,7 @@ package com.reviewlah.controller.form;
 
 import java.math.BigInteger;
 
-public class UpdateUserRequest {
+public class UpdateCustomerRequest {
     private BigInteger user_id;
     private String name;
     private String phone_number;

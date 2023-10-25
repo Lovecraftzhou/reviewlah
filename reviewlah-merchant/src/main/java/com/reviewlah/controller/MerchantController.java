@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteUserRequest;
-import com.reviewlah.controller.form.InsertUserRequest;
+import com.reviewlah.controller.form.InsertMerchantRequest;
 import com.reviewlah.controller.form.LoginRequest;
 import com.reviewlah.controller.form.SelectAllRecommendMerchantRequest;
 import com.reviewlah.controller.form.SelectMerchantByUserIdRequest;
@@ -225,7 +225,7 @@ public class MerchantController {
         return RCode.ok().put("list", merchant);
     }
     @PostMapping({"/insert"})
-    public RCode insertUser(@RequestBody InsertUserRequest request) {
+    public RCode insertUser(@RequestBody InsertMerchantRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();

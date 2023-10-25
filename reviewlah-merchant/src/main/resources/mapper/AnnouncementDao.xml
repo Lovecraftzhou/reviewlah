@@ -47,5 +47,9 @@
         FROM announcement
         WHERE announcement_id = #{announcement_id}
     </select>
-
+    <select id="selectAllAnnouncement" resultType="com.reviewlah.db.pojo.Announcement">
+        SELECT *
+        FROM announcement
+        ORDER BY time_anc DESC
+    </select>
 </mapper>

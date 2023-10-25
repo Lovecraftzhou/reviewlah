@@ -17,6 +17,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Category selectCategoryByName(String category_name) {
         return this.categoryDao.selectCategoryByName(category_name);
     }
+    public Category selectCategoryById(int category_id) {
+        return this.categoryDao.selectCategoryById(category_id);
+    }
     public void insertCategory(String category_name) {
         this.categoryDao.insertCategory(category_name);
     }

@@ -6,10 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reviewlah.common.util.RCode;
@@ -45,6 +42,11 @@ public class BrowseHistoryController {
         return mapper.convertValue(rCode.get("category"), Category.class);
     }
 
+    @GetMapping("/showAll")
+    public RCode selectAllBrowseHistory() {
+        ArrayList<BrowseHistory> list = this.browseHistoryService.selectAllBrowseHistory();
+        return RCode.ok().put("list", list);
+    }
     @PostMapping({"/historyDetail"})
     public RCode selectBrowseHistoryByHistoryID(@RequestBody SelectBrowseHistoryByHistoryIDRequest request){
         BigInteger history_id=request.getHistory_id();

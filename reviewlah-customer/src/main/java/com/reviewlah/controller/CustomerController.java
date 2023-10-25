@@ -1,6 +1,7 @@
 package com.reviewlah.controller;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reviewlah.common.util.RCode;
-import com.reviewlah.controller.form.DeleteUserRequest;
-import com.reviewlah.controller.form.InsertUserRequest;
+import com.reviewlah.controller.form.DeleteCustomerRequest;
+import com.reviewlah.controller.form.InsertCustomerRequest;
 import com.reviewlah.controller.form.LoginRequest;
 import com.reviewlah.controller.form.SelectUserByIdRequest;
-import com.reviewlah.controller.form.UpdateUserRequest;
+import com.reviewlah.controller.form.UpdateCustomerRequest;
 import com.reviewlah.db.pojo.Customer;
 import com.reviewlah.service.CustomerService;
 
@@ -60,7 +61,7 @@ public class CustomerController {
         return RCode.ok().put("list", customer);
     }
     @PostMapping({"/insert"})
-    public RCode insertUser(@RequestBody InsertUserRequest request) {
+    public RCode insertCustomer(@RequestBody InsertCustomerRequest request) {
         String name = request.getName();
         String phone_number = request.getPhone_number();
         String email = request.getEmail();
@@ -99,7 +100,7 @@ public class CustomerController {
         return RCode.ok("successful");
     }
     @PostMapping({"/personalInfo/update"})
-    public RCode updateUser(@RequestBody UpdateUserRequest request) {
+    public RCode updateCustomer(@RequestBody UpdateCustomerRequest request) {
         BigInteger user_id = request.getUser_id();
         String name = request.getName();
         String phone_number = request.getPhone_number();
@@ -109,7 +110,7 @@ public class CustomerController {
         Customer customer = this.customerService.selectCustomerByCustomerId(user_id);
         Customer tmp = this.customerService.selectCustomerByName(name);
         if(customer != null) {
-            if(tmp != null && tmp != customer) {
+            if(tmp != null && tmp.getCustomer_id() != customer.getCustomer_id()) {
                 System.out.println("UserName Already Exists");
                 return RCode.error("UserName Already Exists");
             }
@@ -143,7 +144,7 @@ public class CustomerController {
         return RCode.ok("successful");
     };
     @PostMapping({"/delete"})
-    public RCode deleteUserById(@RequestBody DeleteUserRequest request) {
+    public RCode deleteCustomerById(@RequestBody DeleteCustomerRequest request) {
         BigInteger user_id = request.getUser_id();
         Customer customer = this.customerService.selectCustomerByCustomerId(user_id);
         if(customer != null) {
@@ -175,5 +176,10 @@ public class CustomerController {
             return RCode.error("Username Error");
         }
         return RCode.ok("Login Successful");
+    }
+    @GetMapping("/all")
+    public RCode selectAllCustomer() {
+        ArrayList<Customer> list = this.customerService.selectAllCustomer();
+        return RCode.ok().put("list", list);
     }
 }
