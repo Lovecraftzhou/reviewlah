@@ -7,14 +7,8 @@ WORKDIR /reviewlah-vue
 # 拷贝前端项目到app目录下
 COPY package.json /reviewlah-vue/
 
-# 设置淘宝npm镜像
-RUN npm install -g npm
 # 安装依赖
-RUN npm install
-COPY . /reviewlah-vue
-# 打包 - 目的：丢到nginx下跑
-RUN npm run build
-#EXPOSE 8101
+RUN npm install && npm run build
 # 前端项目运行命令
 #CMD ["npm","run","serve"]
 

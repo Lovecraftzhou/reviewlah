@@ -6,7 +6,7 @@ services:
     container_name: reviewlah-back
     image: reviewlah-back
     build:
-      context:  ./reviewlah-back
+      context:  /reviewlah-back
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -18,7 +18,7 @@ services:
     container_name: reviewlah-vue
     image: reviewlah-vue
     build:
-      context: ./reviewlah-vue
+      context: /reviewlah-vue
       dockerfile: Dockerfile
     ports:
       - "8101:8101"
