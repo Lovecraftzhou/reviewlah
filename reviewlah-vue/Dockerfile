@@ -6,7 +6,7 @@ RUN echo "-------------------- web环境配置 --------------------"
 WORKDIR /reviewlah-vue
 # 拷贝前端项目到app目录下
 COPY package.json /reviewlah-vue/
-
+COPY . /reviewlaj-vue
 # 安装依赖
 RUN npm install && npm run build
 # 前端项目运行命令
