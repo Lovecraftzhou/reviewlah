@@ -4,11 +4,12 @@ RUN echo "-------------------- web环境配置 --------------------"
 
 # 指定接下来的工作路径为/reviewlah-vue  - 类似于cd命令
 WORKDIR /reviewlah-vue
-# 拷贝前端项目到app目录下
-COPY package.json /reviewlah-vue/
-COPY . /reviewlaj-vue
+# 拷贝前端项目到目录下
+COPY . .
 # 安装依赖
-RUN npm install && npm run build
+RUN npm install
+
+RUN npm run build
 # 前端项目运行命令
 #CMD ["npm","run","serve"]
 
