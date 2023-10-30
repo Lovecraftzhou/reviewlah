@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reviewlah.db.dao.AdministratorDao">
+    <select id="selectAdministratorById" parameterType="BigInteger" resultType="com.reviewlah.db.pojo.Administrator">
+        SELECT *
+        FROM administrator
+        WHERE admin_id = #{admin_id}
+    </select>
+    <insert id="insertAdministrator" parameterType="com.reviewlah.db.pojo.Administrator" useGeneratedKeys="true" keyProperty="admin_id">
+        INSERT INTO administrator (
+        <if test="name!=null">
+            name,
+        </if>
+        <if test="password!=null">
+            password,
+        </if>
+        <if test="phone_number!=null">
+            phone_number,
+        </if>
+        <if test="email!=null">
+            email,
+        </if>
+        avator) values (
+        <if test="name!=null">
+            #{name},
+        </if>
+        <if test="password!=null">
+            #{password},
+        </if>
+        <if test="phone_number!=null">
+            #{phone_number},
+        </if>
+        <if test="email!=null">
+            #{email},
+        </if>
+        #{avator}
+        )
+    </insert>
+    <update id="updateAdministrator" parameterType="com.reviewlah.db.pojo.Administrator">
+        UPDATE administrator
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="password!=null">
+                password = #{password},
+            </if>
+            <if test="phone_number!=null">
+                phone_number = #{phone_number},
+            </if>
+            <if test="email!=null">
+                email = #{email},
+            </if>
+            <if test="avator!=null">
+                avator = #{avator},
+            </if>
+        </set>
+        where admin_id = #{admin_id}
+    </update>
+    <delete id="deleteAdministratorById" parameterType="BigInteger">
+        DELETE FROM administrator
+        where admin_id = #{admin_id}
+    </delete>
+    <select id="selectAdministratorByName" parameterType="String" resultType="com.reviewlah.db.pojo.Administrator">
+        SELECT *
+        FROM administrator
+        WHERE name = #{name}
+    </select>
+</mapper>
