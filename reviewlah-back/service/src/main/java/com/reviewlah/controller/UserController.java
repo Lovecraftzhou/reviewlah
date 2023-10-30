@@ -186,6 +186,8 @@ public class UserController {
         if(user != null) {
             if(password.equals(user.getPassword())) {
                 System.out.println("Login Successful");
+                user.setPassword("");
+                return RCode.ok("Login Successful").put("list", user);
             }
             else {
                 System.out.println("Password Error");
@@ -196,6 +198,5 @@ public class UserController {
             System.out.println("Username Error");
             return RCode.error("Username Error");
         }
-        return RCode.ok("Login Successful");
     }
 }
