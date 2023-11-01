@@ -88,10 +88,22 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/usersmange/index'),
-        name: 'Users',
-        meta: { title: 'User management', icon: 'peoples'}
+        path: 'customers',
+        component: () => import('@/views/usersmange/customers.vue'),
+        name: 'customers',
+        meta: { title: 'Customers', icon: 'peoples'}
+      }
+    ]
+  },
+  {
+    path: '/users',
+    component: Layout,
+    children: [
+      {
+        path: 'merchants',
+        component: () => import('@/views/usersmange/merchants.vue'),
+        name: 'Merchants',
+        meta: { title: 'Merchants', icon: 'people'}
       }
     ]
   },
@@ -103,7 +115,19 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/comments/index'),
         name: 'Comments management',
-        meta: { title: 'Comments management', icon: 'wechat'}
+        meta: { title: 'Comments', icon: 'wechat'}
+      }
+    ]
+  },
+  {
+    path: '/dishes',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/dishes/index'),
+        name: 'Dishes management',
+        meta: { title: 'Dishes', icon: 'shopping'}
       }
     ]
   },
@@ -160,8 +184,8 @@ export const asyncRoutes = [
     redirect: '/posts/list',
     name: 'Posts Management',
     meta: {
-      title: 'Posts Management',
-      icon: 'el-icon-s-help'
+      title: 'Posts',
+      icon: 'message'
     },
     children: [
       {
@@ -182,6 +206,38 @@ export const asyncRoutes = [
         component: () => import('@/views/posts/create'),
         name: 'CreateArticle',
         meta: { title: 'Create Posts', icon: 'edit' }
+      },
+
+    ]
+  },
+  {
+    path: '/announcement',
+    component: Layout,
+    redirect: '/announcement/list',
+    name: 'Announcements Management',
+    meta: {
+      title: 'Announcements',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/announcement/edit'),
+        name: 'EditArticle',
+        meta: { title: 'Edit Article', noCache: true, activeMenu: '/announcement/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/announcement/list'),
+        name: 'ArticleList',
+        meta: { title: 'List', icon: 'list' }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/announcement/create'),
+        name: 'CreateArticle',
+        meta: { title: 'Create', icon: 'edit' }
       },
 
     ]

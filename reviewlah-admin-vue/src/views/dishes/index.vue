@@ -1,13 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Username" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" placeholder="Type" clearable style="width: 120px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
+      <el-input v-model="listQuery.menu_id" placeholder="Menu id" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.type" placeholder="Category" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
       </el-select>
-<!--      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">-->
-<!--        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />-->
-<!--      </el-select>-->
       <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
@@ -16,9 +13,6 @@
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         Add
-      </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
       </el-button>
     </div>
 
@@ -37,25 +31,29 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Username" min-width="150px" align="center">
+      <el-table-column label="Menu ID" prop="id" align="center" width="100">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.username }}</span>
+          <span>{{ row.menu_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Phone number" min-width="150px" align="center">
+      <el-table-column label="Dishes" min-width="50px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.phone }}</span>
+          <span>{{ row.dishes | ellipsis}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Email" min-width="150px" align="center">
+      <el-table-column label="Category" min-width="50px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.email }}</span>
+          <span>{{ row.type }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Type" min-width="100px" align="center">
+      <el-table-column label="Merchant" width="110px" align="center">
         <template slot-scope="{row}">
-          <span> {{row.identities}} </span>
-          <el-tag v-if="row.identities == 'merchant'"> {{ row.type}} </el-tag>
+          <span>{{ row.author }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Date" width="150px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.timestamp | parseTime('{d}-{m}-{y}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
@@ -73,20 +71,20 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.identities" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="Category" prop="type">
+          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Username" prop="username">
-          <el-input v-model="temp.username" />
+        <el-form-item label="Date" prop="timestamp">
+          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
-        <el-form-item label="Phone" prop="phone">
-          <el-input v-model="temp.phone" />
+        <el-form-item label="Merchant" prop="author">
+          <el-input v-model="temp.author" />
         </el-form-item>
-        <el-form-item label="Email" prop="email">
-          <el-input v-model="temp.email" />
+        <el-form-item label="Dishes" prop="content">
+          <el-input v-model="temp.dishes" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -118,10 +116,9 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
+  { key: 'CN', display_name: 'Chinese' },
+  { key: 'JP', display_name: 'Japanese' },
+  { key: 'KR', display_name: 'Korean' }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -130,6 +127,9 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
   return acc
 }, {})
 
+export function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 export default {
   name: 'ComplexTable',
   components: { Pagination },
@@ -145,6 +145,9 @@ export default {
     },
     typeFilter(type) {
       return calendarTypeKeyValue[type]
+    },
+    ellipsis (value) {
+      return value + ''
     }
   },
   data() {
@@ -154,40 +157,44 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        menu_id: undefined,
         page: 1,
         limit: 20,
         importance: undefined,
         title: undefined,
         type: undefined,
+        author: undefined,
         sort: '+id'
       },
-      importanceOptions: ["customer","merchant"],
+      importanceOptions: [1, 2, 3, 4, 5],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
+      statusOptions: ['published', 'draft'],
       temp: {
         id: undefined,
+        dishes: "",
         importance: 1,
-        remark: '',
+        content: '',
         timestamp: new Date(),
-        username: '',
-        phone:"",
-        email:"",
+        title: '',
         type: '',
-        status: 'published'
+        status: 'published',
+        author: '',
+        reviewer: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
-        create: 'Add users'
+        create: 'Create'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type : [{ required: true, message: 'username is required', trigger: 'change' }],
-        username: [{ required: true, message: 'username is required', trigger: 'change' }],
-        phone: [{ required: true, message: 'phone is required', trigger: 'change' }]
+        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        content: [{ required: true, message: 'title is required', trigger: 'blur' }],
+        author: [{ required: true, message: 'title is required', trigger: 'blur' }]
+
       },
       downloadLoading: false
     }
@@ -237,11 +244,12 @@ export default {
       this.temp = {
         id: undefined,
         importance: 1,
-        remark: '',
+        content: '',
         timestamp: new Date(),
         title: '',
         status: 'published',
-        type: ''
+        type: '',
+        dishes: ""
       }
     },
     handleCreate() {
@@ -322,7 +330,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'User-table-list'
+          filename: 'table-list'
         })
         this.downloadLoading = false
       })

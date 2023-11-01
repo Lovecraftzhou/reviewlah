@@ -80,13 +80,6 @@
 					<finalName>${project.artifactId}</finalName>
 					<mainClass>com.reviewlah.ReviewlahCustomerApplication</mainClass>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

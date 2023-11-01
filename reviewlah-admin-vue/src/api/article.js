@@ -8,6 +8,14 @@ export function fetchList(query) {
   })
 }
 
+export function fetchmerchants(query) {
+  return request({
+    url: 'http://localhost:9527/dev-api/vue-element-admin/merchants/list',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: 'http://localhost:9527/dev-api/vue-element-admin/article/detail',
