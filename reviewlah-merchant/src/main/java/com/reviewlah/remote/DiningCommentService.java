@@ -13,4 +13,6 @@ public interface DiningCommentService {
 
     @GetMapping("/comment/merchants/{merchant_id}")
     RCode selectDCByMerchantId(@PathVariable BigInteger merchant_id);
+
+//    Double getAverageRateByMerchantId(BigInteger merchant_id);
 }

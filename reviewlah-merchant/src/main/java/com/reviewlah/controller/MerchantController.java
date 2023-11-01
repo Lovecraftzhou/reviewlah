@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.reviewlah.controller.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,13 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reviewlah.common.util.RCode;
-import com.reviewlah.controller.form.DeleteUserRequest;
-import com.reviewlah.controller.form.InsertMerchantRequest;
-import com.reviewlah.controller.form.LoginRequest;
-import com.reviewlah.controller.form.SelectAllRecommendMerchantRequest;
-import com.reviewlah.controller.form.SelectMerchantByUserIdRequest;
-import com.reviewlah.controller.form.SelectUserByIdRequest;
-import com.reviewlah.controller.form.UpdateUserRequest;
 import com.reviewlah.db.pojo.Address;
 import com.reviewlah.db.pojo.Announcement;
 import com.reviewlah.db.pojo.Customer;
@@ -100,6 +95,7 @@ public class MerchantController {
     @PostMapping("/avg-rate/{merchant_id}")
     public RCode updateAvgRateByMerchantId(@PathVariable BigInteger merchant_id, @RequestParam double avg_rate) {
         Merchant merchant = merchantService.selectMerchantById(merchant_id);
+//        Double rate = this.diningCommentService.getAverageRateByMerchantId(merchant_id);
         if (merchant != null) {
             merchant.setAvg_rate(avg_rate);
             merchantService.updateMerchant(merchant);
@@ -107,12 +103,21 @@ public class MerchantController {
         return RCode.ok();
     }
 
-    @GetMapping("/merchants/{merchant_id}")
-    public RCode selectMerchantById(@PathVariable BigInteger merchant_id) {
+    //    public RCode selectMerchantById(@PathVariable BigInteger merchant_id) {
+//        Merchant merchant = merchantService.selectMerchantById(merchant_id);
+//        return RCode.ok().put("merchant", merchant);
+//    }
+    @PostMapping("merchantDetail")
+    public RCode selectMerchantById(@RequestBody SelectMerchantByIdRequest request) {
+        BigInteger merchant_id = request.getUser_id();
         Merchant merchant = merchantService.selectMerchantById(merchant_id);
-        return RCode.ok().put("merchant", merchant);
+        if(merchant != null) {
+            return RCode.ok().put("merchant", merchant);
+        }
+        else {
+            return RCode.error("Merchant Does Not Exist");
+        }
     }
-
     @GetMapping("/merchantList")
     public RCode selectAllMerchant() {
         ArrayList<Merchant> merchant_list = this.merchantService.selectAllMerchant();

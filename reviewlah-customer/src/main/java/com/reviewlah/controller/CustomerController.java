@@ -3,6 +3,7 @@ package com.reviewlah.controller;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import com.reviewlah.controller.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,11 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reviewlah.common.util.RCode;
-import com.reviewlah.controller.form.DeleteCustomerRequest;
-import com.reviewlah.controller.form.InsertCustomerRequest;
-import com.reviewlah.controller.form.LoginRequest;
-import com.reviewlah.controller.form.SelectUserByIdRequest;
-import com.reviewlah.controller.form.UpdateCustomerRequest;
 import com.reviewlah.db.pojo.Customer;
 import com.reviewlah.service.CustomerService;
 
@@ -26,10 +22,16 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping("/customers/{customer_id}")
-    public RCode selectCustomerById(@PathVariable BigInteger customer_id) {
+    @PostMapping("/customerDetail")
+    public RCode selectCustomerById(@RequestBody SelectCustomerByIdRequest request) {
+        BigInteger customer_id = request.getUser_id();
         Customer customer = customerService.selectCustomerByCustomerId(customer_id);
-        return RCode.ok().put("customer", customer);
+        if(customer != null) {
+            return RCode.ok().put("customer", customer);
+        }
+        else {
+            return RCode.error("Customer Does Not Exist");
+        }
     }
 
     @GetMapping("personalPage")

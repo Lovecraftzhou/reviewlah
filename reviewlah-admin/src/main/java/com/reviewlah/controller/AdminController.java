@@ -127,6 +127,8 @@ public class AdminController {
         if(administrator != null) {
             if(password.equals(administrator.getPassword())) {
                 System.out.println("Login Successful");
+                administrator.setPassword("");
+                return RCode.ok("Login Successful").put("list", administrator);
             }
             else {
                 System.out.println("Password Error");
@@ -137,6 +139,6 @@ public class AdminController {
             System.out.println("Username Error");
             return RCode.error("Username Error");
         }
-        return RCode.ok("Login Successful");
+
     }
 }

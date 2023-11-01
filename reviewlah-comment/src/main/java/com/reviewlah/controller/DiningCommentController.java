@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,6 +54,13 @@ public class DiningCommentController {
             return null;
         }
         return mapper.convertValue(rCode.get("customer"), Customer.class);
+    }
+    public Double getAverageRateByMerchantId(BigInteger merchant_id) {
+        Double rate = this.diningCommentService.getAverageRateByMerchantId(merchant_id);
+        if(rate == null) rate = 0.0;
+        BigDecimal bd = new BigDecimal(rate);
+        double avg_rate = bd.setScale(1, BigDecimal.ROUND_DOWN).doubleValue();
+        return avg_rate;
     }
 
     @GetMapping("/merchants/{merchant_id}")
@@ -250,5 +258,6 @@ public class DiningCommentController {
         }
         return RCode.ok("successful");
     }
+
 
 }

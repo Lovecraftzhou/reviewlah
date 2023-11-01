@@ -3,6 +3,7 @@ package com.reviewlah.remote;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteMerchantrRequest;
 import com.reviewlah.controller.form.InsertMerchantRequest;
+import com.reviewlah.controller.form.SelectMerchantByIdRequest;
 import com.reviewlah.controller.form.UpdateMerchantRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,8 @@ import java.math.BigInteger;
 public interface MerchantService {
     @GetMapping("/merchant/merchantList")
     RCode selectAllMerchant();
-    @GetMapping("/merchant/merchants/{merchant_id}")
-    RCode selectMerchantById(@PathVariable BigInteger merchant_id);
+    @PostMapping("/merchant/merchantDetail")
+    RCode selectMerchantById(@RequestBody SelectMerchantByIdRequest request);
     @PostMapping({"/merchant/insert"})
     RCode insertUser(@RequestBody InsertMerchantRequest request);
     @PostMapping({"/merchant/personalInfo/update"})

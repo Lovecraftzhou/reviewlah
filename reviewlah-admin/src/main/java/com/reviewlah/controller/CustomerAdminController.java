@@ -3,6 +3,7 @@ package com.reviewlah.controller;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteCustomerByIdRequest;
 import com.reviewlah.controller.form.InsertCustomerRequest;
+import com.reviewlah.controller.form.SelectCustomerByIdRequest;
 import com.reviewlah.controller.form.UpdateCustomerRequest;
 import com.reviewlah.remote.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ import java.math.BigInteger;
 public class CustomerAdminController {
     @Autowired
     private CustomerService customerService;
-    @GetMapping("/customers/{user_id}")
-    public RCode selectCustomerById(@PathVariable BigInteger user_id) {
-        return this.customerService.selectCustomerById(user_id);
+    @PostMapping("/customerDetail")
+    public RCode selectCustomerById(@RequestBody SelectCustomerByIdRequest request) {
+        return this.customerService.selectCustomerById(request);
     }
     @PostMapping("/insert")
     public RCode insertCustomer(@RequestBody InsertCustomerRequest request) {
@@ -28,10 +29,8 @@ public class CustomerAdminController {
         return customerService.updateCustomer(request);
     }
 
-    @PostMapping("/delete/{user_id}")
-    public RCode deleteCustomerById(@PathVariable BigInteger user_id) {
-        DeleteCustomerByIdRequest request = new DeleteCustomerByIdRequest();
-        request.setUser_id(user_id);
+    @PostMapping("/delete")
+    public RCode deleteCustomerById(@RequestBody DeleteCustomerByIdRequest request) {
         return customerService.deleteCustomerById(request);
     }
 

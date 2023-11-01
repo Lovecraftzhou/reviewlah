@@ -3,6 +3,7 @@ package com.reviewlah.controller;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteMerchantrRequest;
 import com.reviewlah.controller.form.InsertMerchantRequest;
+import com.reviewlah.controller.form.SelectMerchantByIdRequest;
 import com.reviewlah.controller.form.UpdateMerchantRequest;
 import com.reviewlah.remote.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class MerchantAdminController {
     public RCode selectAllMerchant() {
         return this.merchantService.selectAllMerchant();
     }
-    @GetMapping("/merchants/{user_id}")
-    public RCode selectMerchantById(@PathVariable BigInteger user_id) {
-        return this.merchantService.selectMerchantById(user_id);
+    @PostMapping("/merchantDetail")
+    public RCode selectMerchantById(@RequestBody SelectMerchantByIdRequest request) {
+        return this.merchantService.selectMerchantById(request);
     }
     @PostMapping({"/insert"})
     public RCode insertUser(@RequestBody InsertMerchantRequest request) {

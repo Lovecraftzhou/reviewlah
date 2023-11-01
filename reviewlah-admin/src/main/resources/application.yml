@@ -1,11 +1,13 @@
 spring:
   application:
     name: admin
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/admin?useSSL=false
-    username:
-    password:
+    url: jdbc:mysql://review-db.cnglxiwein6d.ap-southeast-1.rds.amazonaws.com:3306/reviewlah-admin?characterEncoding=utf-8&useSSL=false
+    username: admin
+    password: ZHou*87721472
 server:
   port: 8086
 mybatis:
