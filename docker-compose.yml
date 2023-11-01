@@ -1,0 +1,100 @@
+version: "3"
+
+services:
+  reviewlah-admin:
+    restart: always
+    container_name: reviewlah-admin
+    image: reviewlah-admin
+    build:
+      context:  ./reviewlah-admin
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    depends_on:
+      - reviewlah-gateway
+      - reviewlah-eureka
+
+  reviewlah-admin-vue:
+    restart: always
+    container_name: reviewlah-admin-vue
+    image: reviewlah-admin-vue
+    build:
+      context: ./reviewlah-admin-vue
+      dockerfile: Dockerfile
+    ports:
+      - "9527:9527"
+
+  reviewlah-comment:
+    restart: always
+    container_name:  reviewlah-comment
+    image:  reviewlah-comment
+    build:
+      context: ./reviewlah-comment
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - reviewlah-gateway
+      - reviewlah-eureka
+
+  reviewlah-customer:
+    restart: always
+    container_name: reviewlah-customer
+    image: reviewlah-customer
+    build:
+      context: ./reviewlah-customer
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - reviewlah-gateway
+      - reviewlah-eureka
+
+  reviewlah-merchant:
+    restart: always
+    container_name: reviewlah-merchant
+    image: reviewlah-merchant
+    build:
+      context: ./reviewlah-merchant
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - reviewlah-gateway
+      - reviewlah-eureka
+
+  reviewlah-message:
+    restart: always
+    container_name: reviewlah-message
+    image: reviewlah-message
+    build:
+      context: ./reviewlah-message
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    depends_on:
+      - reviewlah-gateway
+      - reviewlah-eureka
+
+  reviewlah-eureka:
+    restart: always
+    container_name: reviewlah-eureka
+    image: reviewlah-eureka
+    build:
+      context: ./reviewlah-eureka
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  reviewlah-gateway:
+    restart: always
+    container_name: reviewlah-gateway
+    image: reviewlah-gateway
+    build:
+      context: ./reviewlah-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - reviewlah-eureka
+

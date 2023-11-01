@@ -1,7 +1,7 @@
 FROM openjdk:18-oracle
 MAINTAINER reviewlah
-WORKDIR /reviewlah-back
-COPY target/reviewlah.jar reviewlah.jar
-EXPOSE 8080
+WORKDIR /reviewlah-admin
+COPY target/reviewlah-admin.jar reviewlah-admin.jar
+EXPOSE 8086
 ENV LANG C.UTF-8
-ENTRYPOINT ["java","-jar","reviewlah.jar"]
+ENTRYPOINT ["java","-jar","reviewlah-admin.jar"]
