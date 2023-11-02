@@ -354,7 +354,7 @@ export default {
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           updateArticle(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(customers, 1, this.temp)
+            this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
@@ -373,7 +373,7 @@ export default {
         type: 'success',
         duration: 2000
       })
-      this.list.splice(customers, 1)
+      this.list.splice(index, 1)
     },
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
