@@ -15,5 +15,5 @@ mybatis:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKASERVER_URI:http://127.0.0.1:8761/eureka}
 

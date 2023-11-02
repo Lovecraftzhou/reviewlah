@@ -11,3 +11,6 @@ server:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKASERVER_URI:http://127.0.0.1:8761/eureka}
