@@ -4,4 +4,4 @@ WORKDIR /reviewlah-customer
 COPY target/reviewlah-customer.jar reviewlah-customer.jar
 EXPOSE 8082
 ENV LANG C.UTF-8
-ENTRYPOINT ["java","-jar","reviewlah-customer.jar"]
+ENTRYPOINT ["java","-jar","-Xmx512m","reviewlah-customer.jar"]
