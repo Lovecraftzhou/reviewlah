@@ -85,7 +85,7 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="Category" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+            <el-option v-for="item in calendarTypeOptions" :key="item.display_name" :label="item.display_name" :value="item.display_name" />
           </el-select>
         </el-form-item>
         <el-form-item label="Username" prop="username">
@@ -178,9 +178,6 @@ export default {
       }
       return statusMap[status]
     },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    }
   },
   data() {
     const validPhone = (rule, value, callback) => {
