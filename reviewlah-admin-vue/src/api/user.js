@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export function login(data) {
   return request({
     // url:"/vue-element-admin/user/info",
-    url:'http://host.docker.internal:8086/admin/login',
+    url:'http://47.236.103.174:8086/admin/login',
     method: 'post',
     data
   })
