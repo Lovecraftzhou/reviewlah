@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="reviewlah-back" />
         <module name="reviewlah-admin" />
         <module name="reviewlah-eureka" />
         <module name="reviewlah-comment" />
@@ -15,10 +16,15 @@
         <module name="reviewlah-gateway" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="reviewlah" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="reviewlah" options="-parameters" />
       <module name="reviewlah-admin" options="-parameters" />
+      <module name="reviewlah-back" options="-parameters" />
       <module name="reviewlah-comment" options="-parameters" />
       <module name="reviewlah-customer" options="-parameters" />
       <module name="reviewlah-eureka" options="-parameters" />

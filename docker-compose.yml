@@ -101,6 +101,39 @@ services:
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
+  reviewlah-back:
+    restart: always
+    container_name: reviewlah-back
+    image: reviewlah-back
+    build:
+      context: ./reviewlah-back
+      dockerfile: Dockerfile
+    ports:
+      - "8181:8181"
+    volumes:
+      - "/data"
+    deploy:
+      resources:
+        limits:
+          cpus: 0.25
+          memory: 512m
+
+  reviewlah-vue:
+    restart: always
+    container_name: reviewlah-vue
+    image: reviewlah-vue
+    build:
+      context: ./reviewlah-vue
+      dockerfile: Dockerfile
+    ports:
+      - "8182:8182"
+    links:
+      - reviewlah-back
+    deploy:
+      resources:
+        limits:
+          cpus: 0.25
+          memory: 512m
 
   reviewlah-eureka:
     restart: always
