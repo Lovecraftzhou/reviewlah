@@ -9,7 +9,7 @@ services:
       context:  ./reviewlah-back
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8181:8181"
     volumes:
       - "/data"
 
@@ -21,4 +21,6 @@ services:
       context: ./reviewlah-vue
       dockerfile: Dockerfile
     ports:
-      - "8101:8101"
+      - "8182:8182"
+    links:
+      - reviewlah-back
