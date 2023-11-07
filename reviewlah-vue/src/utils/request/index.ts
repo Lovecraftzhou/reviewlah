@@ -6,7 +6,7 @@ import Request from "./request";
 /* eslint-disable */
 // const token = String(window.localStorage.getItem('token'))
 const web: Request = new Request({
-    baseURL: "http://localhost:8080/",
+    baseURL: process.env.baseURL,
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json',
