@@ -15,7 +15,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: 0.25
+          cpus: '0.25'
           memory: 512m
 
   reviewlah-vue:
@@ -32,5 +32,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: 0.25
+          cpus: '0.25'
           memory: 512m
