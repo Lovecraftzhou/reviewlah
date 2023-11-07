@@ -4,8 +4,7 @@
       <img alt="Vue logo" src="@/assets/reviewlah.png" style="height: 44px">
     </div>
     <div style="flex-grow: 1"></div>
-    <el-button type="primary" style="margin-top: 8px" @click="showCreatePost">Publish Posts</el-button>
-    <div class="mt-4" style="margin: 8px 0 0 8px">
+    <div class="mt-4" style="margin-top: 8px">
       <el-input
           v-model="input"
           placeholder="Please input"
@@ -29,7 +28,7 @@
         </el-tooltip>
       </template>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper" @click="editUserInfo">
+        <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
@@ -53,134 +52,46 @@
       </el-dropdown>
     </div>
   </div>
-  <div id="box">
-    <div class="banner">
-      <!--切换图片-->
-      <div class="bannerImg">
-        <transition-group name="fade" tag="ul" class="slideUl">
-          <li v-for="(merchant, index) in merchantList" :key="index" v-show="index===currentIndex" @mouseenter="stop">
-            <span @click="toMerchantPage(merchant.user_id)">
-              <img :src="merchant.avator" :alt="merchant.name">
-            </span>
-          </li>
-        </transition-group>
-      </div>
-<!--      切换小按钮-->
-      <div class="bannerItems">
-        <span v-for="(item,index) in merchantList.length" :key="index" :class="{'active':index===currentIndex}" @click="change(index)">{{index+1}}</span>
-      </div>
-    </div>
-  </div>
   <div class="main_container">
     <div class="area_title" style="text-align: center;margin-bottom: 48px !important;">
-      <h2 class="css-rlqqlq">Recent Posts</h2>
+      <h2 class="css-rlqqlq">Merchants</h2>
     </div>
-    <div class="posts_contaner">
-      <div class="post_container" v-for="(post,index) in posts" :key="index">
-        <div class="post_content">
-          <div class="post_header">
-            <div class="post_avatar_container">
-              <div class="post_avatar_link">
-                <img class="post_avatar"
-                     :src="post.pic_post"
-                     alt="Avatar" height="40" width="40"
-                     loading="lazy"
-                     draggable="true">
-              </div>
-            </div>
-            <div class="post_author_container">
-              <span class="post_author" data-font-weight="bold">
-                {{ post.name }}
-              </span>
-              <div class="post_time_container">
-                <span class="post_time">{{post.time_post}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="post_title_container">
-            <p class="post_title" data-font-weight="bold">
-              <text class="post_title_link" @click="showPostDeatail(post.post_id)">{{post.title}}</text>
-            </p>
-          </div>
-          <div class="post_bottom">
-            <div class="pic" style="height: 200px">
-                <div class="post_pic" @click="showPostDeatail(post.post_id)">
-                  <img class="post_pic_img" :src="post.pic_post"
-                       alt="" loading="eager" draggable="true">
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <el-dialog
-      v-model="postDetailVisible"
-      :title="postDetail.title"
-      destroy-on-close
-      center
-      style="    max-width: 500px;    min-height: 400px;   ;"
-  >
-    <div style="width: 100%;display: flex">
-      <div style="width: 70%;background: #000;font-size: 0;height: 100%;
-    text-align: center;">
-        <img :src="postDetail.pic_post" alt="Loading" style="display: inline-block;max-height: 100%;max-width: 100%;vertical-align: middle;">
-      </div>
-      <div style="width: 30%;margin:16px">
-        <h4 style="font-family: Poppins, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 15px;
-        letter-spacing: -0.4px;
-        line-height: 28px;
-        color: rgb(45, 46, 47);
-        word-break: break-word !important;
-        overflow-wrap: break-word !important;">{{ postDetail.content }}</h4>
-      </div>
-    </div>
-  </el-dialog>
-  <el-dialog
-      v-model="createPostVisible"
-      title="Create Post"
-      destroy-on-close
-      center
-      style="    max-width: 1300px;    min-height: 400px;    min-width: 960px;"
-  >
-    <div style="width: 100%;display: flex;margin-left: 200px">
-      <div class="login-form-container" style="width: 500px;height: 500px">
-        <el-input
-            style="margin-bottom: 9px;"
-            v-model="newPost.title"
-            placeholder="Title"
+    <el-col
+        v-for="(merchant,index) in merchantList"
+        :key="index"
+        :span="8"
+        :offset="2"
+    >
+      <el-card :body-style="{ padding: '16px' }">
+        <img
+            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+            class="image"
         />
-        <el-input
-            style="margin-bottom: 9px;"
-            v-model="newPost.content"
-            placeholder="Content"
+        <div style="padding: 14px">
+          <span>{{merchant.name}}</span>
+          <div class="bottom" style="margin-bottom: 10px">
+            <el-rate
+                v-model="merchant.avg_rate"
+                disabled
+                show-score
+                text-color="#ff9900"
+                score-template="{value} points"
+            />
 
-        />
-        <el-upload
-            class="avatar-uploader"
-            action="#"
-            :show-file-list="false"
-            :before-upload="beforePostPictureUpload"
-            :http-request="handleFileUpload"
-            style="text-align: center;margin-bottom: 9px"
-        >
-          <img v-if="newPost.imageUrl" :src="newPost.imageUrl" class="avatar"/>
-          <el-icon v-else class="avatar-uploader-icon"><Plus/></el-icon>
-        </el-upload>
-        <el-button type="danger" style="width: 100%" @click="submitNewPost">Submit</el-button>
-      </div>
-    </div>
-  </el-dialog>
+            <el-button type="danger" round>Edit</el-button>
+          </div>
+          <el-text class="mx-1">{{'address: '+merchant.address_code}}</el-text>
+        </div>
+      </el-card>
+    </el-col>
+  </div>
 </template>
 
 <script>
 import SizeSelect from '@/components/SizeSelect'
-import {createNewPost, getPostDetail, getPosts} from "@/api/post";
+import {getPostDetail, getPosts} from "@/api/post";
 import {Search} from '@element-plus/icons-vue'
-import {getMerchantRecommendList} from "@/api/merchant";
-import {login} from "@/api/user";
-import {ElMessage} from "element-plus";
+import {getMerchantDeatail, getMerchantRecommendList, searchMerchant} from "@/api/merchant";
 
 export default {
   computed: {
@@ -193,12 +104,6 @@ export default {
   },
   data() {
     return {
-      newPost:{
-        title:'',
-        content:'',
-        imageUrl:''
-      },
-      userId:'',
       avatar: '',
       input:'',
       searchType:'',
@@ -207,52 +112,33 @@ export default {
       postDetail:{},
       merchantList:[
         {
-          "address_code": "127371",
-          "user_id": 8,
-          "name": "wxf",
-          "avator": "D://pic/reviewlah.jpg",
-          "avg_rate": 0,
+          "address_code": "120751",
+          "user_id": 29,
+          "name": "JemBBQ",
+          "avator": "http://defaultUserAvator",
+          "avg_rate": 3.2,
           "category": [
-            "BBQ",
-            "HotPot"
-          ]
-        },
-        {
-          "address_code": "119077",
-          "user_id": 11,
-          "name": "九里香",
-          "avator": "http://pic3",
-          "avg_rate": 0,
-          "category": [
-            "HotPot",
             "BBQ"
-          ]
-        },
-        {
-          "address_code": "119123",
-          "user_id": 18,
-          "name": "E2",
-          "avator": "http://pic3",
-          "avg_rate": 5,
-          "category": [
-            "HotPot"
           ]
         }
       ],
       currentIndex: 0, // 当前显示的图片的索引
       timer: null,// 自动切换的定时器
-      createPostVisible:false
+      searchInput: '',
     }
   },
   created() {
     this.avatar = localStorage.getItem('Reviewlah.avatar')
-    this.userId = localStorage.getItem('Reviewlah.id')
-    getPosts(this.userId).then((res)=>{
+    getPosts(localStorage.getItem('Reviewlah.id')).then((res)=>{
       this.posts=res.list
     })
-    this.merchantList=getMerchantRecommendList(this.userId).then((res)=>{
-      this.merchantList=res.list
-    })
+    let searchInput = this.$route.query.searchInput
+    if (typeof searchInput === "string"){
+      this.searchInput = searchInput
+      searchMerchant(searchInput).then((res)=>{
+        this.merchantList = res.list
+      })
+    }
   },
   // mounted() {
   //   // 页面加载完成后，开始自动播放
@@ -290,47 +176,9 @@ export default {
       this.$router.push({path: '/merchantDetail',query:{userId:userId}});
     },
     doSearch(input){
-      this.$router.push({path: '/merchantList',query:{searchInput:input}});
-    },
-    showCreatePost(){
-      this.createPostVisible=true
-    },
-    submitNewPost() {
-      createNewPost(this.userId,this.newPost.title,this.newPost.content,this.newPost.imageUrl).then((res)=>{
-        if (res.code == 200) {
-          location.reload()
-          ElMessage({
-            message: 'upload success!',
-            type: 'success',
-          })
-        } else {
-          ElMessage.error(res.msg)
-        }
+      searchMerchant(input).then((res)=>{
+        this.merchantList = res.list
       })
-      this.createPostVisible=false
-    },
-    beforePostPictureUpload(rawFile) {
-      if (rawFile.type !== 'image/jpeg') {
-        ElMessage.error('Avatar picture must be JPG format!')
-        return false
-      } else if (rawFile.size / 1024 / 1024 > 2) {
-        ElMessage.error('Avatar picture size can not exceed 2MB!')
-        return false
-      }
-      return true
-    },
-    handleFileUpload(rawFile){
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      let that = this
-      let reader = new FileReader()
-      reader.readAsDataURL(rawFile.file)
-      reader.onload = function () {
-        if(reader.result)
-          that.newPost.imageUrl=reader.result.toString()
-      }
-    },
-    editUserInfo(){
-      this.$router.push({path: '/userInfoEdit',query:{userId:this.userId}});
     }
   }
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
-import {defineComponent, getCurrentInstance} from 'vue'
+import {defineComponent, getCurrentInstance, ref} from 'vue'
 import {login, signup} from "@/api/user";
-import {ElMessage, MessageParamsWithType} from "element-plus";
+import {ElMessage, MessageParamsWithType, UploadInstance} from "element-plus";
 import type {UploadProps} from 'element-plus'
 
 export default defineComponent({
@@ -16,7 +16,7 @@ export default defineComponent({
         "phone_number": "",
         "email": "",
         "password": "",
-        "type": 0,
+        "type": '',
         "avator": "",
         "address_code": "",
         "address_detail": "",
@@ -25,11 +25,11 @@ export default defineComponent({
       },
       accountTypes: [
         {
-          value: 1,
+          value: 'Customer',
           label: 'Customer',
         },
         {
-          value: 2,
+          value: 'Merchant',
           label: 'Merchant',
         }],
       accountType: '',
@@ -58,7 +58,12 @@ export default defineComponent({
           localStorage.setItem('Reviewlah.password',res.list.password)
           localStorage.setItem('Reviewlah.type',res.list.type)
           localStorage.setItem('Reviewlah.avatar',res.list.avator)
-          this.$router.push('/home')
+          if(res.list.type==2){
+              this.$router.push({path: '/merchantDetail',query:{userId:localStorage.getItem('Reviewlah.id')}});
+          }else{
+            this.$router.push('/home')
+          }
+
           ElMessage({
             message: 'login success',
             type: 'success',
@@ -70,8 +75,9 @@ export default defineComponent({
     },
     handleAvatarSuccess(response: any, uploadFile: any) {
       this.imageUrl = URL.createObjectURL(uploadFile.raw)
+      console.log('imageUrl:'+this.imageUrl)
     },
-    beforeAvatarUpload(rawFile: { type: string; size: number; }) {
+    beforeAvatarUpload(rawFile:any) {
       if (rawFile.type !== 'image/jpeg') {
         ElMessage.error('Avatar picture must be JPG format!')
         return false
@@ -81,8 +87,18 @@ export default defineComponent({
       }
       return true
     },
+    handleFileUpload(rawFile: any){
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      let that = this
+      let reader = new FileReader()
+      reader.readAsDataURL(rawFile.file)
+      reader.onload = function () {
+        if(reader.result)
+          that.imageUrl=reader.result.toString()
+      }
+    },
     toSignup() {
-      signup(this.user.name, this.user.password, this.user.phone_number, this.user.email, this.user.type, this.user.avator, this.user.address_code, this.user.address_detail, this.user.unitnum, this.user.category)
+      signup(this.user.name, this.user.password, this.user.phone_number, this.user.email, this.user.type, this.imageUrl, this.user.address_code, this.user.address_detail, this.user.unitnum, this.user.category)
           .then((res: any) => {
             console.log(res)
             if (res.code == 200) {
@@ -199,46 +215,45 @@ export default defineComponent({
               <el-upload
                   v-if="user.type"
                   class="avatar-uploader"
-                  action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                  action="#"
                   :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload"
+                  :http-request="handleFileUpload"
               >
                 <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
-                <el-icon v-else class="avatar-uploader-icon">
-                  <Plus/>
-                </el-icon>
+                <el-icon v-else class="avatar-uploader-icon"><Plus/></el-icon>
               </el-upload>
+
               <el-input
-                  v-if="user.type==2"
+                  v-if="user.type=='Merchant'"
                   style="margin-bottom: 9px;margin-top:9px"
                   v-model="user.address_code"
                   placeholder="Post Code"
               />
               <el-input
-                  v-if="user.type==2"
+                  v-if="user.type=='Merchant'"
                   style="margin-bottom: 9px"
                   v-model="user.address_detail"
                   placeholder="Address Detail"
               />
               <el-input
-                  v-if="user.type==2"
+                  v-if="user.type=='Merchant'"
                   style="margin-bottom: 9px"
                   v-model="user.unitnum"
                   placeholder="Unit Number"
               />
-              <el-checkbox-group v-model="user.category" v-if="user.type==2">
+              <el-checkbox-group v-model="user.category" v-if="user.type=='Merchant'">
                 <el-checkbox label="BBQ"/>
                 <el-checkbox label="ChineseFood"/>
                 <el-checkbox label="FrenchFood"/>
                 <el-checkbox label="HotPot"/>
               </el-checkbox-group>
-              <el-button type="danger" style="width: 100%" @click="toSignup">Submit</el-button>
+              <el-button type="danger" style="width: 100%;margin-top: 9px" @click="toSignup">Submit</el-button>
             </div>
           </div>
         </div>
         <div id="right" style="width: 465px;margin:0 15px">
-          <img alt="Vue logo" src="@/assets/reviewlah.png">
+          <img alt="Vue logo" src="@/assets/logo2.jpg" style="height: 600px;width: 300px">
         </div>
       </div>
     </div>

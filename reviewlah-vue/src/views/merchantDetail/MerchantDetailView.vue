@@ -32,38 +32,6 @@ export default defineComponent({
         ],
         announcement: []
       },
-      slideList:[
-        {
-          image:"https://picsum.photos/800/300?random=1",
-          desc:"第一张照片",
-          clickURL:"https://picsum.photos/800/300?random=1"
-        },
-        {
-          image:"https://picsum.photos/800/300?random=2",
-          desc:"第二张照片",
-          clickURL:"https://picsum.photos/800/300?random=2"
-        },
-        {
-          image:"https://picsum.photos/800/300?random=3",
-          desc:"第三张照片",
-          clickURL:"https://picsum.photos/800/300?random=3"
-        },
-        {
-          image:"https://picsum.photos/800/300?random=4",
-          desc:"第四张照片",
-          clickURL:"https://picsum.photos/800/300?random=4"
-        },
-        {
-          image:"https://picsum.photos/800/300?random=5",
-          desc:"第五张照片",
-          clickURL:"https://picsum.photos/800/300?random=5"
-        },
-        {
-          image:"https://picsum.photos/800/300?random=6",
-          desc:"第六张照片",
-          clickURL:"https://picsum.photos/800/300?random=6"
-        }
-      ],
       currentIndex: 0, // 当前显示的图片的索引
       timer: 1000, // 自动切换的定时器
       posts:[],
@@ -121,7 +89,7 @@ export default defineComponent({
       this.userId = userId
       getMerchantDeatail(userId).then((res:any)=>{
         this.merchant = res.list
-
+        console.log(res.list)
       })
     }
     getComments(userId).then((res:any)=>{
@@ -132,7 +100,7 @@ export default defineComponent({
     play() {
       this.timer = setInterval(() => {
         this.currentIndex++;
-        if (this.currentIndex >= this.slideList.length) {
+        if (this.currentIndex >= this.merchant.dish.length) {
           this.currentIndex = 0;
         }
       }, 3000);
@@ -146,6 +114,9 @@ export default defineComponent({
     change(index:any){
       this.currentIndex = index;
     },
+    toEdit(){
+      this.$router.push({path: '/merchantEdit',query:{userId:this.userId}});
+    }
   },
 
 })
@@ -162,7 +133,7 @@ export default defineComponent({
       >
         <el-card :body-style="{ padding: '16px' }">
           <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+              :src="merchant.avator"
               class="image"
           />
           <div style="padding: 14px">
@@ -176,7 +147,7 @@ export default defineComponent({
                   score-template="{value} points"
               />
 
-              <el-button type="danger" round>Edit</el-button>
+              <el-button type="danger" round @click="toEdit">Edit</el-button>
             </div>
             <el-text class="mx-1">{{'address: '+merchant.address_code}}</el-text>
           </div>
@@ -188,83 +159,96 @@ export default defineComponent({
           :offset="2"
       >
         <el-card :body-style="{ padding: '16px' }" style="height: 100%">
-          <h1 style="margin:20px">Announcement</h1>
-          <p>{{merchant.announcement[0]?merchant.announcement[0].content:'none'}}</p>
+          <div style="display: flex;flex-direction: column;height: 100%">
+            <h1 style="margin:20px">Announcement</h1>
+            <div style="flex-grow: 2"></div>
+            <p>{{merchant.announcement[0]?merchant.announcement[0].content:'none'}}</p>
+            <div style="flex-grow: 3"></div>
+          </div>
         </el-card>
       </el-col>
     </el-row>
-    <div class="area_title" style="text-align: center;margin-top: 48px !important;">
+    <div v-if="merchant.dish.pic_dish" class="area_title" style="text-align: center;margin-top: 48px !important;">
       <h2 class="css-rlqqlq">Dishes</h2>
     </div>
-    <div style="width: 100%;padding: 16px">
+    <div v-if="merchant.dish.pic_dish" style="width: 100%;padding: 16px">
       <div id="box">
         <div class="banner">
           <!--切换图片-->
           <div class="bannerImg">
             <transition-group name="fade" tag="ul" class="slideUl">
-              <li v-for="(list, index) in slideList" :key="index" v-show="index===currentIndex" @mouseenter="stop">
-                <a :herf="list.clickURL">
-                  <img :src="list.image" :alt="list.desc">
-                </a>
+              <li v-for="(dish, index) in merchant.dish" :key="index" v-show="index===currentIndex" @mouseenter="stop">
+                <img :src="dish.pic_dish" :alt="dish.dish_name">
+                <el-text class="mx-1">{{dish.name}}</el-text>
+                <el-text class="mx-1">{{dish.name}}</el-text>
               </li>
             </transition-group>
           </div>
           <!--切换小按钮-->
           <div class="bannerItems">
-            <span v-for="(item,index) in slideList.length" :key="index" :class="{'active':index===currentIndex}" @click="change(index)">{{index+1}}</span>
+            <span v-for="(item,index) in merchant.dish.length" :key="index" :class="{'active':index===currentIndex}" @click="change(index)">{{index+1}}</span>
           </div>
         </div>
       </div>
     </div>
-    <div class="area_title" style="text-align: center;margin-bottom: 48px !important;">
-      <h2 class="css-rlqqlq">Comments</h2>
-    </div>
-    <div class="posts_contaner">
-      <div class="post_container" v-for="(post,index) in posts" :key="index">
-        <div class="post_content">
-          <div class="post_header">
-            <div class="post_avatar_container">
-              <div class="post_avatar_link">
-                <img class="post_avatar"
-                     :src="post.avator"
-                     alt="Avatar" height="40" width="40"
-                     loading="lazy"
-                     draggable="true">
+    <el-card :body-style="{ padding: '16px'}" style="margin-top: 16px">
+      <div class="area_title" style="text-align: center;margin: 48px 0 !important;">
+        <h2 class="css-rlqqlq">Comments</h2>
+      </div>
+      <div class="posts_contaner">
+        <el-text v-if="!posts.length" type="info" >No recent comments</el-text>
+        <div class="post_container" v-for="(post,index) in posts" :key="index">
+          <div class="post_content">
+            <div class="post_header">
+              <div class="post_avatar_container">
+                <div class="post_avatar_link">
+                  <img class="post_avatar"
+                       :src="post.avator"
+                       alt="Avatar" height="40" width="40"
+                       loading="lazy"
+                       draggable="true">
+                </div>
               </div>
-            </div>
-            <div class="post_author_container">
+              <div class="post_author_container">
               <span class="post_author" data-font-weight="bold">
                 {{ post.name }}
               </span>
-              <div class="post_time_container">
-                <span class="post_time">{{post.time_dc}}</span>
+                <div class="post_time_container">
+                  <span class="post_time">{{post.time_dc}}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="post_title_container">
-            <p class="post_title" data-font-weight="bold">
-              <text class="post_title_link">{{post.title}}</text>
-            </p>
-          </div>
-          <div class="post_bottom">
-            <div class="pic" style="height: 200px">
-              <div class="post_pic">
-                <img class="post_pic_img" :src="post.content"
-                     alt="" loading="eager" draggable="true">
+            <div class="post_title_container">
+              <p class="post_title" data-font-weight="bold">
+                <text class="post_title_link">{{post.title}}</text>
+              </p>
+            </div>
+            <div class="post_bottom">
+              <div class="pic" style="height: 200px">
+                <div class="post_pic">
+                  <img class="post_pic_img" :src="post.pic_dc"
+                       alt="" loading="eager" draggable="true">
+                </div>
+              </div>
+
+            </div>
+            <div class="post_header">
+              <el-rate
+                  v-model="post.rate"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value} points"
+              />
+              <div>
+                <el-text class="mx-1">{{post.content}}</el-text>
               </div>
             </div>
-            <el-rate
-                v-model="post.rate"
-                disabled
-                show-score
-                text-color="#ff9900"
-                score-template="{value} points"
-                style="margin-top: 10px"
-            />
           </div>
         </div>
       </div>
-    </div>
+    </el-card>
+
   </div>
 </template>
 
@@ -311,14 +295,14 @@ a{
   text-decoration: none;
 }
 .banner {
-  width: 1080px;
-  height: 720px;
+  width: 900px;
+  height: 600px;
   margin: 20px auto;
   position: relative;
 }
 .bannerImg img{
-  width: 1080px;
-  height: 720px;
+  width: 900px;
+  height: 600px;
   z-index: 800;
   position: relative;
 }
@@ -350,13 +334,13 @@ a{
   background-color: red;
 }
 .posts_contaner {
+  text-align: center;
   margin-top: -32px;
   margin-left: -16px;
   margin-right: -16px;
   display: block;
   font-size: 0;
   line-height: 1;
-  text-align: left;
   border-collapse: initial;
   border-spacing: 32px 0;
   min-width: 100%;
@@ -532,5 +516,9 @@ a{
   line-height: 20px;
   color: rgba(45,46,47,1);
   text-align: left;
+}
+
+/deep/ .el-card__body{
+  height: 100%;
 }
 </style>

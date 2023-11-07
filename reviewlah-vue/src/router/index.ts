@@ -25,6 +25,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'merchantDetail',
     component: () => import('@/views/merchantDetail/MerchantDetailView.vue')
   },
+  {
+    path: '/merchantList',
+    name: 'merchantList',
+    component: () => import('@/views/merchantList/MerchantListView.vue')
+  },
+  {
+    path: '/merchantEdit',
+    name: 'merchantEdit',
+    component: () => import('@/views/merchantEdit/MerchantEditView.vue')
+  },
+  {
+    path: '/userInfoEdit',
+    name: 'userInfoEdit',
+    component: () => import('@/views/userInfoEdit/UserInfoEditView.vue')
+  },
 ]
 
 const router = createRouter({
