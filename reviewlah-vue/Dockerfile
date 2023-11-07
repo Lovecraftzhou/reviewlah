@@ -9,7 +9,7 @@ COPY . .
 # 安装依赖
 RUN npm install
 
-RUN npm run build
+RUN npm run build:prod
 # 前端项目运行命令
 #CMD ["npm","run","serve"]
 

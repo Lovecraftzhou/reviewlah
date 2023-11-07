@@ -6,7 +6,7 @@ import Request from "./request";
 /* eslint-disable */
 // const token = String(window.localStorage.getItem('token'))
 const web: Request = new Request({
-    baseURL: process.env.baseURL,
+    baseURL: process.env.VUE_APP_BASE_URL,
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json',
