@@ -38,6 +38,9 @@ public class MerchantServiceImpl implements MerchantService {
     public ArrayList<BigInteger> selectRecMerchantByCategoryId(Integer category_id) {
         return this.merchantDao.selectRecMerchantByCategoryId(category_id);
     }
+    public ArrayList<BigInteger> selectMerchantByName(String keyword) {
+        return this.merchantDao.selectMerchantByName(keyword);
+    }
 //    public ArrayList<HashMap> selectAllMerchant() {
 //        return this.merchantDao.selectAllMerchant();
 //    }

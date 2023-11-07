@@ -1,13 +1,13 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.ImageUtil;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.SelectAllRecommendMerchantRequest;
+import com.reviewlah.controller.form.SelectMerchantByNameRequest;
 import com.reviewlah.controller.form.SelectMerchantByUserIdRequest;
 import com.reviewlah.controller.form.SelectTop3CategoryFromBrowseHistoryRequest;
 import com.reviewlah.db.pojo.*;
 import com.reviewlah.service.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-@Tag(name = "商家模块")
 @RestController
 @RequestMapping({"/merchant"})
 public class MerchantController {
@@ -41,7 +40,6 @@ public class MerchantController {
     private CategoryService categoryService;
     @Autowired
     private MCService mcService;
-    @Operation(summary = "获取所有商家")
     @GetMapping("/merchantList")
     public RCode selectAllMerchant() {
         this.refreshAllMerchantRate();
@@ -55,6 +53,10 @@ public class MerchantController {
                 Address address = this.addressService.selectAddressByMerchantId(merchant_id);
                 ArrayList<String> mc_list = this.mcService.selectMCByMerchantId(merchant_id);
                 Map<String, Object> map = new HashMap<>();
+                String base64 = ImageUtil.convertImageToBase64Str(tmp.getAvator());
+                String head = "data:image/jpg;base64,";
+                String avator = head.concat(base64);
+                tmp.setAvator(avator);
                 map.put("user_id", tmp.getUser_id());
                 map.put("name", tmp.getName());
                 map.put("avator", tmp.getAvator());
@@ -66,8 +68,35 @@ public class MerchantController {
         }
         return RCode.ok().put("list", res);
     }
-
-    @Operation(summary = "获取推荐列表")
+    @PostMapping("/merchantList/selectByKeyword")
+    public RCode selectMerchantByName(@RequestBody SelectMerchantByNameRequest request) {
+        this.refreshAllMerchantRate();
+        String keyword = request.getKeyword();
+        ArrayList<BigInteger> merchant_list = this.merchantService.selectMerchantByName(keyword);
+        ArrayList<Map<String, Object>> res = new ArrayList<>();
+        for(BigInteger merchant_id : merchant_list) {
+            Merchant merchant = this.merchantService.selectMerchantById(merchant_id);
+            if(merchant != null) {
+                BigInteger user_id = merchant.getUser_id();
+                User tmp = this.userService.selectUserById(user_id);
+                Address address = this.addressService.selectAddressByMerchantId(merchant_id);
+                ArrayList<String> mc_list = this.mcService.selectMCByMerchantId(merchant_id);
+                Map<String, Object> map = new HashMap<>();
+                String base64 = ImageUtil.convertImageToBase64Str(tmp.getAvator());
+                String head = "data:image/jpg;base64,";
+                String avator = head.concat(base64);
+                tmp.setAvator(avator);
+                map.put("user_id", tmp.getUser_id());
+                map.put("name", tmp.getName());
+                map.put("avator", tmp.getAvator());
+                map.put("avg_rate", merchant.getAvg_rate());
+                map.put("address_code", address.getAddress_code());
+                map.put("category", mc_list);
+                res.add(map);
+            }
+        }
+        return RCode.ok().put("list", res);
+    }
     @PostMapping("/merchantRecommendList")
     public RCode selectAllRecommendMerchant(@RequestBody SelectAllRecommendMerchantRequest request) {
         this.refreshAllMerchantRate();
@@ -90,6 +119,30 @@ public class MerchantController {
         merchant_id_list.clear();
         merchant_id_list.addAll(set);
         ArrayList<Map<String, Object>> res = new ArrayList<>();
+        if(merchant_id_list.isEmpty()) {
+            ArrayList<Merchant> merchant_list = this.merchantService.selectAllMerchant();
+            for(Merchant merchant : merchant_list) {
+                if(merchant != null) {
+                    User tmp = this.userService.selectUserById(user_id);
+                    BigInteger merchant_id = merchant.getMerchant_id();
+                    Address address = this.addressService.selectAddressByMerchantId(merchant_id);
+                    ArrayList<String> mc_list = this.mcService.selectMCByMerchantId(merchant_id);
+                    Map<String, Object> map = new HashMap<>();
+                    String base64 = ImageUtil.convertImageToBase64Str(tmp.getAvator());
+                    String head = "data:image/jpg;base64,";
+                    String avator = head.concat(base64);
+                    tmp.setAvator(avator);
+                    map.put("user_id", tmp.getUser_id());
+                    map.put("name", tmp.getName());
+                    map.put("avator", tmp.getAvator());
+                    map.put("avg_rate", merchant.getAvg_rate());
+                    map.put("address_code", address.getAddress_code());
+                    map.put("category", mc_list);
+                    res.add(map);
+                }
+            }
+            return RCode.ok().put("list", res);
+        }
         for(BigInteger merchant_id : merchant_id_list) {
             if(merchant_id != null) {
                 Merchant merchant = this.merchantService.selectMerchantById(merchant_id);
@@ -98,6 +151,10 @@ public class MerchantController {
                 Address address = this.addressService.selectAddressByMerchantId(merchant_id);
                 ArrayList<String> mc_list = this.mcService.selectMCByMerchantId(merchant_id);
                 Map<String, Object> map = new HashMap<>();
+                String base64 = ImageUtil.convertImageToBase64Str(tmp.getAvator());
+                String head = "data:image/jpg;base64,";
+                String avator = head.concat(base64);
+                tmp.setAvator(avator);
                 map.put("user_id", tmp.getUser_id());
                 map.put("name", tmp.getName());
                 map.put("avator", tmp.getAvator());
@@ -109,9 +166,7 @@ public class MerchantController {
         }
         return RCode.ok().put("list", res);
     }
-
-    @Operation(summary = "获取商家页面")
-    @GetMapping("/merchantList/merchantPage")
+    @PostMapping("/merchantList/merchantPage")
     public RCode selectMerchantByUserId(@RequestBody SelectMerchantByUserIdRequest request) {
         BigInteger user_id = request.getUser_id();
         Map<String, Object> map = new HashMap<>();
@@ -123,14 +178,28 @@ public class MerchantController {
                 Address address = this.addressService.selectAddressByMerchantId(merchant_id);
                 ArrayList<String> mc_list = this.mcService.selectMCByMerchantId(merchant_id);
                 ArrayList<HashMap> dish_list = this.dishService.selectDishByMerchantId(merchant_id);
+                for(HashMap map_tmp : dish_list) {
+                    Object obj = map_tmp.get("pic_dish");
+                    String pic_dish = obj.toString();
+                    String base64 = ImageUtil.convertImageToBase64Str(pic_dish);
+                    String head = "data:image/jpg;base64,";
+                    pic_dish = head.concat(base64);
+                    map_tmp.put("pic_dish", pic_dish);
+                }
                 ArrayList<Announcement> announcements = this.announcementService.selectAnnouncementByMerchantId(merchant_id);
                 ArrayList<DiningComment> diningComments = this.diningCommentService.selectDCByMerchantId(merchant_id);
+                String base64 = ImageUtil.convertImageToBase64Str(user.getAvator());
+                String head = "data:image/jpg;base64,";
+                String avator = head.concat(base64);
+                user.setAvator(avator);
                 map.put("user_id", user.getUser_id());
                 map.put("name", user.getName());
                 map.put("phone_number", user.getPhone_number());
                 map.put("avator", user.getAvator());
                 map.put("avg_rate", merchant.getAvg_rate());
                 map.put("address_code", address.getAddress_code());
+                map.put("address_detail", address.getAddress_detail());
+                map.put("address_unitnum", address.getUnitnum());
                 map.put("category", mc_list);
                 map.put("dish", dish_list);
                 map.put("announcement", announcements);

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>reviewlah</artifactId>
+    <artifactId>reviewlah-back</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>reviewlah</name>
-    <description>reviewlah</description>
+    <name>reviewlah-back</name>
+    <description>reviewlah-back</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -95,7 +95,17 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <skip>true</skip>
+                    <skipTests>false</skipTests>
+                    <!--表示执行任何子目录下所有命名以Tests结尾的java类 -->
+                    <includes>
+                        <include>**/*Tests.java</include>
+                    </includes>
+                    <!--表示不执行任何子目录下所有命名以Test开头的java类 -->
+                    <!--
+                    <excludes>
+                        <exclude>**/Test*.java</exclude>
+                    </excludes>
+                    -->
                 </configuration>
             </plugin>
         </plugins>

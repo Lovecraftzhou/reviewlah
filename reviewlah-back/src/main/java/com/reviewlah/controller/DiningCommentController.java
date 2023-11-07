@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.ImageUtil;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.DeleteDiningCommentRequest;
 import com.reviewlah.controller.form.InsertDiningCommentRequest;
@@ -14,8 +15,6 @@ import com.reviewlah.service.DiningCommentService;
 import com.reviewlah.service.MerchantService;
 import com.reviewlah.service.UserService;
 import io.micrometer.common.util.StringUtils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +27,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Tag(name = "餐厅评论模块")
 @RestController
 @RequestMapping({"/merchant/diningComment"})
 public class DiningCommentController {
@@ -40,7 +38,6 @@ public class DiningCommentController {
     private CustomerService customerService;
     @Autowired
     private DiningCommentService diningCommentService;
-    @Operation(summary = "显示所有商家评论")
     @PostMapping({"/showAllForMerchant"})
     public RCode selectDCByMerchantId(@RequestBody SelectDCByMerchantIdRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -50,6 +47,20 @@ public class DiningCommentController {
             Merchant merchant = this.merchantService.selectMerchantByUserId(user_id);
             if(merchant != null) {
                 res = this.diningCommentService.selectDCMapByMerchantId(merchant.getMerchant_id());
+                for(HashMap map : res) {
+                    Object obj = map.get("pic_dc");
+                    String pic_dc = obj.toString();
+                    String base64 = ImageUtil.convertImageToBase64Str(pic_dc);
+                    String head = "data:image/jpg;base64,";
+                    pic_dc = head.concat(base64);
+                    map.put("pic_dc", pic_dc);
+                    Object obj_ava = map.get("avator");
+                    String avator = obj_ava.toString();
+                    String base64_ava = ImageUtil.convertImageToBase64Str(avator);
+                    String head_ava = "data:image/jpg;base64,";
+                    avator = head_ava.concat(base64_ava);
+                    map.put("avator", avator);
+                }
             }
             else {
                 System.out.println("Merchant Does Not Exist");
@@ -101,7 +112,6 @@ public class DiningCommentController {
 //        }
 //        return null;
 //    }
-    @Operation(summary = "获取当前用户在商家下的评论")
     @PostMapping({"/showAllForCustomer"})
     public RCode selectDCByMerAndCusId(@RequestBody SelectDCByMerAndCusIdRequest request) {
         ArrayList<HashMap> res = new ArrayList<>();
@@ -121,6 +131,20 @@ public class DiningCommentController {
                 return RCode.error("Customer Does Not Exist");
             }
             res = this.diningCommentService.selectDCMapByMerAndCusId(merchant.getMerchant_id(), customer.getCustomer_id());
+            for(HashMap map : res) {
+                Object obj = map.get("pic_dc");
+                String pic_dc = obj.toString();
+                String base64 = ImageUtil.convertImageToBase64Str(pic_dc);
+                String head = "data:image/jpg;base64,";
+                pic_dc = head.concat(base64);
+                map.put("pic_dc", pic_dc);
+                Object obj_ava = map.get("avator");
+                String avator = obj_ava.toString();
+                String base64_ava = ImageUtil.convertImageToBase64Str(avator);
+                String head_ava = "data:image/jpg;base64,";
+                avator = head_ava.concat(base64_ava);
+                map.put("avator", avator);
+            }
         }
         else {
             System.out.println("User Does Not Exist");
@@ -177,7 +201,6 @@ public class DiningCommentController {
 //        }
 //        return res;
 //    }
-    @Operation(summary = "发布新评论")
     @PostMapping({"/insert"})
     public RCode insertDC(@RequestBody InsertDiningCommentRequest request) {
         BigInteger customer_user_id = request.getCustomer_user_id();
@@ -202,9 +225,15 @@ public class DiningCommentController {
             if(content == null || content.isEmpty()) {
                 content = "The user did not provide a detailed evaluation";
             }
-//            if(pic_dc == null || pic_dc.isEmpty()) {
-//                pic_dc = "";
-//            }
+            String filename = System.getProperty("user.dir") + "\\reviewlah-back" + "\\pic\\pic-dc\\" + customer.getName() + merchant.getName() + ".jpg";
+            if(pic_dc == null || pic_dc.isEmpty()) {
+                filename = System.getProperty("user.dir") + "\\reviewlah-back" + "\\pic\\pic-dc\\" + "reviewlah.jpg";
+            }
+            else {
+                String[] tmp = pic_dc.split(",");
+                pic_dc = tmp[1];
+                ImageUtil.convertBase64StrToImage(pic_dc, filename);
+            }
             if(StringUtils.isEmpty(String.valueOf(rate))) {
                 System.out.println("Rate Cannot Be Empty");
                 return RCode.error("Rate Cannot Be Empty");
@@ -216,7 +245,7 @@ public class DiningCommentController {
                 diningComment.setContent(content);
                 diningComment.setRate(rate);
                 diningComment.setTime_dc(time_dc);
-                diningComment.setPic_dc(pic_dc);
+                diningComment.setPic_dc(filename);
                 this.diningCommentService.insertDC(diningComment);
                 System.out.println("successful");
             }
@@ -227,7 +256,6 @@ public class DiningCommentController {
         }
         return RCode.ok("successful");
     }
-    @Operation(summary = "删除新评论")
     @PostMapping({"/delete"})
     public RCode deleteDCById(@RequestBody DeleteDiningCommentRequest request) {
         BigInteger dining_com_id = request.getDining_com_id();

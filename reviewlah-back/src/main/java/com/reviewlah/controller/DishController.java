@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.ImageUtil;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Dish;
@@ -9,8 +10,6 @@ import com.reviewlah.service.DishService;
 import com.reviewlah.service.MenuService;
 import com.reviewlah.service.MerchantService;
 import com.reviewlah.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-@Tag(name = "菜单模块")
+
 @RestController
 @RequestMapping({"/menu"})
 public class DishController {
@@ -33,7 +32,6 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
-    @Operation(summary = "根据Menu_ID获取菜")
     @PostMapping({"/dishes"})
     public RCode selectDishByMenuId(@RequestBody SelectDishByMenuIdRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -45,6 +43,12 @@ public class DishController {
                 Menu menu = this.menuService.selectMenuByMerchantId(merchant_id);
                 if(menu != null) {
                     list = this.dishService.selectDishByMenuId(menu.getMenu_id());
+                    for(Dish dish : list) {
+                        String base64 = ImageUtil.convertImageToBase64Str(dish.getPic_dish());
+                        String head = "data:image/jpg;base64,";
+                        String pic_dish = head.concat(base64);
+                        dish.setPic_dish(pic_dish);
+                    }
                     System.out.println("successful");
                 }
                 else {
@@ -63,7 +67,6 @@ public class DishController {
         }
         return RCode.ok().put("list", list);
     }
-    @Operation(summary = "根据名字获取菜")
     @PostMapping({"/select_dish"})
     public RCode selectDishIdByName(@RequestBody SelectDishIdByNameRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -76,6 +79,12 @@ public class DishController {
                 Menu menu = this.menuService.selectMenuByMerchantId(merchant_id);
                 if(menu != null) {
                     list = this.dishService.selectDishByName(dish_name, menu.getMenu_id());
+                    for(Dish dish : list) {
+                        String base64 = ImageUtil.convertImageToBase64Str(dish.getPic_dish());
+                        String head = "data:image/jpg;base64,";
+                        String pic_dish = head.concat(base64);
+                        dish.setPic_dish(pic_dish);
+                    }
                     System.out.println("successful");
                 }
                 else {
@@ -95,7 +104,6 @@ public class DishController {
         }
         return RCode.ok().put("list", list);
     }
-    @Operation(summary = "发布新菜")
     @PostMapping({"/insert_dish"})
     public RCode insertDish(@RequestBody InsertDishRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -117,13 +125,20 @@ public class DishController {
                         System.out.println("Dish Price Cannot Be Empty");
                         return RCode.error("Dish Price Cannot Be Empty");
                     }
+                    String filename = "C://Users/86138/Desktop/reviewlah-dishpic/" + menu_id + dish_name + ".jpg";
                     if(pic_dish == null || pic_dish.isEmpty()) {
-                        pic_dish = "http://defaultFoodPic";
+                        pic_dish = "C://Users/86138/Desktop/reviewlah-avator/userDefaultAva.jpg";
+                        filename = "D://pic/reviewlah.jpg";
+                    }
+                    else {
+                        String[] tmp = pic_dish.split(",");
+                        pic_dish = tmp[1];
+                        ImageUtil.convertBase64StrToImage(pic_dish, filename);
                     }
                     Dish dish = new Dish();
                     dish.setDish_name(dish_name);
                     dish.setPrice(price);
-                    dish.setPic_dish(pic_dish);
+                    dish.setPic_dish(filename);
                     dish.setMenu_id(menu_id);
                     this.dishService.insertDish(dish);
                     System.out.println("successful");
@@ -144,7 +159,6 @@ public class DishController {
         }
         return RCode.ok("successful");
     }
-    @Operation(summary = "更新菜的信息")
     @PostMapping({"/update_dish"})
     public RCode updateDish(@RequestBody UpdateDishRequest request) {
         BigInteger dish_id = request.getDish_id();
@@ -157,7 +171,16 @@ public class DishController {
             BigInteger menu_id = request.getMenu_id();
             dish.setDish_name(dish_name);
             dish.setPrice(price);
-            dish.setPic_dish(pic_dish);
+            String filename = System.getProperty("user.dir") + "\\reviewlah-back" + "\\pic\\pic-dish\\" + menu_id + dish_name + ".jpg";
+            if(pic_dish == null || pic_dish.isEmpty()) {
+                filename = System.getProperty("user.dir") + "\\reviewlah-back" + "\\pic\\pic-dish\\" + "reviewlah.jpg";
+            }
+            else {
+                String[] tmp = pic_dish.split(",");
+                pic_dish = tmp[1];
+                ImageUtil.convertBase64StrToImage(pic_dish, filename);
+            }
+            dish.setPic_dish(filename);
             dish.setMenu_id(menu_id);
             this.dishService.updateDish(dish);
             System.out.println("successful");
@@ -168,7 +191,6 @@ public class DishController {
         }
         return RCode.ok("successful");
     }
-    @Operation(summary = "删除菜")
     @PostMapping({"/delete_dish"})
     public RCode deleteDishById(@RequestBody DeleteDishByIdRequest request) {
         BigInteger dish_id = request.getDish_id();

@@ -1,5 +1,6 @@
 package com.reviewlah.controller;
 
+import com.reviewlah.common.util.ImageUtil;
 import com.reviewlah.common.util.RCode;
 import com.reviewlah.controller.form.*;
 import com.reviewlah.db.pojo.Customer;
@@ -8,8 +9,6 @@ import com.reviewlah.db.pojo.User;
 import com.reviewlah.service.CustomerService;
 import com.reviewlah.service.PostService;
 import com.reviewlah.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 
 @RestController
 @RequestMapping({"/post"})
-@Tag(name = "帖子模块")
 public class PostController {
     @Autowired
     private UserService userService;
@@ -29,8 +28,6 @@ public class PostController {
     private CustomerService customerService;
     @Autowired
     private PostService postService;
-
-    @Operation(summary = "发布新帖子")
     @PostMapping({"/insert"})
     public RCode insertPost(@RequestBody InsertPostRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -48,13 +45,25 @@ public class PostController {
                 System.out.println("Title Cannot Be Empty");
                 return RCode.error("Title Cannot Be Empty");
             }
-            if(pic_post == null || pic_post.isEmpty()) pic_post = "http://defaultPostPic";
+//            String filename = "C://Users/86138/Desktop/reviewlah-postpic/" + user.getName() + title + ".jpg";
+            String filename = System.getProperty("user.dir") + "\\reviewlah-back" + "\\pic\\pic-post\\" + user.getName() + title + ".jpg";
+//            String test = "C://Users/86138/Desktop/reviewlah-postpic/userDefaultAva.jpg";
+//            String base64 = ImageUtil.convertImageToBase64Str(test);
+            if(pic_post == null || pic_post.isEmpty()) {
+                filename = System.getProperty("user.dir") + "\\reviewlah-back" + "\\pic\\pic-post\\" + "reviewlah.jpg";
+            }
+            else {
+                String[] tmp = pic_post.split(",");
+                pic_post = tmp[1];
+                ImageUtil.convertBase64StrToImage(pic_post, filename);
+//                filename = "D://pic/food1.jpg";
+            }
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             Post post = new Post();
             post.setCustomer_id(customer_id);
             post.setTitle(title);
             post.setContent(content);
-            post.setPic_post(pic_post);
+            post.setPic_post(filename);
             post.setTime_post(date);
             this.postService.insertPost(post);
             System.out.println("successful");
@@ -65,7 +74,6 @@ public class PostController {
         }
         return RCode.ok("successful");
     }
-    @Operation(summary = "删除帖子")
     @PostMapping({"/delete"})
     public RCode deletePost(@RequestBody DeletePostRequest request) {
         BigInteger post_id = request.getPost_id();
@@ -80,8 +88,6 @@ public class PostController {
         }
         return RCode.ok("successful");
     }
-
-    @Operation(summary = "获取帖子")
     @PostMapping({"/mypost"})
     public RCode selectPostByCustomerId(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_Id = request.getUser_id();
@@ -91,9 +97,22 @@ public class PostController {
             Customer customer = this.customerService.selectCustomerByUserId(user_Id);
             if(customer != null) {
                 list = this.postService.selectPostByCustomerId(customer.getCustomer_id());
+                for(HashMap map : list) {
+                    Object obj = map.get("pic_post");
+                    String pic_post = obj.toString();
+                    String base64 = ImageUtil.convertImageToBase64Str(pic_post);
+                    String head = "data:image/jpg;base64,";
+                    pic_post = head.concat(base64);
+                    map.put("pic_post", pic_post);
+                    Object obj_ava = map.get("avator");
+                    String avator = obj_ava.toString();
+                    String base64_ava = ImageUtil.convertImageToBase64Str(avator);
+                    String head_ava = "data:image/jpg;base64,";
+                    avator = head_ava.concat(base64_ava);
+                    map.put("avator", avator);
+                }
                 System.out.println("successful");
             }
-
         }
         else {
             System.out.println("User Does Not Exist");
@@ -101,8 +120,6 @@ public class PostController {
         }
         return RCode.ok().put("list", list);
     }
-
-    @Operation(summary = "获取所有帖子")
     @PostMapping({"/homepage"})
     public RCode selectAllPostExceptMine(@RequestBody SelectPostByCustomerIdRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -111,6 +128,20 @@ public class PostController {
         if(user != null) {
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             list = this.postService.selectAllPostExceptMine(customer_id);
+            for(HashMap map : list) {
+                Object obj = map.get("pic_post");
+                String pic_post = obj.toString();
+                String base64 = ImageUtil.convertImageToBase64Str(pic_post);
+                String head = "data:image/jpg;base64,";
+                pic_post = head.concat(base64);
+                map.put("pic_post", pic_post);
+                Object obj_ava = map.get("avator");
+                String avator = obj_ava.toString();
+                String base64_ava = ImageUtil.convertImageToBase64Str(avator);
+                String head_ava = "data:image/jpg;base64,";
+                avator = head_ava.concat(base64_ava);
+                map.put("avator", avator);
+            }
             System.out.println("successful");
         }
         else {
@@ -119,8 +150,6 @@ public class PostController {
         }
         return RCode.ok().put("list", list);
     }
-
-    @Operation(summary = "获取相对Post")
     @PostMapping({"/homepage/relative"})
     public RCode selectRelativePost(@RequestBody SelectRelativePostRequest request) {
         BigInteger user_id = request.getUser_id();
@@ -130,6 +159,20 @@ public class PostController {
         if(user != null) {
             BigInteger customer_id = this.customerService.selectCustomerIdByUserId(user_id);
             list = this.postService.selectRelativePost(keyword, customer_id);
+            for(HashMap map : list) {
+                Object obj = map.get("pic_post");
+                String pic_post = obj.toString();
+                String base64 = ImageUtil.convertImageToBase64Str(pic_post);
+                String head = "data:image/jpg;base64,";
+                pic_post = head.concat(base64);
+                map.put("pic_post", pic_post);
+                Object obj_ava = map.get("avator");
+                String avator = obj_ava.toString();
+                String base64_ava = ImageUtil.convertImageToBase64Str(avator);
+                String head_ava = "data:image/jpg;base64,";
+                avator = head_ava.concat(base64_ava);
+                map.put("avator", avator);
+            }
             System.out.println("successful");
         }
         else {
@@ -138,8 +181,6 @@ public class PostController {
         }
         return RCode.ok().put("list", list);
     }
-
-    @Operation(summary = "获取详细信息")
     @PostMapping({"/detail"})
     public RCode selectPostByPostId(@RequestBody SelectPostByPostIdRequest request) {
         BigInteger post_id = request.getPost_id();
@@ -149,6 +190,10 @@ public class PostController {
             return RCode.error("Post Does Not Exist");
         }
         else {
+            String base64 = ImageUtil.convertImageToBase64Str(post.getPic_post());
+            String head = "data:image/jpg;base64,";
+            String pic_post = head.concat(base64);
+            post.setPic_post(pic_post);
             System.out.println("successful");
         }
         return RCode.ok().put("list", post);

@@ -12,6 +12,7 @@ import java.util.HashMap;
 public interface MerchantDao {
     void insertMerchant(Merchant merchant);
     BigInteger selectMerchantIdByUserId(BigInteger user_id);
+    ArrayList<BigInteger> selectMerchantByName(String keyword);
     Merchant selectMerchantByUserId(BigInteger user_id);
     Merchant selectMerchantById(BigInteger merchant_id);
     ArrayList<Merchant> selectAllMerchant();

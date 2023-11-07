@@ -7,13 +7,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
+import static org.springframework.boot.SpringApplication.*;
+
 @SpringBootApplication
 @MapperScan("com.reviewlah.db.dao")
 @EnableKnife4j
 public class ReviewlahApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ReviewlahApplication.class, args);
+        run(ReviewlahApplication.class, args);
     }
 
 }

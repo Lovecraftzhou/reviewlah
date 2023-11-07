@@ -12,6 +12,11 @@ services:
       - "8181:8181"
     volumes:
       - "/data"
+    deploy:
+      resources:
+        limits:
+          cpus: 0.25
+          memory: 512m
 
   reviewlah-vue:
     restart: always
@@ -24,3 +29,8 @@ services:
       - "8182:8182"
     links:
       - reviewlah-back
+    deploy:
+      resources:
+        limits:
+          cpus: 0.25
+          memory: 512m

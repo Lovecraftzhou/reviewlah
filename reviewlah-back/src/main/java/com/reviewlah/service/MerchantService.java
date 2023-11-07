@@ -17,6 +17,7 @@ public interface MerchantService {
     ArrayList<Merchant> selectAllMerchant();
     void updateRateByMerchantId(@Param("merchant_id") BigInteger merchant_id, @Param("avg_rate") Double avg_rate);
     ArrayList<BigInteger> selectRecMerchantByCategoryId(Integer category_id);
+    ArrayList<BigInteger> selectMerchantByName(String keyword);
 //    ArrayList<HashMap> selectAllMerchant();
 
 }

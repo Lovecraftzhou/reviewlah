@@ -43,6 +43,12 @@
         ORDER BY avg_rate DESC
         Limit 3
     </select>
+    <select id="selectMerchantByName" parameterType="String" resultType="BigInteger">
+        SELECT m.merchant_id
+        FROM merchant m LEFT JOIN user u ON m.user_id = u.user_id
+        WHERE u.name like concat('%',#{keyword},'%')
+        ORDER BY m.avg_rate DESC
+    </select>
 <!--    <select id="selectAllMerchant" resultType="HashMap">-->
 <!--        SELECT u.user_id AS user_id,-->
 <!--               u.name AS name,-->
