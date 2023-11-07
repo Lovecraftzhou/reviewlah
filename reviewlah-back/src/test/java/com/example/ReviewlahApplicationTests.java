@@ -1,14 +1,8 @@
 package com.example;
 
 import com.reviewlah.ReviewlahApplication;
-import com.reviewlah.db.pojo.BrowseHistory;
-import com.reviewlah.db.pojo.Customer;
-import com.reviewlah.db.pojo.DiningComment;
-import com.reviewlah.db.pojo.Post;
-import com.reviewlah.service.BrowseHistoryService;
-import com.reviewlah.service.CustomerService;
-import com.reviewlah.service.DiningCommentService;
-import com.reviewlah.service.PostService;
+import com.reviewlah.db.pojo.*;
+import com.reviewlah.service.*;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,14 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest(classes = ReviewlahApplication.class)
 class ReviewlahApplicationTests {
     @Autowired
-    @Resource
     private DiningCommentService DiningCommentService;
     @Autowired
-    @Resource
     private BrowseHistoryService BrowseHistoryService;
     @Autowired
-    @Resource
     private PostService PostService;
+    @Autowired
+    private MerchantService MerchantService;
 
     @Test
     void DiningCommentTest() {
@@ -101,5 +94,4 @@ class ReviewlahApplicationTests {
         maps = PostService.selectAllPostExceptMine(BigInteger.ONE);
         assertFalse(maps.isEmpty());
     }
-
 }
