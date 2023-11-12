@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/reviewlah-admin/reviewlah-admin.iml" filepath="$PROJECT_DIR$/reviewlah-admin/reviewlah-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/reviewlah-comment/reviewlah-comment.iml" filepath="$PROJECT_DIR$/reviewlah-comment/reviewlah-comment.iml" />
-      <module fileurl="file://$PROJECT_DIR$/reviewlah-customer/reviewlah-customer.iml" filepath="$PROJECT_DIR$/reviewlah-customer/reviewlah-customer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/reviewlah-eureka/reviewlah-eureka.iml" filepath="$PROJECT_DIR$/reviewlah-eureka/reviewlah-eureka.iml" />
-      <module fileurl="file://$PROJECT_DIR$/reviewlah-gateway/reviewlah-gateway.iml" filepath="$PROJECT_DIR$/reviewlah-gateway/reviewlah-gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/reviewlah-merchant/reviewlah-merchant.iml" filepath="$PROJECT_DIR$/reviewlah-merchant/reviewlah-merchant.iml" />
-      <module fileurl="file://$PROJECT_DIR$/reviewlah-message/reviewlah-message.iml" filepath="$PROJECT_DIR$/reviewlah-message/reviewlah-message.iml" />
     </modules>
   </component>
 </project>

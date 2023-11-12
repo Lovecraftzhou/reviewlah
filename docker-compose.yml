@@ -15,6 +15,11 @@ services:
       - reviewlah-eureka
     links:
       - reviewlah-eureka
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8086' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
@@ -27,6 +32,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9527:9527"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:9527' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     links:
       - reviewlah-eureka
 
@@ -44,6 +54,11 @@ services:
       - reviewlah-eureka
     links:
       - reviewlah-eureka
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8084' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
@@ -62,6 +77,11 @@ services:
       - reviewlah-eureka
     links:
       - reviewlah-eureka
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8082' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
@@ -80,6 +100,11 @@ services:
       - reviewlah-eureka
     links:
       - reviewlah-eureka
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8083' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
@@ -98,30 +123,18 @@ services:
       - reviewlah-eureka
     links:
       - reviewlah-eureka
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8085' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
-  reviewlah-back:
+  reviewlah-micro-vue:
     restart: always
-    container_name: reviewlah-back
-    image: reviewlah-back
-    build:
-      context: ./reviewlah-back
-      dockerfile: Dockerfile
-    ports:
-      - "8181:8181"
-    volumes:
-      - "/data"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.25'
-          memory: 512m
-
-  reviewlah-vue:
-    restart: always
-    container_name: reviewlah-vue
-    image: reviewlah-vue
+    container_name: reviewlah-micro-vue
+    image: reviewlah-micro-vue
     build:
       context: ./reviewlah-vue
       dockerfile: Dockerfile
@@ -129,6 +142,11 @@ services:
       - "8182:8182"
     links:
       - reviewlah-back
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8182' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     deploy:
       resources:
         limits:
@@ -142,6 +160,11 @@ services:
     build:
       context: ./reviewlah-eureka
       dockerfile: Dockerfile
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8761' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     ports:
       - "8761:8761"
 
@@ -158,6 +181,11 @@ services:
       - reviewlah-eureka
     links:
       - reviewlah-eureka
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8081' || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
