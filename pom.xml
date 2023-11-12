@@ -24,7 +24,6 @@
         <module>reviewlah-gateway</module>
         <module>reviewlah-merchant</module>
         <module>reviewlah-message</module>
-        <module>reviewlah-back</module>
     </modules>
 
     <dependencies>

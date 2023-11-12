@@ -131,28 +131,6 @@ services:
     environment:
       EUREKASERVER_URI: "http://reviewlah-eureka:8761/eureka/"
 
-  reviewlah-micro-vue:
-    restart: always
-    container_name: reviewlah-micro-vue
-    image: reviewlah-micro-vue
-    build:
-      context: ./reviewlah-vue
-      dockerfile: Dockerfile
-    ports:
-      - "8182:8182"
-    links:
-      - reviewlah-back
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -sS 'http://localhost:8182' || exit 1" ]
-      interval: 10s
-      timeout: 10s
-      retries: 6
-    deploy:
-      resources:
-        limits:
-          cpus: '0.25'
-          memory: 512m
-
   reviewlah-eureka:
     restart: always
     container_name: reviewlah-eureka
